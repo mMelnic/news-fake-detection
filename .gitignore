@@ -1,0 +1,5 @@
+flutter/
+venv/
+__pycache__/
+.env
+db.sqlite3
