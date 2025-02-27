@@ -1,0 +1,146 @@
+import requests
+import redis
+import json
+from dotenv import load_dotenv
+import os
+from news.models import Articles, Sources
+from django.utils.timezone import now
+from django.db.utils import IntegrityError
+
+load_dotenv()
+
+redis_client = redis.Redis(host=os.getenv('REDIS_HOST', 'localhost'), port=os.getenv('REDIS_PORT', 6379), db=0)
+
+NEWS_API_URL = "https://newsapi.org/v2/everything"
+NEWS_API_KEY = os.getenv('NEWS_API_KEY')
+
+VALID_LANGUAGES = {'ar', 'de', 'en', 'es', 'fr', 'he', 'it', 'nl', 'no', 'pt', 'ru', 'sv', 'ud', 'zh'}
+
+CACHE_DURATION = 36000
+MAX_PAGES = 5
+
+class NewsFetcher:
+    """Class responsible for fetching and storing news articles."""
+
+    def __init__(self):
+        self.api_key = NEWS_API_KEY
+
+    def fetch_articles(self, query, language=None):
+        """
+        Fetch articles from API, cache results, and store valid articles in the database.
+        :param query: (str) Search term
+        :param language: (str | None) Optional language filter
+        :return: List of stored article objects
+        """
+        query = self._validate_and_format_query(query)
+        language = self._validate_language(language)
+
+        # Check cache first
+        cached_result = self._get_cached_result(query, language)
+        if cached_result:
+            return cached_result
+
+        # Fetch from API
+        articles = self._fetch_from_api(query, language)
+
+        if articles:
+            self._store_articles(articles)
+            self._cache_result(query, language, articles)
+        return articles
+
+    def _fetch_from_api(self, query, language):
+        """Fetches articles from NewsAPI, handling pagination up to MAX_PAGES pages."""
+        params = {
+            "apiKey": self.api_key,
+            "q": query,
+            "sortBy": "popularity",
+            "pageSize": 100,
+        }
+        if language:
+            params["language"] = language
+
+        all_articles = []
+        current_page = 1
+        total_results = None
+
+        while current_page <= MAX_PAGES:
+            params["page"] = current_page
+            response = requests.get(NEWS_API_URL, params=params)
+
+            if response.status_code != 200:
+                raise Exception(f"Error {response.status_code}: {response.json()}")
+
+            data = response.json()
+            if total_results is None:
+                total_results = data.get("totalResults", 0)
+
+            articles = data.get("articles", [])
+            all_articles.extend(articles)
+
+            total_fetched = len(all_articles)
+            if total_fetched >= total_results:
+                break
+
+            # Not fetching incomplete pages
+            remaining_articles = total_results - total_fetched
+            if remaining_articles < 50: # TODO: remove magic number
+                break
+
+            current_page += 1
+
+        return all_articles
+
+    def _store_articles(self, articles):
+        """Stores fetched articles in PostgreSQL while preventing duplicates."""
+        for article in articles:
+            try:
+                source_obj, _ = Sources.objects.get_or_create(
+                    url=article["source"]["name"],
+                    defaults={"name": article["source"]["name"]}
+                )
+
+                Articles.objects.create(
+                    title=article["title"],
+                    content=article["content"] or "",
+                    url=article["url"],
+                    source=source_obj,
+                    published_date=article["publishedAt"],
+                    category=None,  # Could be inferred later
+                    location=None,  # Can be enriched later
+                    fake_score=None,  # To be determined by ML model
+                    embedding=None,  # To be processed later
+                    created_at=now(),
+                )
+            except IntegrityError:
+                print(f"Skipping duplicate article: {article['url']}")
+
+    def _get_cached_result(self, query, language):
+        """Retrieve cached articles from Redis."""
+        cache_key = self._generate_cache_key(query, language)
+        cached_data = redis_client.get(cache_key)
+        if cached_data:
+            return json.loads(cached_data)
+        return None
+
+    def _cache_result(self, query, language, articles):
+        """Cache the fetched articles in Redis with a CACHE_DURATION-hour expiration."""
+        cache_key = self._generate_cache_key(query, language)
+        redis_client.setex(cache_key, CACHE_DURATION, json.dumps(articles))
+
+    def _generate_cache_key(self, query, language):
+        """Generate a unique cache key based on query and language."""
+        return f"news:{query}:{language if language else 'all'}"
+
+    def _validate_and_format_query(self, query):
+        """Validate and format the search query."""
+        if not query or not isinstance(query, str):
+            raise ValueError("Query must be a non-empty string.")
+        if len(query) > 500:
+            raise ValueError("Query must not exceed 500 characters.")
+        return query.strip()
+
+    def _validate_language(self, language):
+        """Validate the language parameter."""
+        if language and language not in VALID_LANGUAGES:
+            raise ValueError(f"Invalid language code. Valid options are: {', '.join(VALID_LANGUAGES)}")
+        return language
