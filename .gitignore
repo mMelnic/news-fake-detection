@@ -3,3 +3,9 @@ venv/
 __pycache__/
 .env
 db.sqlite3
+*.sql
+dump_*.sql
+/pgdata/
+*.db
+config.json
+settings.py
