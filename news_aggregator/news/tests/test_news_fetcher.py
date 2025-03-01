@@ -39,27 +39,23 @@ class NewsFetcherTestCase(TestCase):
 
     @patch('requests.get')
     def test_fetch_articles_partial_results(self, mock_get):
-        # Setup mock response to simulate the first page with 100 articles
         mock_response_1 = MagicMock(spec=Response)
         mock_response_1.status_code = 200
         mock_response_1.json.return_value = {
             "status": "ok",
-            "totalResults": 120,  # Total results across all pages
+            "totalResults": 120,
             "articles": [
                 {"title": f"Article {i+1}", "description": f"Description {i+1}"}
-                for i in range(100)  # First page returns 100 articles
+                for i in range(100)
             ]
         }
         
-        # Simulate that only the first page is fetched
         mock_get.return_value = mock_response_1
 
         fetcher = NewsApiFetcher()
 
-        # Fetch articles
         articles = fetcher.fetch_articles("test query", "en")
 
-        # Assert that exactly 100 articles were fetched
         self.assertEqual(len(articles), 100)
 
         # Check that requests.get was called exactly once for the first page
