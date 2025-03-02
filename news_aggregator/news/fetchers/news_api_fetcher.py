@@ -1,5 +1,6 @@
 import requests
 from urllib.parse import quote
+from datetime import datetime, timedelta
 import os
 
 NEWS_API_URL = "https://newsapi.org/v2/everything"
@@ -18,44 +19,25 @@ class NewsApiFetcher:
         return articles
 
     def _fetch_from_api(self, query, language):
+        one_week_ago = (datetime.now() - timedelta(days=7)).isoformat()
+
         params = {
             "apiKey": self.api_key,
             "q": query,
             "sortBy": "popularity",
             "pageSize": 100,
+            "from": one_week_ago,
         }
         if language:
             params["language"] = language
 
-        all_articles = []
-        current_page = 1
-        total_results = None
+        response = requests.get(NEWS_API_URL, params=params)
+        if response.status_code != 200:
+            raise Exception(f"Error {response.status_code}: {response.json()}")
 
-        while current_page <= MAX_PAGES:
-            params["page"] = current_page
-            response = requests.get(NEWS_API_URL, params=params)
-            if response.status_code != 200:
-                raise Exception(f"Error {response.status_code}: {response.json()}")
-
-            data = response.json()
-            if total_results is None:
-                total_results = data.get("totalResults", 0)
-
-            articles = data.get("articles", [])
-            all_articles.extend(articles)
-
-            total_fetched = len(all_articles)
-            if total_fetched >= total_results:
-                break
-            
-            # Not fetching incomplete pages
-            remaining_articles = total_results - total_fetched
-            if remaining_articles < 50: # TODO: remove magic number
-                break
-
-            current_page += 1
-
-        return all_articles
+        data = response.json()
+        articles = data.get("articles", [])
+        return articles
 
     def _validate_and_format_query(self, query):
         if not query or not isinstance(query, str):
