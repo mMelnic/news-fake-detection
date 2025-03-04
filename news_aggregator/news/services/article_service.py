@@ -7,10 +7,12 @@ class ArticleService:
         parsed_keywords = self._parse_query(query)
 
         for article in articles:
+            source_name = article["source"]["name"]
+            source_url = article["source"].get("url", source_name)
             try:
                 source_obj, _ = Sources.objects.get_or_create(
-                    url=article["source"]["name"],
-                    defaults={"name": article["source"]["name"]}
+                    url=source_url,
+                    defaults=source_name
                 )
 
                 article_obj, created = Articles.objects.get_or_create(
