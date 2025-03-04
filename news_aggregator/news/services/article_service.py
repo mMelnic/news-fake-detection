@@ -1,39 +1,37 @@
-from news.models import Articles, Sources, Keyword
-from django.utils.timezone import now
-from django.db.utils import IntegrityError
+from news.models import Keyword
+from news.repositories.article_repository import ArticleRepository
+from news.repositories.source_repository import SourceRepository
 
 class ArticleService:
+    def __init__(self):
+        self.article_repo = ArticleRepository()
+        self.source_repo = SourceRepository()
+
     def store_articles(self, articles, query):
         parsed_keywords = self._parse_query(query)
 
         for article in articles:
             source_name = article["source"]["name"]
             source_url = article["source"].get("url", source_name)
-            try:
-                source_obj, _ = Sources.objects.get_or_create(
-                    url=source_url,
-                    defaults=source_name
-                )
 
-                article_obj, created = Articles.objects.get_or_create(
-                    url=article["url"],
-                    defaults={
-                        "title": article["title"],
-                        "content": article["content"] or "",
-                        "source": source_obj,
-                        "published_date": article["publishedAt"],
-                        "category": None,
-                        "location": None,
-                        "fake_score": None,
-                        "embedding": None,
-                        "created_at": now(),
-                    }
-                )
+            source_obj, _ = self.source_repo.get_or_create_source(
+                url=source_url,
+                defaults={"name": source_name}
+            )
 
-            except IntegrityError:
-                print(f"Skipping duplicate article: {article['url']}")
-                article_obj = Articles.objects.get(url=article["url"])
-                created = False
+            article_obj, created = self.article_repo.get_or_create_article(
+                url=article["url"],
+                defaults={
+                    "title": article["title"],
+                    "content": article.get("content", "") or "",
+                    "source": source_obj,
+                    "published_date": article["publishedAt"],
+                    "category": None,
+                    "location": None,
+                    "fake_score": None,
+                    "embedding": None,
+                }
+            )
 
             existing_keywords = set(article_obj.keywords.values_list('keyword', flat=True)) if not created else set()
             
