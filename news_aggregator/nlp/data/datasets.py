@@ -33,3 +33,30 @@ class DatasetLoader:
         except ValueError as ve:
             print(f"Error: {ve}")
             return pd.DataFrame()
+        
+    def load_fake_news_data(self, true_path: str, fake_path: str) -> pd.DataFrame:
+        """
+        Combines the TRUE and FAKE datasets into a single DataFrame and adds a label column.
+        :param true_path: Path to the TRUE.csv file.
+        :param fake_path: Path to the FAKE.csv file.
+        :return: A pandas DataFrame containing combined data with labels.
+        """
+        try:
+            true_data = pd.read_csv(true_path)
+            fake_data = pd.read_csv(fake_path)
+
+            if "text" not in true_data.columns or "text" not in fake_data.columns:
+                raise ValueError("Both files must contain a 'text' column")
+
+            true_data["label"] = 1
+            fake_data["label"] = 0
+
+            combined_data = pd.concat([true_data, fake_data], ignore_index=True)
+
+            return combined_data
+        except FileNotFoundError:
+            print(f"Error: One of the files was not found: {true_path}, {fake_path}")
+            return pd.DataFrame()
+        except ValueError as ve:
+            print(f"Error: {ve}")
+            return pd.DataFrame()
