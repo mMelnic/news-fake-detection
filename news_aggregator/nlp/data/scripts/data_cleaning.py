@@ -105,6 +105,7 @@ if __name__ == '__main__':
     cleaner.remove_duplicates("news")
     cleaner.filter_short_texts("news")
     cleaner.balance_classes("sentiment")
+    cleaner.data.rename(columns={"news": "title", "sentiment": "label"}, inplace=True)
     cleaner.save_cleaned_data("nlp/data/datasets/cleaned_sentiment.csv")
 
     cleaner = DataCleaner(loader, "nlp/data/datasets/News_Category_Dataset_v3.json", file_type="json", required_columns=["headline", "category"])
@@ -112,6 +113,7 @@ if __name__ == '__main__':
     cleaner.remove_duplicates("headline")
     cleaner.filter_short_texts("headline", 4)
     cleaner.rename_rows_by_value("category", "CULTURE & ARTS", "ARTS & CULTURE")
+    cleaner.data.rename(columns={"headline": "title", "category": "label"}, inplace=True)
     cleaner.save_cleaned_data("nlp/data/datasets/cleaned_category.csv")
 
     # Load the first dataset (WELFake_Dataset.csv)
