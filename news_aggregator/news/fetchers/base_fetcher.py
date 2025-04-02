@@ -15,7 +15,7 @@ class BaseFetcher:
             raise ValueError("Query must be a non-empty string.")
         if len(query) > 500:
             raise ValueError("Query must not exceed 500 characters.")
-        return quote(query.strip())
+        return quote(query.strip()) # TODO: Check if explicit url encoiding is needed or if requests params handles it correctly
 
     def _send_request(self, url, params, headers=None):
         """Send an HTTP GET request and return the response."""
