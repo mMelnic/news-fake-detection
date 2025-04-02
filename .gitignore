@@ -9,3 +9,6 @@ dump_*.sql
 *.db
 config.json
 settings.py
+news_aggregator.egg-info
+*.csv
+*.json
