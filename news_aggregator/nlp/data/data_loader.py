@@ -54,6 +54,7 @@ class DatasetLoader:
 
             true_data = true_data[["title", "label"]]
             fake_data = fake_data[["title", "label"]]
+
             combined_data = pd.concat([true_data, fake_data], ignore_index=True)
             return combined_data
 
