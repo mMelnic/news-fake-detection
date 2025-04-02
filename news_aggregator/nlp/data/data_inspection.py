@@ -96,3 +96,48 @@ class DataInspector:
         noisy_entries = self.data[self.data['word_count'] < 5]
         print(noisy_entries[[text_column, 'word_count']].head())
         print(f"Total number of noisy entries (less than 5 words): {len(noisy_entries)}")
+
+if __name__ == "__main__":
+    from nlp.data.data_loader import DatasetLoader
+
+    loader = DatasetLoader()
+    inspector = DataInspector(loader, "nlp/data/datasets/cleaned_sentiment.csv", file_type="csv", required_columns=["news", "sentiment"])
+    inspector.check_special_characters("news")
+    inspector.check_punctuation("news")
+    inspector.check_contractions("news")
+    inspector.check_spelling("news")
+    inspector.check_duplicates("news")
+    inspector.check_class_balance("sentiment")
+    inspector.check_noisy_input("news")
+
+    inspector = DataInspector(loader, "nlp/data/datasets/cleaned_category.csv", file_type="csv", required_columns=["headline", "category"])
+    inspector.check_special_characters("headline")
+    inspector.check_punctuation("headline")
+    inspector.check_contractions("headline")
+    inspector.check_duplicates("headline", "category")
+    inspector.check_class_balance("category")
+    inspector.check_noisy_input("headline")
+
+    inspector = DataInspector(loader, None, file_type="fake_news", true_path="nlp/data/datasets/DataSet_Misinfo_TRUE.csv", fake_path="nlp/data/datasets/DataSet_Misinfo_FAKE.csv")
+    inspector.check_special_characters("text")
+    inspector.check_punctuation("text")
+    inspector.check_contractions("text")
+    inspector.check_duplicates("text")
+    inspector.check_class_balance("label")
+    inspector.check_noisy_input("text")
+
+    inspector = DataInspector(loader, "nlp/data/datasets/cleaned_fake_news.csv", file_type="csv", required_columns=['title', 'label'])
+    inspector.check_special_characters("title")
+    inspector.check_punctuation("title")
+    inspector.check_contractions("title")
+    inspector.check_duplicates("title")
+    inspector.check_class_balance("label")
+    inspector.check_noisy_input("title")
+
+    inspector = DataInspector(loader, None, file_type="fake_news", true_path="nlp/data/datasets/True.csv", fake_path="nlp/data/datasets/Fake.csv")
+    inspector.check_special_characters("title")
+    inspector.check_punctuation("title")
+    inspector.check_contractions("title")
+    inspector.check_duplicates("title")
+    inspector.check_class_balance("label")
+    inspector.check_noisy_input("title")
