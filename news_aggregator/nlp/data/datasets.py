@@ -1,62 +1,46 @@
-import pandas as pd
-import json
+import random
+from torch.utils.data import Dataset
 
-class DatasetLoader:
-    def load_json(self, file_path: str, required_columns: list[str]) -> pd.DataFrame:
+class MultiTaskDataset(Dataset):
+    def __init__(self, datasets):
         """
-        Loads a JSON dataset and extracts the required columns.
-        :param file_path: Path to the dataset file.
-        :param required_columns: List of columns to extract (e.g., ['headline', 'short_description', 'category']).
-        :return: A pandas DataFrame containing the extracted data.
+        Initialize the multi-task dataset.
+        :param datasets: A dictionary containing task names as keys and their corresponding datasets as values.
         """
-        with open(file_path, 'r') as file:
-            data = [json.loads(line) for line in file]
-        df = pd.DataFrame(data)
-        return df[required_columns]
-    
-    def load_csv(self, file_path: str, required_columns: list[str] = None) -> pd.DataFrame:
-        """
-        Loads data from a CSV file and extracts the required columns.
-        :param file_path: Path to the CSV file.
-        :param required_columns: List of columns to extract. If None, all columns will be loaded.
-        :return: A pandas DataFrame containing the extracted data.
-        """
-        try:
-            if required_columns:
-                data = pd.read_csv(file_path, usecols=required_columns)
-            else:
-                data = pd.read_csv(file_path)
-            return data
-        except FileNotFoundError:
-            print(f"Error: File not found at path {file_path}")
-            return pd.DataFrame()
-        except ValueError as ve:
-            print(f"Error: {ve}")
-            return pd.DataFrame()
+        self.datasets = datasets
+        self.task_list = list(datasets.keys())
+
+        self.samples = []
+        for task_name, dataset in datasets.items():
+            for sample in dataset:
+                sample["task"] = task_name
+                self.samples.append(sample)
+
+        # Shuffle for better task distribution
+        random.shuffle(self.samples)
+
+    def __len__(self):
+        return len(self.samples)
+
+    def __getitem__(self, idx):
+        sample = self.samples[idx]
         
-    def load_fake_news_data(self, true_path: str, fake_path: str) -> pd.DataFrame:
-        """
-        Combines the TRUE and FAKE datasets into a single DataFrame and adds a label column.
-        :param true_path: Path to the TRUE.csv file.
-        :param fake_path: Path to the FAKE.csv file.
-        :return: A pandas DataFrame containing combined data with labels.
-        """
-        try:
-            true_data = pd.read_csv(true_path)
-            fake_data = pd.read_csv(fake_path)
+        # Each sample has the required fields for batching
+        input_ids = sample.get("input_ids")
+        attention_mask = sample.get("attention_mask")
+        labels = sample.get("label")
+        task = sample.get("task")
+        
+        if "input_ids" not in sample:
+            raise KeyError(f"Sample at index {idx} is missing 'input_ids'.")
+        if "attention_mask" not in sample:
+            raise KeyError(f"Sample at index {idx} is missing 'attention_mask'.")
+        if "label" not in sample:
+            raise KeyError(f"Sample at index {idx} is missing 'labels'.")
 
-            if "text" not in true_data.columns or "text" not in fake_data.columns:
-                raise ValueError("Both files must contain a 'text' column")
-
-            true_data["label"] = 1
-            fake_data["label"] = 0
-
-            combined_data = pd.concat([true_data, fake_data], ignore_index=True)
-
-            return combined_data
-        except FileNotFoundError:
-            print(f"Error: One of the files was not found: {true_path}, {fake_path}")
-            return pd.DataFrame()
-        except ValueError as ve:
-            print(f"Error: {ve}")
-            return pd.DataFrame()
+        return {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "label": labels,
+            "task": task
+        }
