@@ -2,7 +2,7 @@ from transformers import AutoTokenizer
 import pandas as pd
 
 class DataPreprocessor:
-    def __init__(self, tokenizer_name: str = "roberta-base"):
+    def __init__(self, tokenizer_name: str = "distilroberta-base"):
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
 
     def clean_text(self, text: str) -> str:
@@ -28,7 +28,7 @@ class DataPreprocessor:
         self.label_mapping = label_mapping  # Save for later use
         return data
 
-    def tokenize(self, data: pd.DataFrame, text_columns: list[str], max_length: int = 128):
+    def tokenize(self, data: pd.DataFrame, text_columns: list[str], max_length: int = 50):
         """
         Tokenizes text columns and prepares tokenized inputs for the model.
         :param data: DataFrame containing the text to tokenize.
