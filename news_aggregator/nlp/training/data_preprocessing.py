@@ -19,13 +19,14 @@ def split_tokenize_and_save_data():
 
     for task, file in data_files.items():
         df = pd.read_csv(file)
+        df = preprocessor.encode_labels(df, "label")
         train_df, val_df, test_df, weights = splitter.stratified_split(df, "label")
         class_weights[task] = weights
 
         # Tokenize
         for split, split_df in zip(["train", "val", "test"], [train_df, val_df, test_df]):
             split_df["title"] = split_df["title"].apply(preprocessor.clean_text)
-            split_encoded = preprocessor.tokenize(split_df, ["title"])
+            split_encoded = preprocessor.tokenize(split_df, "title")
 
             # Add tokenized columns to the dataframe
             split_df["input_ids"] = split_encoded["input_ids"].tolist()
