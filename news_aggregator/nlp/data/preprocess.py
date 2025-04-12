@@ -28,18 +28,17 @@ class DataPreprocessor:
         self.label_mapping = label_mapping  # Save for later use
         return data
 
-    def tokenize(self, data: pd.DataFrame, text_columns: list[str], max_length: int = 50):
+    def tokenize(self, data: pd.DataFrame, text_column: str, max_length: int = 50):
         """
         Tokenizes text columns and prepares tokenized inputs for the model.
         :param data: DataFrame containing the text to tokenize.
-        :param text_columns: List of columns to combine as input (e.g., ['headline', 'short_description']).
+        :param text_columns: Column to use as input.
         :param max_length: Maximum sequence length for the tokenizer.
         :return: Tokenized inputs as a dictionary of tensors.
         """
-        data['combined_text'] = data[text_columns].agg(" ".join, axis=1)
         
         encoded_data = self.tokenizer(
-            list(data['combined_text']),
+            list(data[text_column]),
             padding=True,
             truncation=True,
             max_length=max_length,
