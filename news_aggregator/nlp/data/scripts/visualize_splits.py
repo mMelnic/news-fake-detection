@@ -54,8 +54,8 @@ def compute_word_statistics(dataset, text_column, dataset_name, split_type="Orig
     print(f"Standard Deviation: {dataset['word_count'].std():.2f}")
 
 for dataset_name, dataset in datasets.items():
-    label_column = "sentiment" if dataset_name == "sentiment" else "category" if dataset_name == "topic_classification" else "label"
-    text_column = "news" if dataset_name == "sentiment" else "headline" if dataset_name == "topic_classification" else "title"
+    label_column = "label"
+    text_column = "title"
 
     # Visualize original dataset
     visualize_class_distribution(dataset, label_column, dataset_name, split_type="Original")
