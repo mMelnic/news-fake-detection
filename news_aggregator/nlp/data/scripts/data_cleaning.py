@@ -117,12 +117,14 @@ if __name__ == '__main__':
     cleaner.save_cleaned_data("nlp/data/datasets/cleaned_category.csv")
 
     # Load the first dataset (WELFake_Dataset.csv)
+    # 1 is for real news, 0 is for fake news
     cleaner1 = DataCleaner(loader, file_path="nlp/data/datasets/WELFake_Dataset.csv", file_type="csv", required_columns=["title", "label"])
     cleaner1.clean_special_characters("title")
     cleaner1.remove_duplicates("title")
     cleaner1.filter_short_texts("title")
 
     # Load the second dataset (True.csv and Fake.csv)
+    # 1 is for real news, 0 is for fake news
     cleaner2 = DataCleaner(loader, file_type="fake_news", true_path="nlp/data/datasets/True.csv", fake_path="nlp/data/datasets/Fake.csv")
     cleaner2.clean_special_characters("title")
     cleaner2.remove_duplicates("title")
