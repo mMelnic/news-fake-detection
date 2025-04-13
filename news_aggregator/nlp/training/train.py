@@ -1,7 +1,7 @@
 import pytorch_lightning as pl
 import pandas as pd
 import json
-
+from pytorch_lightning.callbacks import ModelCheckpoint
 import torch
 from nlp.data.datasets import MultiTaskDataset
 from nlp.models.data_module import MultiTaskDataModule
@@ -47,7 +47,12 @@ def train_multitask_model():
         patience=2,  # Number of epochs to wait before stopping
         verbose=True,  # Log stopping decisions
     )
-    
+    checkpoint_callback = ModelCheckpoint(
+        monitor="val_loss",
+        mode="min",
+        save_top_k=1,
+        filename="best-checkpoint"
+    )
     accelerator = "gpu" if torch.cuda.is_available() else "cpu"
 
     trainer = pl.Trainer(
@@ -58,7 +63,8 @@ def train_multitask_model():
         accumulate_grad_batches=4,
         precision='16-mixed',
         gradient_clip_val=1.0,
-        callbacks=[early_stopping_callback],
+        callbacks=[early_stopping_callback, checkpoint_callback],
+        enable_checkpointing=False,
     )
     
     trainer.fit(model, datamodule)
