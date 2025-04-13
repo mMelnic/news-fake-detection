@@ -53,6 +53,11 @@ def compute_word_statistics(dataset, text_column, dataset_name, split_type="Orig
     print(f"Median: {dataset['word_count'].median():.2f}")
     print(f"Standard Deviation: {dataset['word_count'].std():.2f}")
 
+def print_class_distribution(dataset, label_column, dataset_name, split_type="Original"):
+    class_counts = dataset[label_column].value_counts()
+    print(f"\nClass Distribution for {dataset_name} ({split_type}):")
+    print(class_counts)
+
 for dataset_name, dataset in datasets.items():
     label_column = "label"
     text_column = "title"
@@ -66,6 +71,7 @@ for dataset_name, dataset in datasets.items():
 
     # Visualize splits
     visualize_class_distribution(train_data, label_column, dataset_name, split_type="Train Set")
+    print_class_distribution(train_data, label_column, dataset_name, split_type="Train Set")
     visualize_class_distribution(val_data, label_column, dataset_name, split_type="Validation Set")
     visualize_class_distribution(test_data, label_column, dataset_name, split_type="Test Set")
 
