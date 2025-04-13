@@ -37,7 +37,6 @@ if __name__ == "__main__":
     model.eval()
     model.to(device)
 
-    # Dictionary to store true and predicted labels per task
     task_metrics = {task: {"true_labels": [], "pred_labels": []} for task in test_files.keys()}
 
     with torch.no_grad():
