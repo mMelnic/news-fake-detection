@@ -31,3 +31,12 @@ class DatasetSplitter:
         class_weights = dict(zip(class_counts.index, class_weights))
 
         return train_data, val_data, test_data, class_weights
+
+    def compute_class_weights(self, data, label_column):
+        classes = np.unique(data[label_column])
+        new_weights = compute_class_weight(
+            'balanced', 
+            classes=classes, 
+            y=data[label_column]
+        )
+        return {cls: float(w) for cls, w in zip(classes, new_weights)}
