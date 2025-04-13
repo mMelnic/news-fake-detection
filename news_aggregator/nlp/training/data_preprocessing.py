@@ -3,6 +3,16 @@ from nlp.data.data_split import DatasetSplitter
 from nlp.data.preprocess import DataPreprocessor
 import json
 
+def merge_topic_classes(df):
+    merge_map = {
+        'THE WORLDPOST': 'WORLDPOST',
+        'STYLE': 'STYLE & BEAUTY',
+        'ARTS': 'ARTS & CULTURE',
+        'HEALTHY LIVING': 'WELLNESS'
+    }
+    df['label'] = df['label'].replace(merge_map)
+    return df
+
 def split_tokenize_and_save_data():
     preprocessor = DataPreprocessor("distilroberta-base")
     splitter = DatasetSplitter()
