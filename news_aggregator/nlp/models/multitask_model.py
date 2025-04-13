@@ -33,6 +33,6 @@ class MultiTaskModel(nn.Module):
         :return: Task-specific output.
         """
         encoder_outputs = self.shared_encoder(input_ids, attention_mask)
-        pooled_output = encoder_outputs.pooler_output  # CLS token
+        pooled_output = encoder_outputs.last_hidden_state[:, 0, :]  # CLS token
         pooled_output = self.dropout(pooled_output)
         return self.heads[task_name](pooled_output)
