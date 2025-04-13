@@ -1,65 +1,21 @@
 from nlp.data.preprocess import DataPreprocessor
 import pandas as pd
+import json
 
 # Define the main function
 def main():
-    # Initialize preprocessor
-    preprocessor = DataPreprocessor("roberta-base")
-
-    # Load datasets (Assuming CSV format)
-    sentiment_data = pd.read_csv("nlp/data/datasets/cleaned_sentiment.csv")
-    topic_data = pd.read_csv("nlp/data/datasets/cleaned_category.csv")
-    fake_news_data = pd.read_csv("nlp/data/datasets/cleaned_fake_news.csv")
-
-    # Apply text cleaning
-    sentiment_data["title"] = sentiment_data["title"].apply(preprocessor.clean_text)
-    topic_data["title"] = topic_data["title"].apply(preprocessor.clean_text)
-    fake_news_data["title"] = fake_news_data["title"].apply(preprocessor.clean_text)
-
-    # Encode labels
-    sentiment_data = preprocessor.encode_labels(sentiment_data, "label")
-    topic_data = preprocessor.encode_labels(topic_data, "label")
-    fake_news_data = preprocessor.encode_labels(fake_news_data, "label")
-
-    # Tokenize text
-    sentiment_encoded = preprocessor.tokenize(sentiment_data, ["title"])
-    topic_encoded = preprocessor.tokenize(topic_data, ["title"])
-    fake_news_encoded = preprocessor.tokenize(fake_news_data, ["title"])
-
-    sentiment_data["input_ids"] = sentiment_encoded["input_ids"].tolist()
-    sentiment_data["attention_mask"] = sentiment_encoded["attention_mask"].tolist()
-
-    topic_data["input_ids"] = topic_encoded["input_ids"].tolist()
-    topic_data["attention_mask"] = topic_encoded["attention_mask"].tolist()
-
-    fake_news_data["input_ids"] = fake_news_encoded["input_ids"].tolist()
-    fake_news_data["attention_mask"] = fake_news_encoded["attention_mask"].tolist()
-
-    from nlp.data.data_split import DatasetSplitter
-
-    # Initialize splitter
-    splitter = DatasetSplitter()
-
-    # Stratified split
-    sentiment_train, sentiment_val, sentiment_test, sentiment_class_weights = splitter.stratified_split(sentiment_data, "label")
-    topic_train, topic_val, topic_test, topic_class_weights = splitter.stratified_split(topic_data, "label")
-    fake_news_train, fake_news_val, fake_news_test, fake_news_class_weights = splitter.stratified_split(fake_news_data, "label")
-
-    # Store class weights for loss calculation
-    class_weights = {
-        "sentiment_analysis": sentiment_class_weights,
-        "topic_classification": topic_class_weights,
-        "fake_news_detection": fake_news_class_weights
+    train_files = {
+        "sentiment_analysis": "nlp/outputs/sentiment_analysis_train.csv",
+        "topic_classification": "nlp/outputs/topic_classification_train.csv",
+        "fake_news_detection": "nlp/outputs/fake_news_detection_train.csv"
     }
+
+    train_datasets = {task: pd.read_csv(file).to_dict(orient="records") for task, file in train_files.items()}
+
+    with open("nlp/outputs/class_weights.json", "r") as f:
+        class_weights = json.load(f)
 
     from nlp.data.datasets import MultiTaskDataset
-
-    # Define training datasets
-    train_datasets = {
-        "sentiment_analysis": sentiment_train.to_dict(orient="records"),
-        "topic_classification": topic_train.to_dict(orient="records"),
-        "fake_news_detection": fake_news_train.to_dict(orient="records")
-    }
 
     # Initialize multi-task dataset
     multi_task_dataset = MultiTaskDataset(train_datasets)
@@ -91,11 +47,11 @@ def main():
     # Initialize the model
     task_classes = {
         "sentiment_analysis": 2,
-        "topic_classification": len(topic_class_weights),
+        "topic_classification": len(class_weights['topic_classification']),
         "fake_news_detection": 2
     }
 
-    model = MultiTaskModel("roberta-base", task_classes)
+    model = MultiTaskModel("distilroberta-base", task_classes)
     model.eval()  # Set model to evaluation mode
 
     # Run inference on a sample batch
