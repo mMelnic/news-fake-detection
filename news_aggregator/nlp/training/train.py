@@ -63,8 +63,7 @@ def train_multitask_model():
         accumulate_grad_batches=4,
         precision='16-mixed',
         gradient_clip_val=1.0,
-        callbacks=[early_stopping_callback, checkpoint_callback],
-        enable_checkpointing=False,
+        callbacks=[early_stopping_callback, checkpoint_callback]
     )
     
     trainer.fit(model, datamodule)
