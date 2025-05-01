@@ -89,6 +89,15 @@ class RegisterView(APIView):
 
         return Response({'success': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
     
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserSerializer
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+    
 from rest_framework_simplejwt.views import TokenRefreshView
 
 class CookieTokenRefreshView(TokenRefreshView):
