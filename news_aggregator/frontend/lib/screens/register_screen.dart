@@ -11,67 +11,107 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _email = TextEditingController();
-  final _password = TextEditingController();
-  final _authService = AuthService();
-  bool _loading = false;
+  final _formKey = GlobalKey<FormState>();
+  String username = '';
+  String email = '';
+  String password = '';
+  String confirmPassword = '';
+  bool isLoading = false;
+  String errorMessage = '';
 
-  void _register() async {
-    setState(() => _loading = true);
-    final response = await _authService.register(
-      _email.text.trim(),
-      _password.text.trim(),
-    );
+Future<void> register() async {
     if (!mounted) return;
-    setState(() => _loading = false);
+
+    setState(() {
+      isLoading = true;
+      errorMessage = '';
+    });
+
+    if (password != confirmPassword) {
+      if (!mounted) return;
+      setState(() {
+        errorMessage = 'Passwords do not match';
+        isLoading = false;
+      });
+      return;
+    }
+
+    final response = await AuthService().register(username, email, password);
+    final data = response.data;
+
+    if (!mounted) return;
 
     if (response.statusCode == 201) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Registered successfully')));
-      widget.onSwitch();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Registered! Check your email to verify.'),
+        ),
+      );
+      Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Registration failed')));
+      setState(() {
+        errorMessage = data['error']?.toString() ?? 'Registration failed';
+        isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child:
-            _loading
-                ? const CircularProgressIndicator()
-                : Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextField(
-                        controller: _email,
-                        decoration: const InputDecoration(labelText: 'Email'),
-                      ),
-                      TextField(
-                        controller: _password,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _register,
-                        child: const Text('Register'),
-                      ),
-                      TextButton(
-                        onPressed: widget.onSwitch,
-                        child: const Text("Already have an account? Login"),
-                      ),
-                    ],
-                  ),
+      appBar: AppBar(title: const Text('Register')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Username'),
+                onChanged: (val) => username = val.trim(),
+                validator:
+                    (val) => val!.isEmpty ? 'Enter a valid username' : null,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (val) => email = val.trim(),
+                validator:
+                    (val) => val!.contains('@') ? null : 'Enter a valid email',
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                onChanged: (val) => password = val,
+                validator:
+                    (val) => val!.length < 8 ? 'Minimum 8 characters' : null,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Confirm Password',
                 ),
+                obscureText: true,
+                onChanged: (val) => confirmPassword = val,
+              ),
+              const SizedBox(height: 20),
+              if (errorMessage.isNotEmpty)
+                Text(errorMessage, style: const TextStyle(color: Colors.red)),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) register();
+                },
+                child:
+                    isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('Register'),
+              ),
+              TextButton(
+                onPressed: widget.onSwitch,
+                child: Text('Already have an account? Log in'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
