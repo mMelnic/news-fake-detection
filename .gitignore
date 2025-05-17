@@ -12,3 +12,4 @@ settings.py
 news_aggregator.egg-info
 *.csv
 *.json
+*.md
