@@ -13,3 +13,4 @@ news_aggregator.egg-info
 *.csv
 *.json
 *.md
+.VSCodeCounter
