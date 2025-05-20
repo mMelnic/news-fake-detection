@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final VoidCallback onSwitch;
-
-  const RegisterScreen({super.key, required this.onSwitch});
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -19,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isLoading = false;
   String errorMessage = '';
 
-Future<void> register() async {
+  Future<void> register() async {
     if (!mounted) return;
 
     setState(() {
@@ -28,7 +27,6 @@ Future<void> register() async {
     });
 
     if (password != confirmPassword) {
-      if (!mounted) return;
       setState(() {
         errorMessage = 'Passwords do not match';
         isLoading = false;
@@ -42,12 +40,7 @@ Future<void> register() async {
     if (!mounted) return;
 
     if (response.statusCode == 201) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Registered! Check your email to verify.'),
-        ),
-      );
-      Navigator.pop(context);
+      context.go('/home');
     } else {
       setState(() {
         errorMessage = data['error']?.toString() ?? 'Registration failed';
@@ -106,8 +99,8 @@ Future<void> register() async {
                         : const Text('Register'),
               ),
               TextButton(
-                onPressed: widget.onSwitch,
-                child: Text('Already have an account? Log in'),
+                onPressed: () => context.go('/login'),
+                child: const Text('Already have an account? Log in'),
               ),
             ],
           ),

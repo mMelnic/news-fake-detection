@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
-  final VoidCallback onSwitch;
-
-  const LoginScreen({super.key, required this.onSwitch});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -29,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Login successful')));
-      // TODO: Navigate to home screen
+      context.go('/home');
     } else {
       ScaffoldMessenger.of(
         context,
@@ -40,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
       body: Center(
         child:
             _loading
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Text('Login'),
                       ),
                       TextButton(
-                        onPressed: widget.onSwitch,
+                        onPressed: () => context.go('/register'),
                         child: const Text("Don't have an account? Register"),
                       ),
                     ],
