@@ -108,7 +108,7 @@ def store_article_async(self, article, query=None):
             try:
                 published_at = parser.parse(published_at_raw)
             except Exception as e:
-                logger.warning(f"Could not parse publishedAt '{published_at_raw}' for article '{title[:50]}': {e}")
+                logger.warning(f"Could not parse publishedAt '{published_at_raw}' for article '{title[:100]}': {e}")
                     
         logger.debug(f"Creating/updating article with URL: {url}")
                     
