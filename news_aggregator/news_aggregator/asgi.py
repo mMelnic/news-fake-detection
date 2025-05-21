@@ -8,9 +8,23 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
 """
 
 import os
-
+import django
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'news_aggregator.settings')
+django.setup() 
 
-application = get_asgi_application()
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+import news.routing
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'news_aggregator.settings')
+
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            news.routing.websocket_urlpatterns
+        )
+    ),
+})

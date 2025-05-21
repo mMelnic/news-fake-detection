@@ -35,12 +35,19 @@ class NewsAggregatorView(APIView):
         else:
             message = "Fetched from database only. Use refresh=true parameter to fetch new articles."
         
+        # Include WebSocket information in the response
+        websocket_info = {
+            "use_websocket": True,
+            "websocket_url": f"ws://{request.get_host()}/ws/news/?query={query}&language={language}&country={country or 'all'}"
+        }
+        
         # Return the database articles immediately
         return Response({
             "message": message,
             "articles": db_articles,
             "article_count": len(db_articles),
-            "from_db_only": not (force_refresh or len(db_articles) < 5)
+            "from_db_only": not (force_refresh or len(db_articles) < 5),
+            "websocket": websocket_info
         })
     
     def get_db_articles(self, query, language, country, fresh_only):

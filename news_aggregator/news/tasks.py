@@ -178,6 +178,51 @@ def store_article_async(self, article, query=None):
                     
             logger.debug(f"Added {added_keywords} keywords to article {article_obj.id}")
 
+        # After storing the article, send a notification via WebSocket
+        if created:
+            try:
+                # Import here to avoid circular imports
+                from channels.layers import get_channel_layer
+                from asgiref.sync import async_to_sync
+                
+                channel_layer = get_channel_layer()
+                
+                # Format the article for sending
+                article_data = {
+                    "id": article_obj.id,
+                    "title": article_obj.title,
+                    "url": article_obj.url,
+                    "content": article_obj.content[:200] + "..." if len(article_obj.content) > 200 else article_obj.content,
+                    "image_url": article_obj.image_url,
+                    "author": article_obj.author,
+                    "published_date": article_obj.published_date.isoformat() if article_obj.published_date else None,
+                    "source": article_obj.source.name if article_obj.source else "Unknown",
+                    "has_embedding": article_obj.embedding is not None,
+                    "is_fake": article_obj.is_fake,
+                    "fake_score": article_obj.fake_score,
+                    "sentiment": article_obj.sentiment
+                }
+                
+                # Create a group name that matches the one in the consumer
+                if query:
+                    # Extract language and country from article
+                    language = article.get('language', 'en')
+                    country = article.get('country', 'all')
+                    room_group_name = f"news_{query}_{language}_{country}"
+                    
+                    # Send the update to the group
+                    async_to_sync(channel_layer.group_send)(
+                        room_group_name,
+                        {
+                            'type': 'article_update',
+                            'article': article_data
+                        }
+                    )
+                    logger.debug(f"WebSocket notification sent for article {article_obj.id} to group {room_group_name}")
+            except Exception as ws_error:
+                logger.error(f"WebSocket notification error: {str(ws_error)}")
+                # Don't raise here, just log the error and continue
+                
         article_data = {
             "id": article_obj.id,
             "title": article_obj.title,
@@ -228,6 +273,9 @@ def store_articles_batch(articles, query=None):
     # Keep track of stored article IDs for NLP processing
     stored_article_ids = []
     
+    # Store all successfully processed articles for batch notification
+    processed_articles = []
+    
     for article in articles:
         # If the article doesn't already have query info, add it
         if query and 'query' not in article:
@@ -243,11 +291,41 @@ def store_articles_batch(articles, query=None):
         # If article was stored successfully, add its ID to the list for NLP processing
         if result and isinstance(result, dict) and 'id' in result:
             stored_article_ids.append(result['id'])
-        
+            processed_articles.append(result)
+    
     # Process stored articles with NLP in a separate task
     if stored_article_ids:
         logger.info(f"Queueing {len(stored_article_ids)} articles for NLP processing")
         process_articles_nlp.delay(stored_article_ids)
+    
+    # Send batch notification via WebSocket
+    if processed_articles and query:
+        try:
+            # Import here to avoid circular imports
+            from channels.layers import get_channel_layer
+            from asgiref.sync import async_to_sync
+            
+            # Get the first article to extract language and country
+            first_article = articles[0]
+            language = first_article.get('language', 'en')
+            country = first_article.get('country', 'all')
+            
+            channel_layer = get_channel_layer()
+            room_group_name = f"news_{query}_{language}_{country}"
+            
+            # Send the batch update to the group
+            async_to_sync(channel_layer.group_send)(
+                room_group_name,
+                {
+                    'type': 'batch_update',
+                    'articles': processed_articles,
+                    'count': len(processed_articles)
+                }
+            )
+            logger.debug(f"WebSocket batch notification sent for {len(processed_articles)} articles to group {room_group_name}")
+        except Exception as ws_error:
+            logger.error(f"WebSocket batch notification error: {str(ws_error)}")
+            # Don't raise here, just log the error and continue
     
     return {"queued_articles": len(articles), "stored_articles": len(stored_article_ids)}
 

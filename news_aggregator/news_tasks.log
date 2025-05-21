@@ -1,0 +1,326 @@
+2025-05-21 16:47:22,874 - INFO - Watching for file changes with StatReloader
+2025-05-21 16:47:28,115 - INFO - Initializing SentenceTransformer model...
+2025-05-21 16:47:28,117 - INFO - Use pytorch device_name: cpu
+2025-05-21 16:47:28,117 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 16:47:30,257 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 16:49:06,634 - INFO - Searching database for articles matching: query=AI, language=en, country=us, fresh_only=True
+2025-05-21 16:49:06,653 - INFO - Found 0 articles in database matching criteria
+2025-05-21 16:49:06,655 - INFO - Fetching new articles from APIs: query=AI, language=en, country=us
+2025-05-21 16:49:07,740 - INFO - Fetched 100 articles from NewsAPI
+2025-05-21 16:49:08,356 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 16:49:08,357 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=AI&hl=en&gl=us&ceid=us:en
+2025-05-21 16:49:09,621 - INFO - Found 100 articles from RSS feed
+2025-05-21 16:49:09,621 - INFO - Fetched 100 articles from RSS feed
+2025-05-21 16:49:09,622 - INFO - Total articles fetched from all sources: 210
+2025-05-21 16:59:50,922 - INFO - Searching database for articles matching: query=family, language=en, country=us, fresh_only=True
+2025-05-21 16:59:50,945 - INFO - Found 0 articles in database matching criteria
+2025-05-21 16:59:50,948 - INFO - Fetching new articles from APIs: query=family, language=en, country=us
+2025-05-21 16:59:51,973 - INFO - Fetched 100 articles from NewsAPI
+2025-05-21 16:59:52,567 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 16:59:52,568 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=family&hl=en&gl=us&ceid=us:en
+2025-05-21 16:59:53,948 - INFO - Found 100 articles from RSS feed
+2025-05-21 16:59:53,949 - INFO - Fetched 100 articles from RSS feed
+2025-05-21 16:59:53,949 - INFO - Total articles fetched from all sources: 210
+2025-05-21 17:01:39,919 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:01:39,920 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:01:39,921 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:01:54,054 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:01:54,055 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:01:54,056 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:01:56,314 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 17:02:28,062 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:02:28,063 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:02:28,063 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:02:31,087 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 17:11:51,613 - INFO - Watching for file changes with StatReloader
+2025-05-21 17:12:02,206 - INFO - Watching for file changes with StatReloader
+2025-05-21 17:12:11,826 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:12:11,828 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:12:11,828 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:12:14,548 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 17:12:46,231 - INFO - Watching for file changes with StatReloader
+2025-05-21 17:12:51,849 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:12:51,850 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:12:51,851 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:12:54,325 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 17:13:15,351 - WARNING - Method Not Allowed: /auth/token/refresh/
+2025-05-21 17:13:23,690 - INFO - Searching database for articles matching: query=family, language=en, country=us, fresh_only=True
+2025-05-21 17:13:23,758 - INFO - Found 0 articles in database matching criteria
+2025-05-21 17:13:23,764 - INFO - Fetching new articles from APIs: query=family, language=en, country=us
+2025-05-21 17:13:24,820 - INFO - Fetched 100 articles from NewsAPI
+2025-05-21 17:13:25,385 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 17:13:25,385 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=family&hl=en&gl=us&ceid=us:en
+2025-05-21 17:13:26,514 - INFO - Found 100 articles from RSS feed
+2025-05-21 17:13:26,515 - INFO - Fetched 100 articles from RSS feed
+2025-05-21 17:13:26,516 - INFO - Total articles fetched from all sources: 210
+2025-05-21 17:16:09,120 - INFO - Watching for file changes with StatReloader
+2025-05-21 17:16:16,057 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:16:16,059 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:16:16,059 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:16:18,218 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 17:16:38,448 - INFO - Watching for file changes with StatReloader
+2025-05-21 17:16:46,020 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:16:46,021 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:16:46,022 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:16:48,741 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 17:16:49,266 - INFO - Searching database for articles matching: query=family, language=en, country=us, fresh_only=True
+2025-05-21 17:16:49,297 - INFO - Found 0 articles in the database matching criteria
+2025-05-21 17:16:49,302 - INFO - Fetching new articles from APIs: query=family, language=en, country=us
+2025-05-21 17:16:50,333 - INFO - Fetched 100 articles from NewsAPI
+2025-05-21 17:16:50,873 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 17:16:50,874 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=family&hl=en&gl=us&ceid=us:en
+2025-05-21 17:16:52,207 - INFO - Found 100 articles from RSS feed
+2025-05-21 17:16:52,208 - INFO - Fetched 100 articles from RSS feed
+2025-05-21 17:16:52,209 - INFO - Total articles fetched from all sources: 210
+2025-05-21 17:24:22,476 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:24:22,478 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:24:22,479 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:24:24,818 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 17:29:21,502 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:29:21,503 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:29:21,504 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:29:23,818 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 17:43:48,542 - INFO - Watching for file changes with StatReloader
+2025-05-21 17:43:54,862 - INFO - Initializing SentenceTransformer model...
+2025-05-21 17:43:54,864 - INFO - Use pytorch device_name: cpu
+2025-05-21 17:43:54,864 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 17:43:57,038 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:16:24,999 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:16:33,946 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:16:33,948 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:16:33,948 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:16:36,565 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:17:35,746 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:17:42,896 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:17:42,898 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:17:42,898 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:17:45,118 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:17:57,969 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:18:07,672 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:18:07,674 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:18:07,675 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:18:09,865 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:18:17,766 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:18:24,798 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:18:24,800 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:18:24,800 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:18:26,879 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:19:23,812 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:19:29,429 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:19:29,431 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:19:29,432 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:19:32,185 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:19:51,707 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:19:51,709 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:19:51,710 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:19:53,917 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:20:19,920 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:20:19,922 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:20:19,923 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:20:22,240 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:30:50,943 - INFO - Searching database for articles matching: query=holiday, language=en, country=us, fresh_only=True
+2025-05-21 18:30:51,024 - INFO - Found 0 articles in database matching criteria
+2025-05-21 18:30:51,033 - INFO - Fetching new articles from APIs: query=holiday, language=en, country=us
+2025-05-21 18:30:52,129 - INFO - Fetched 99 articles from NewsAPI
+2025-05-21 18:30:52,807 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 18:30:52,809 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=holiday&hl=en&gl=us&ceid=us:en
+2025-05-21 18:30:54,044 - INFO - Found 102 articles from RSS feed
+2025-05-21 18:30:54,045 - INFO - Fetched 102 articles from RSS feed
+2025-05-21 18:30:54,046 - INFO - Total articles fetched from all sources: 211
+2025-05-21 18:35:14,661 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:35:22,108 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:35:22,110 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:35:22,110 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:35:24,297 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:35:37,451 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:35:43,976 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:35:43,977 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:35:43,977 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:35:46,241 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:36:53,514 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:37:01,008 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:37:01,011 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:37:01,011 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:37:03,527 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:37:19,651 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:37:25,197 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:37:25,199 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:37:25,199 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:37:27,347 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:38:37,691 - INFO - Searching database for articles matching: query=holiday, language=en, country=us, fresh_only=True
+2025-05-21 18:38:37,729 - INFO - Found 0 articles in database matching criteria
+2025-05-21 18:38:37,735 - INFO - Fetching new articles from APIs: query=holiday, language=en, country=us
+2025-05-21 18:38:38,803 - INFO - Fetched 99 articles from NewsAPI
+2025-05-21 18:38:39,353 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 18:38:39,353 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=holiday&hl=en&gl=us&ceid=us:en
+2025-05-21 18:38:40,585 - INFO - Found 102 articles from RSS feed
+2025-05-21 18:38:40,591 - INFO - Fetched 102 articles from RSS feed
+2025-05-21 18:38:40,592 - INFO - Total articles fetched from all sources: 211
+2025-05-21 18:40:36,641 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:40:42,184 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:40:42,185 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:40:42,185 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:40:44,486 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:45:00,197 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:45:00,199 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:45:00,200 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:45:02,978 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:45:46,005 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:45:46,007 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:45:46,008 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:45:48,027 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:46:58,844 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:47:07,240 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:47:07,243 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:47:07,244 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:47:10,634 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:48:59,446 - WARNING - Unauthorized: /api/news/
+2025-05-21 18:49:19,080 - WARNING - Not Found: /
+2025-05-21 18:49:29,843 - WARNING - Method Not Allowed: /auth/token/refresh/
+2025-05-21 18:49:50,490 - INFO - Searching database for articles matching: query=holiday, language=en, country=us, fresh_only=True
+2025-05-21 18:49:50,538 - INFO - Found 0 articles in database matching criteria
+2025-05-21 18:49:50,543 - INFO - Fetching new articles from APIs: query=holiday, language=en, country=us
+2025-05-21 18:49:51,641 - INFO - Fetched 99 articles from NewsAPI
+2025-05-21 18:49:52,218 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 18:49:52,218 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=holiday&hl=en&gl=us&ceid=us:en
+2025-05-21 18:49:53,403 - INFO - Found 102 articles from RSS feed
+2025-05-21 18:49:53,403 - INFO - Fetched 102 articles from RSS feed
+2025-05-21 18:49:53,404 - INFO - Total articles fetched from all sources: 211
+2025-05-21 18:54:41,626 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:54:41,627 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:54:41,628 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:54:43,841 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:55:22,513 - WARNING - Not Found: /
+2025-05-21 18:55:29,859 - WARNING - Method Not Allowed: /auth/token/refresh/
+2025-05-21 18:55:45,011 - INFO - Searching database for articles matching: query=holiday, language=en, country=us, fresh_only=True
+2025-05-21 18:55:45,034 - INFO - Found 0 articles in database matching criteria
+2025-05-21 18:55:45,042 - INFO - Fetching new articles from APIs: query=holiday, language=en, country=us
+2025-05-21 18:55:45,610 - INFO - Fetched 99 articles from NewsAPI
+2025-05-21 18:55:46,159 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 18:55:46,160 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=holiday&hl=en&gl=us&ceid=us:en
+2025-05-21 18:55:47,529 - INFO - Found 102 articles from RSS feed
+2025-05-21 18:55:47,531 - INFO - Fetched 102 articles from RSS feed
+2025-05-21 18:55:47,532 - INFO - Total articles fetched from all sources: 211
+2025-05-21 18:59:38,062 - INFO - Watching for file changes with StatReloader
+2025-05-21 18:59:44,448 - INFO - Initializing SentenceTransformer model...
+2025-05-21 18:59:44,449 - INFO - Use pytorch device_name: cpu
+2025-05-21 18:59:44,450 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 18:59:46,734 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 18:59:57,605 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:00:04,375 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:00:04,376 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:00:04,376 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:00:07,380 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:09:24,381 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:09:31,634 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:09:31,636 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:09:31,636 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:09:34,148 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:09:43,389 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:09:53,999 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:09:54,001 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:09:54,001 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:09:57,209 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:10:11,856 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:10:18,546 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:10:18,548 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:10:18,549 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:10:20,690 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:10:30,396 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:10:38,218 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:10:38,220 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:10:38,221 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:10:40,801 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:12:05,511 - INFO - Searching database for articles matching: query=holiday, language=en, country=us, fresh_only=True
+2025-05-21 19:12:05,600 - INFO - Found 64 articles in database matching criteria
+2025-05-21 19:20:39,508 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:20:47,924 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:20:47,926 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:20:47,926 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:20:50,123 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:40:56,732 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:41:04,289 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:41:04,290 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:41:04,291 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:41:06,526 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:57:33,170 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:57:39,046 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:57:39,048 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:57:39,048 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:57:41,389 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:58:29,104 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:58:38,814 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:58:38,817 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:58:38,818 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:58:41,761 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 19:59:08,012 - INFO - Watching for file changes with StatReloader
+2025-05-21 19:59:16,185 - INFO - Initializing SentenceTransformer model...
+2025-05-21 19:59:16,187 - INFO - Use pytorch device_name: cpu
+2025-05-21 19:59:16,188 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 19:59:19,112 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 20:00:25,795 - INFO - Initializing SentenceTransformer model...
+2025-05-21 20:00:25,797 - INFO - Use pytorch device_name: cpu
+2025-05-21 20:00:25,797 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 20:00:27,928 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 20:00:52,183 - INFO - Initializing SentenceTransformer model...
+2025-05-21 20:00:52,185 - INFO - Use pytorch device_name: cpu
+2025-05-21 20:00:52,185 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 20:00:54,549 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 20:01:40,185 - INFO - Watching for file changes with StatReloader
+2025-05-21 20:01:47,392 - INFO - Initializing SentenceTransformer model...
+2025-05-21 20:01:47,394 - INFO - Use pytorch device_name: cpu
+2025-05-21 20:01:47,394 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 20:01:49,998 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 20:02:11,913 - INFO - Initializing SentenceTransformer model...
+2025-05-21 20:02:11,914 - INFO - Use pytorch device_name: cpu
+2025-05-21 20:02:11,915 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 20:02:14,181 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 20:02:52,365 - INFO - Searching database for articles matching: query=space, language=en, country=us, fresh_only=True
+2025-05-21 20:02:52,438 - INFO - Found 0 articles in database matching criteria
+2025-05-21 20:02:52,446 - INFO - Fetching new articles from APIs: query=space, language=en, country=us
+2025-05-21 20:02:52,447 - INFO - Extracted keywords from query: ['space']
+2025-05-21 20:02:53,209 - INFO - Fetched 100 articles from NewsAPI
+2025-05-21 20:02:53,762 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 20:02:53,763 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=space&hl=en&gl=us&ceid=us:en
+2025-05-21 20:02:55,057 - INFO - Found 100 articles from RSS feed
+2025-05-21 20:02:55,058 - INFO - Fetched 100 articles from RSS feed
+2025-05-21 20:02:55,058 - INFO - Total articles fetched from all sources: 210
+2025-05-21 20:10:59,384 - INFO - Searching database for articles matching: query=space, language=en, country=us, fresh_only=True
+2025-05-21 20:10:59,440 - INFO - Found 69 articles in database matching criteria
+2025-05-21 20:11:18,948 - INFO - Searching database for articles matching: query=food, language=en, country=us, fresh_only=True
+2025-05-21 20:11:18,977 - INFO - Found 1 articles in database matching criteria
+2025-05-21 20:11:18,990 - INFO - Fetching new articles from APIs: query=food, language=en, country=us
+2025-05-21 20:11:18,990 - INFO - Extracted keywords from query: ['food']
+2025-05-21 20:11:20,126 - INFO - Fetched 100 articles from NewsAPI
+2025-05-21 20:11:20,718 - INFO - Fetched 10 articles from GNewsAPI
+2025-05-21 20:11:20,719 - INFO - Fetching RSS feed from: https://news.google.com/rss/search?q=food&hl=en&gl=us&ceid=us:en
+2025-05-21 20:11:21,888 - INFO - Found 100 articles from RSS feed
+2025-05-21 20:11:21,889 - INFO - Fetched 100 articles from RSS feed
+2025-05-21 20:11:21,890 - INFO - Total articles fetched from all sources: 210
+2025-05-21 20:21:57,784 - INFO - Watching for file changes with StatReloader
+2025-05-21 20:22:34,272 - INFO - Initializing SentenceTransformer model...
+2025-05-21 20:22:34,273 - INFO - Use pytorch device_name: cpu
+2025-05-21 20:22:34,274 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-05-21 20:22:37,120 - INFO - SentenceTransformer model initialized successfully
+2025-05-21 20:23:38,389 - INFO - Testing NLP model...
+2025-05-21 20:23:38,389 - INFO - Loading NLP prediction model and resources...
+2025-05-21 20:23:43,171 - INFO - NLP model loaded successfully
+2025-05-21 20:23:43,189 - INFO - Running predictions on test texts...
+2025-05-21 20:23:43,427 - INFO - Prediction results:
+2025-05-21 20:23:43,428 - INFO - 
+Text: This article is completely fake and misleading. Th...
+2025-05-21 20:23:43,428 - INFO - Fake news: No
+2025-05-21 20:23:43,429 - INFO - Sentiment: negative
+2025-05-21 20:23:43,429 - INFO - 
+Text: Breaking news: Scientists discover new vaccine tha...
+2025-05-21 20:23:43,429 - INFO - Fake news: No
+2025-05-21 20:23:43,429 - INFO - Sentiment: positive
+2025-05-21 20:23:43,430 - INFO - 
+Text: Stock market plunges 20% in worst day since 2008 f...
+2025-05-21 20:23:43,430 - INFO - Fake news: No
+2025-05-21 20:23:43,430 - INFO - Sentiment: negative
+2025-05-21 20:23:43,431 - INFO - 
+Text: The president announced a new tax plan today that ...
+2025-05-21 20:23:43,431 - INFO - Fake news: No
+2025-05-21 20:23:43,431 - INFO - Sentiment: negative
+2025-05-21 20:23:43,432 - INFO - NLP model test completed successfully!
