@@ -68,26 +68,47 @@ class RegisterView(APIView):
         email = data.get('email')
 
         if not username or not password or not email:
-            return Response({'error': 'All fields (username, password, email) are required.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'All fields are required'}, status=400)
 
-        # Password validation
         try:
             validate_password(password)
         except ValidationError as e:
-            return Response({'error': e.messages}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': e.messages}, status=400)
 
         if User.objects.filter(username=username).exists():
-            return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username exists'}, status=400)
         if User.objects.filter(email=email).exists():
-            return Response({'error': 'Email already registered.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Email exists'}, status=400)
 
         user = User.objects.create(
             username=username,
             email=email,
             password=make_password(password),
+            is_active=True
         )
 
-        return Response({'success': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
+        # Auto-login after registration
+        refresh = RefreshToken.for_user(user)
+        response = Response({'success': 'User registered'}, status=201)
+        
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            value=str(refresh.access_token),
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+        )
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['REFRESH_COOKIE'],
+            value=str(refresh),
+            expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['REFRESH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['REFRESH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['REFRESH_COOKIE_SAMESITE'],
+        )
+        
+        return response
     
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
@@ -106,7 +127,9 @@ class CookieTokenRefreshView(TokenRefreshView):
 
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get(settings.SIMPLE_JWT['REFRESH_COOKIE'])
-
+        print(f"Refresh request cookies: {request.COOKIES}")
+        print(f"Request headers: {request.headers}")
+        print(f"Refresh token: {refresh_token}")
         if refresh_token is None:
             return Response({"detail": "Refresh token not provided."}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -128,9 +151,31 @@ class CookieTokenRefreshView(TokenRefreshView):
         return response
     
 class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         response = Response()
         response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
         response.delete_cookie(settings.SIMPLE_JWT['REFRESH_COOKIE'])
         response.data = {"success": "Logged out successfully."}
         return response
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+
+        if not user.check_password(old_password):
+            return Response({"error": "Old password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            validate_password(new_password, user)
+        except ValidationError as e:
+            return Response({"error": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response({"success": "Password changed successfully."}, status=status.HTTP_200_OK)
