@@ -22,11 +22,10 @@ class DioClient {
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
   
-  // Timer for auto refresh
   static Timer? _refreshTimer;
 
   static void setupInterceptors() {
-    dio.interceptors.clear(); // Clear existing interceptors to avoid duplicates
+    dio.interceptors.clear();
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -46,10 +45,11 @@ class DioClient {
         onResponse: (response, handler) async {
           // Store cookies from response for mobile devices
           if (!kIsWeb && response.headers['set-cookie'] != null) {
-            await storage.write(
-              key: 'cookies',
-              value: response.headers['set-cookie']!.join('; '),
-            );
+            final existingCookies = await storage.read(key: 'cookies') ?? '';
+            final newCookies = response.headers['set-cookie']!;
+
+            final updatedCookies = _mergeCookies(existingCookies, newCookies);
+            await storage.write(key: 'cookies', value: updatedCookies);
           }
           handler.next(response);
         },
@@ -57,12 +57,9 @@ class DioClient {
           // Handle 401 errors (token expired)
           if (error.response?.statusCode == 401) {
             try {
-              // Get the original request options
               final options = error.requestOptions;
               
               // Try to refresh the token with an empty request
-              // Since we're using HTTP-only cookies, the refresh token
-              // will be sent automatically with the request
               final tokenDio = Dio(BaseOptions(
                 baseUrl: dio.options.baseUrl,
                 headers: {'Content-Type': 'application/json'},
@@ -77,7 +74,6 @@ class DioClient {
                 }
               }
 
-              // Send an empty request to the refresh endpoint
               final refreshResponse = await tokenDio.post(
                 '/auth/token/refresh/',
                 options: Options(extra: {'withCredentials': true}),
@@ -92,11 +88,8 @@ class DioClient {
                   );
                 }
                 
-                // Restart auto-refresh timer
                 _setupAutoRefresh();
                 
-                // Retry the original request
-                // The new token cookies will be sent automatically
                 final response = await dio.fetch(options);
                 return handler.resolve(response);
               }
@@ -110,24 +103,20 @@ class DioClient {
             }
           }
           
-          // Handle other errors
           _handleError(error);
           handler.next(error);
         },
       ),
     );
     
-    // Setup automatic refresh timer
     _setupAutoRefresh();
   }
-  
-  // Set up auto-refresh timer to refresh token every 4.5 minutes
+
+  // Auto-refresh timer to refresh token every 4 minutes 40 seconds
   static void _setupAutoRefresh() {
-    // Cancel existing timer if any
     _refreshTimer?.cancel();
     
-    // Create a new timer - 4.5 minutes = 270 seconds
-    _refreshTimer = Timer.periodic(const Duration(seconds: 270), (timer) async {
+    _refreshTimer = Timer.periodic(const Duration(seconds: 280), (timer) async {
       try {
         final success = await refreshTokens();
         if (success) {
@@ -138,12 +127,11 @@ class DioClient {
       } catch (e) {
         debugPrint('Automatic token refresh error: $e');
         // Don't logout on background refresh failure, 
-        // let the interceptor handle it on the next request
+        // interceptor handles it on the next request
       }
     });
   }
   
-  // Helper method to refresh tokens - now simplified for HTTP-only cookies
   static Future<bool> refreshTokens() async {
     try {
       final tokenDio = Dio(BaseOptions(
@@ -152,7 +140,7 @@ class DioClient {
         extra: {'withCredentials': true},
       ));
 
-      // For mobile, manually add cookies to the refresh request
+      // Manually add cookies to the refresh request
       if (!kIsWeb) {
         final cookies = await storage.read(key: 'cookies');
         if (cookies != null) {
@@ -160,19 +148,17 @@ class DioClient {
         }
       }
 
-      // Send an empty request to the refresh endpoint
       final response = await tokenDio.post(
         '/auth/token/refresh/',
         options: Options(extra: {'withCredentials': true}),
       );
 
       if (response.statusCode == 200) {
-        // For mobile, store the new cookies from the response
         if (!kIsWeb && response.headers['set-cookie'] != null) {
-          await storage.write(
-            key: 'cookies',
-            value: response.headers['set-cookie']!.join('; '),
-          );
+          final existingCookies = await storage.read(key: 'cookies') ?? '';
+          final newCookies = response.headers['set-cookie']!;
+          final updatedCookies = _mergeCookies(existingCookies, newCookies);
+          await storage.write(key: 'cookies', value: updatedCookies);
         }
         return true;
       }
@@ -182,14 +168,37 @@ class DioClient {
       return false;
     }
   }
+
+  static String _mergeCookies(String existingRaw, List<String> newSetCookies) {
+    final existingMap = <String, String>{};
+
+    for (final part in existingRaw.split(';')) {
+      final cookie = part.trim();
+      if (cookie.contains('=')) {
+        final split = cookie.split('=');
+        if (split.length == 2) {
+          existingMap[split[0]] = split[1];
+        }
+      }
+    }
+
+    for (final setCookie in newSetCookies) {
+      final parts = setCookie.split(';')[0].split('=');
+      if (parts.length == 2) {
+        existingMap[parts[0]] = parts[1];
+      }
+    }
+
+    return existingMap.entries.map((e) => '${e.key}=${e.value}').join('; ');
+  }
+
   
   // This method will attempt to restore an authenticated session
   static Future<bool> tryAutoLogin() async {
     try {
-      // With HTTP-only cookies, we just need to try a refresh
       final success = await refreshTokens();
       if (success) {
-        setupInterceptors(); // Set up interceptors with the refreshed cookies
+        setupInterceptors();
         return true;
       }
       return false;
@@ -197,6 +206,12 @@ class DioClient {
       debugPrint('Auto-login error: $e');
       return false;
     }
+  }
+
+  static void cancelRefreshTimer() {
+    _refreshTimer?.cancel();
+    _refreshTimer = null;
+    debugPrint('Auto-refresh timer cancelled');
   }
 
   static void _handleError(DioException e) {

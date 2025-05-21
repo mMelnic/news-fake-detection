@@ -1,21 +1,18 @@
 import 'package:dio/dio.dart';
 import 'dio_client.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   final Dio dio = DioClient.dio;
   final FlutterSecureStorage storage = DioClient.storage;
 
-  Future<void> _storeTokens(Map<String, dynamic> data) async {
-    if (data.containsKey('data') && data['data'] is Map) {
-      // Handle case when tokens are in a nested 'data' object
-      final tokenData = data['data'];
-      await storage.write(key: 'access_token', value: tokenData['access']);
-      await storage.write(key: 'refresh_token', value: tokenData['refresh']);
-    } else if (data.containsKey('access') && data.containsKey('refresh')) {
-      // Handle direct token structure
-      await storage.write(key: 'access_token', value: data['access']);
-      await storage.write(key: 'refresh_token', value: data['refresh']);
+  Future<void> _storeCookies(Response response) async {
+    if (!kIsWeb && response.headers['set-cookie'] != null) {
+      await storage.write(
+        key: 'cookies',
+        value: response.headers['set-cookie']!.join('; '),
+      );
     }
   }
 
@@ -28,15 +25,11 @@ class AuthService {
       final response = await dio.post(
         '/auth/register/',
         data: {'username': username, 'email': email, 'password': password},
+        options: Options(extra: {'withCredentials': true}),
       );
       
       if (response.statusCode == 201) {
-        // If the backend gives us tokens in the registration response, store them
-        if (response.data is Map) {
-          await _storeTokens(response.data);
-        }
-        
-        // Set up interceptors for future requests
+        await _storeCookies(response);
         DioClient.setupInterceptors(); 
       }
       return response;
@@ -57,14 +50,14 @@ class AuthService {
       final response = await dio.post(
         '/auth/login/',
         data: {'username': username, 'password': password},
-        options: Options(headers: {'Content-Type': 'application/json'}, extra: {'withCredentials': true}),
+        options: Options(
+          headers: {'Content-Type': 'application/json'}, 
+          extra: {'withCredentials': true}
+        ),
       );
 
       if (response.statusCode == 200) {
-        // Store tokens from response
-        await _storeTokens(response.data);
-        
-        // Setup interceptors with the fresh tokens
+        await _storeCookies(response);
         DioClient.setupInterceptors();
       }
       return response;
@@ -73,12 +66,9 @@ class AuthService {
     }
   }
 
-  // Automatic token refresh setup
   Future<void> initializeAuth() async {
-    // Check if we have a refresh token
-    final refreshToken = await storage.read(key: 'refresh_token');
-    if (refreshToken != null) {
-      // Setup interceptors if we have a refresh token
+    final cookies = await storage.read(key: 'cookies');
+    if (cookies != null) {
       DioClient.setupInterceptors();
     }
   }
@@ -86,13 +76,20 @@ class AuthService {
   Future<Response> logout() async {
     try {
       final response = await dio.post('/auth/logout/');
-      // Clear local storage on logout
-      await storage.delete(key: 'access_token');
-      await storage.delete(key: 'refresh_token');
+      await _clearAuthData();
+      
       return response;
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
+  }
+
+  Future<void> _clearAuthData() async {
+    await storage.delete(key: 'cookies');
+    await storage.delete(key: 'access_token');
+    await storage.delete(key: 'refresh_token');
+    
+    DioClient.cancelRefreshTimer();
   }
 
   Future<Response> getCurrentUser() async {
@@ -106,11 +103,9 @@ class AuthService {
     );
   }
   
-  // Check if user is logged in
   Future<bool> isLoggedIn() async {
-    final accessToken = await storage.read(key: 'access_token');
-    final refreshToken = await storage.read(key: 'refresh_token');
-    return accessToken != null && refreshToken != null;
+    final cookies = await storage.read(key: 'cookies');
+    return cookies != null;
   }
 }
 
