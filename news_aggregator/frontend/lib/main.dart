@@ -3,34 +3,116 @@ import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'services/logger.dart';
 import 'services/dio_client.dart';
+import 'package:go_router/go_router.dart';
 
-void main() async{
+void main() async {
   setupLogging();
   WidgetsFlutterBinding.ensureInitialized();
-  DioClient.setupInterceptors();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
   @override
-  State<MyApp> createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  bool _showLogin = true;
+class MyAppState extends State<MyApp> {
+  late GoRouter _router;
+  bool _isLoggedIn = false;
+  bool _isCheckingAuth = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    try {
+      // First try auto-login with existing refresh token
+      final autoLoginSuccess = await DioClient.tryAutoLogin();
+      
+      if (autoLoginSuccess) {
+        // If auto-login worked, try to get user data to confirm
+        try {
+          final response = await DioClient.dio.get('/auth/user/');
+          if (response.statusCode == 200) {
+            _isLoggedIn = true;
+          }
+        } catch (e) {
+          debugPrint('Error getting user data: $e');
+          _isLoggedIn = false;
+        }
+      } else {
+        _isLoggedIn = false;
+      }
+    } catch (e) {
+      debugPrint('Authentication check error: $e');
+      _isLoggedIn = false;
+    } finally {
+      // After authentication check, set up the router
+      setState(() {
+        _isCheckingAuth = false;
+        _router = GoRouter(
+          navigatorKey: DioClient.navigatorKey,
+          initialLocation: _isLoggedIn ? '/home' : '/login',
+          routes: [
+            GoRoute(
+              path: '/home',
+              builder: (context, state) => const MyHomePage(title: 'Home Page'),
+            ),
+            GoRoute(
+              path: '/login',
+              builder: (context, state) => const LoginScreen(),
+            ),
+            GoRoute(
+              path: '/register',
+              builder: (context, state) => const RegisterScreen(),
+            ),
+          ],
+          // Route redirect logic with compatible syntax for older go_router
+          redirect: (BuildContext context, GoRouterState state) {
+            final String path = state.path ?? '';
+            
+            // If the user is not logged in and not on login or register page, redirect to login
+            if (!_isLoggedIn && 
+                !path.startsWith('/login') && 
+                !path.startsWith('/register')) {
+              return '/login';
+            }
+            // If the user is logged in and tries to access login or register, redirect to home
+            if (_isLoggedIn && 
+                (path.startsWith('/login') || 
+                 path.startsWith('/register'))) {
+              return '/home';
+            }
+            return null; // No redirect needed
+          },
+        );
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'News Auth',
+    if (_isCheckingAuth) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      ); // Show loading while checking auth
+    }
+
+    return MaterialApp.router(
+      title: 'News App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: _showLogin
-          ? LoginScreen(onSwitch: () => setState(() => _showLogin = false))
-          : RegisterScreen(onSwitch: () => setState(() => _showLogin = true)),
+      routerConfig: _router,
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
