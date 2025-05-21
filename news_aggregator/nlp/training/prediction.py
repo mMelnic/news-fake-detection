@@ -44,9 +44,14 @@ if __name__ == "__main__":
     }
 
     input_texts = [
+        "This article is completely fake and misleading. The government is hiding aliens.", # False, 0
         "Boeing Cuts 10% Of Jobs After Receiving $8.7 Billion In Government Tax Breaks And Subsidies", # True, 1
+        "Breaking news: Scientists discover new vaccine that shows promising results in clinical trials.", # False, 0
+        "Stock market plunges 20% in worst day since 2008 financial crisis.", # False, 0
         "Justice Dept. group studying national security threats of internet-linked devices", # False, 0
+        "The president announced a new tax plan today that will cut taxes for middle-class families.", # False, 0
         "Harry Potter and the Nipple Pumps - Culture Minister to consider Ban", # True, 1
+        "Planned Parenthood sues Ohio over plan to restrict funds", # False, 0
     ]
 
     with open("nlp/outputs/class_weights.json", "r") as f:
