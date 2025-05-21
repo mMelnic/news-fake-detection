@@ -4,11 +4,18 @@ import 'screens/register_screen.dart';
 import 'services/logger.dart';
 import 'services/dio_client.dart';
 import 'package:go_router/go_router.dart';
+import 'services/auth_state.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   setupLogging();
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  final authState = AuthState();
+  await authState.checkInitialLoginStatus();
+
+  runApp(
+    ChangeNotifierProvider(create: (_) => authState, child: const MyApp()),
+  );
 }
 
 class MyApp extends StatefulWidget {

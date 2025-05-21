@@ -8,6 +8,8 @@
 from django.db import models
 from django.utils import timezone
 from pgvector.django import VectorField
+from django.conf import settings
+from django.db import models
 
 class Keyword(models.Model):
     keyword = models.TextField(unique=True)
@@ -48,3 +50,17 @@ class Sources(models.Model):
     class Meta:
         managed = True
         db_table = 'sources'
+
+class UserInteraction(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    article = models.ForeignKey('Articles', on_delete=models.CASCADE)
+    interaction_type = models.CharField(max_length=50, default='view')  # e.g., 'view', 'like'
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'article')
+
+class Recommendation(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    article = models.ForeignKey('Articles', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
