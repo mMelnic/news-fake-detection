@@ -25,7 +25,6 @@ class Articles(models.Model):
     image_url = models.TextField(blank=True, null=True)
     source = models.ForeignKey('Sources', models.SET_NULL, blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
-    category = models.TextField(blank=True, null=True)
     country = models.TextField(blank=True, null=True)
     fake_score = models.FloatField(blank=True, null=True)
     embedding = VectorField(dimensions=384, blank=True, null=True)
@@ -38,7 +37,6 @@ class Articles(models.Model):
         indexes = [
             models.Index(fields=['published_date']),
             models.Index(fields=['source']),
-            models.Index(fields=['category']),
         ]
 
 
