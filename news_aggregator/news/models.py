@@ -26,7 +26,9 @@ class Articles(models.Model):
     source = models.ForeignKey('Sources', models.SET_NULL, blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     country = models.TextField(blank=True, null=True)
-    fake_score = models.FloatField(blank=True, null=True)
+    fake_score = models.FloatField(blank=True, null=True)  # Keep for backward compatibility
+    is_fake = models.BooleanField(blank=True, null=True)   # New field: True=fake, False=real
+    sentiment = models.CharField(max_length=10, blank=True, null=True)  # New field: 'positive' or 'negative'
     embedding = VectorField(dimensions=384, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword, related_name='articles')
@@ -37,6 +39,8 @@ class Articles(models.Model):
         indexes = [
             models.Index(fields=['published_date']),
             models.Index(fields=['source']),
+            models.Index(fields=['is_fake']),
+            models.Index(fields=['sentiment']),
         ]
 
 
