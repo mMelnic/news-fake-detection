@@ -26,7 +26,6 @@ class ArticleService:
                     "content": article.get("content", "") or "",
                     "source": source_obj,
                     "published_date": article["publishedAt"],
-                    "category": None,
                     "location": None,
                     "fake_score": None,
                     "embedding": None,

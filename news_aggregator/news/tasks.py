@@ -26,37 +26,66 @@ except Exception as e:
 @shared_task(bind=True, max_retries=3)
 def store_article_async(self, article, query=None):
     """Store a single article asynchronously"""
-    logger.info("Started fetching articles in store_article_async")
-
     try:
         logger.debug(f"Processing article: {article.get('title', 'Unknown')[:50]}...")
         
         # Extract normalized source information based on different API formats
         source_data = {}
+        source_name = "Unknown"
+        source_url = ""
+        
         if "source" in article:
             # Handle different source formats
             if isinstance(article["source"], dict):
                 # NewsAPI and GNews format
-                source_data = {
-                    "name": article["source"].get("name", "Unknown"),
-                    "url": article["source"].get("url", article["source"].get("id", "")),
-                }
+                source_name = article["source"].get("name", "Unknown")
+                
+                # Handle case when URL might be null
+                source_url = article["source"].get("url", "")
+                if not source_url and "id" in article["source"]:
+                    # Try to use ID to generate a URL if explicit URL is missing
+                    source_id = article["source"].get("id", "")
+                    if source_id:
+                        source_url = f"https://www.{source_id.lower()}.com"
+                    else:
+                        # Generate URL from name as fallback
+                        name_slug = source_name.lower().replace(' ', '').replace('.', '')
+                        source_url = f"https://www.{name_slug}.com"
+                        
             elif isinstance(article["source"], str):
                 # RSS feed format in some cases
-                source_data = {
-                    "name": article["source"],
-                    "url": article.get("source_url", "")
-                }
+                source_name = article["source"]
+                source_url = article.get("source_url", "")
+                
+        # If we still don't have a URL, generate one from the name
+        if not source_url and source_name:
+            # Create a slug from the source name
+            name_slug = source_name.lower().replace(' ', '').replace('.', '')
+            source_url = f"https://www.{name_slug}.com"
+        
+        # If we still have no URL (very unlikely at this point), use a placeholder
+        if not source_url:
+            source_url = "https://unknown-source.com"
+            
+        logger.debug(f"Source data normalized: name={source_name}, url={source_url}")
         
         # Create source object
-        source_obj, _ = Sources.objects.get_or_create(
-            url=source_data.get("url", ""),
-            defaults={
-                "name": source_data.get("name", "Unknown"),
-                "country": article.get("country", None),
-                "language": article.get("language", None)
-            }
-        )
+        try:
+            source_obj, _ = Sources.objects.get_or_create(
+                url=source_url,
+                defaults={
+                    "name": source_name,
+                    "country": article.get("country", None),
+                    "language": article.get("language", None)
+                }
+            )
+        except Exception as source_error:
+            logger.error(f"Error creating source: {str(source_error)}")
+            # Create a fallback source if needed
+            source_obj, _ = Sources.objects.get_or_create(
+                url="https://unknown-source.com",
+                defaults={"name": "Unknown Source"}
+            )
 
         # Normalize article fields
         title = article.get("title", "")
@@ -80,10 +109,11 @@ def store_article_async(self, article, query=None):
             try:
                 published_at = parser.parse(published_at_raw)
             except Exception as e:
-                logger.warning(f"Could not parse publishedAt '{published_at_raw}' for article '{article.get('title', '')[:50]}': {e}")
-                logger.debug(f"Creating/updating article with URL: {url}")
+                logger.warning(f"Could not parse publishedAt '{published_at_raw}' for article '{title[:50]}': {e}")
                     
-        # Create or update article
+        logger.debug(f"Creating/updating article with URL: {url}")
+                    
+        # Create or update article - note we're removing the category field
         article_obj, created = Articles.objects.update_or_create(
             url=url,
             defaults={
@@ -95,6 +125,7 @@ def store_article_async(self, article, query=None):
                 "published_date": published_at,
                 "country": article.get("country", None),
                 "fake_score": None,  # Placeholder
+                # No longer storing category
             }
         )
         
@@ -122,30 +153,21 @@ def store_article_async(self, article, query=None):
             else:
                 logger.warning("Embedding model not available, skipping embedding generation")
 
-        # Store keywords from query and title - only if it's a new article
-        if created:
-            # Extract keywords from query
+        # Store keywords from ONLY the query - only if it's a new article
+        if created and query:
+            # Extract keywords from query only
             query_keywords = []
             if query:
-                query_keywords = [word.lower() for word in query.split() if len(word) > 5]
-            
-            # Extract keywords from title
-            title_keywords = []
-            if title:
-                # Remove special characters and split
-                cleaned_title = re.sub(r'[^\w\s]', ' ', title)
-                title_keywords = [word.lower() for word in cleaned_title.split() if len(word) > 5]
-            
-            # Combine unique keywords
-            all_keywords = set(query_keywords + title_keywords)
+                # Split query into words and filter out very short ones
+                query_keywords = [word.lower() for word in query.split() if len(word) > 2]
             
             # Store in database
-            for keyword in all_keywords:
+            for keyword in query_keywords:
                 if keyword:
                     keyword_obj, _ = Keyword.objects.get_or_create(keyword=keyword)
                     article_obj.keywords.add(keyword_obj)
                     
-            logger.debug(f"Added {len(all_keywords)} keywords to article {article_obj.id}")
+            logger.debug(f"Added {len(query_keywords)} keywords from query to article {article_obj.id}")
 
         article_data = {
             "id": article_obj.id,
