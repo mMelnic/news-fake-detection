@@ -30,7 +30,6 @@ def store_article_async(self, article, query=None):
         logger.debug(f"Processing article: {article.get('title', 'Unknown')[:50]}...")
         
         # Extract normalized source information based on different API formats
-        source_data = {}
         source_name = "Unknown"
         source_url = ""
         
@@ -226,6 +225,9 @@ def store_articles_batch(articles, query=None):
     else:
         parsed_keywords = None
         
+    # Keep track of stored article IDs for NLP processing
+    stored_article_ids = []
+    
     for article in articles:
         # If the article doesn't already have query info, add it
         if query and 'query' not in article:
@@ -236,9 +238,18 @@ def store_articles_batch(articles, query=None):
             article['keywords'] = parsed_keywords
             
         # Process each article in its own task
-        store_article_async.delay(article, query)
+        result = store_article_async(article, query)
         
-    return {"queued_articles": len(articles)}
+        # If article was stored successfully, add its ID to the list for NLP processing
+        if result and isinstance(result, dict) and 'id' in result:
+            stored_article_ids.append(result['id'])
+        
+    # Process stored articles with NLP in a separate task
+    if stored_article_ids:
+        logger.info(f"Queueing {len(stored_article_ids)} articles for NLP processing")
+        process_articles_nlp.delay(stored_article_ids)
+    
+    return {"queued_articles": len(articles), "stored_articles": len(stored_article_ids)}
 
 User = get_user_model()
 
@@ -284,3 +295,71 @@ def generate_recommendations(user_id):
         logger.error(f"Error generating recommendations: {str(e)}")
         logger.error(traceback.format_exc())
         return {"status": "error", "message": str(e)}
+
+@shared_task
+def process_articles_nlp(article_ids):
+    """
+    Process a batch of articles with NLP model to get fake news and sentiment predictions
+    """
+    try:
+        if not article_ids:
+            return {"status": "No articles to process"}
+            
+        logger.info(f"Processing {len(article_ids)} articles for NLP predictions")
+        
+        # Get articles from database
+        articles = Articles.objects.filter(id__in=article_ids)
+        if not articles.exists():
+            logger.warning(f"No articles found with provided IDs")
+            return {"status": "No articles found"}
+            
+        # Prepare article texts (combine title and content for better prediction)
+        article_dict = {}  # Map ID to article object for updating later
+        texts = []
+        
+        for article in articles:
+            # Check if we already have predictions
+            if article.is_fake is not None and article.sentiment is not None:
+                logger.debug(f"Article {article.id} already has predictions - skipping")
+                continue
+                
+            # Prepare text for prediction
+            text = f"{article.title} {article.content}"
+            texts.append(text)
+            article_dict[len(texts) - 1] = article  # Map index to article
+            
+        if not texts:
+            logger.info("No new articles need NLP processing")
+            return {"status": "No new articles to process"}
+            
+        # Get predictions
+        from news.services.nlp_service import NLPPredictionService
+        nlp_service = NLPPredictionService()
+        predictions = nlp_service.predict_batch(texts)
+        
+        # Update articles with predictions
+        updated_count = 0
+        for idx, prediction in enumerate(predictions):
+            if idx in article_dict:
+                article = article_dict[idx]
+                updates = {}
+                
+                if prediction["is_fake"] is not None:
+                    updates["is_fake"] = prediction["is_fake"]
+                    # For compatibility with existing code, also set fake_score
+                    updates["fake_score"] = 1.0 if prediction["is_fake"] else 0.0
+                    
+                if prediction["sentiment"] is not None:
+                    updates["sentiment"] = prediction["sentiment"]
+                    
+                if updates:
+                    Articles.objects.filter(id=article.id).update(**updates)
+                    updated_count += 1
+        
+        logger.info(f"Updated {updated_count} articles with NLP predictions")
+        return {"status": "success", "updated_count": updated_count}
+        
+    except Exception as e:
+        logger.error(f"Error processing articles with NLP: {str(e)}")
+        logger.error(traceback.format_exc())
+        return {"status": "error", "error": str(e)}

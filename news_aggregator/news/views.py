@@ -87,7 +87,10 @@ class NewsAggregatorView(APIView):
                 "author": article.author,
                 "published_date": article.published_date,
                 "source": article.source.name if article.source else "Unknown",
-                "has_embedding": article.embedding is not None
+                "has_embedding": article.embedding is not None,
+                "is_fake": article.is_fake,
+                "fake_score": article.fake_score,  # Keep for backward compatibility
+                "sentiment": article.sentiment
             }
             for article in queryset[:50]  # Limit to 50 most recent matching articles
         ]
@@ -214,7 +217,10 @@ class ArticleDetailView(APIView):
                 "author": article.author,
                 "published_date": article.published_date,
                 "source": article.source.name if article.source else "Unknown",
-                "has_embedding": article.embedding is not None
+                "has_embedding": article.embedding is not None,
+                "is_fake": article.is_fake,
+                "fake_score": article.fake_score,  # Keep for backward compatibility
+                "sentiment": article.sentiment
             })
         except Articles.DoesNotExist:
             return Response({"error": "Article not found"}, status=404)
