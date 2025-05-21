@@ -19,14 +19,16 @@ class Keyword(models.Model):
 
 class Articles(models.Model):
     title = models.TextField()
+    author = models.TextField(blank=True, null=True)
     content = models.TextField()
     url = models.TextField(unique=True)
+    image_url = models.TextField(blank=True, null=True)
     source = models.ForeignKey('Sources', models.SET_NULL, blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     category = models.TextField(blank=True, null=True)
-    location = models.TextField(blank=True, null=True)
+    country = models.TextField(blank=True, null=True)
     fake_score = models.FloatField(blank=True, null=True)
-    embedding = VectorField(dimensions=768, blank=True, null=True)
+    embedding = VectorField(dimensions=384, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword, related_name='articles')
 
