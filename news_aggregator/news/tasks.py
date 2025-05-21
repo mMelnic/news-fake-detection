@@ -153,21 +153,31 @@ def store_article_async(self, article, query=None):
             else:
                 logger.warning("Embedding model not available, skipping embedding generation")
 
-        # Store keywords from ONLY the query - only if it's a new article
-        if created and query:
-            # Extract keywords from query only
-            query_keywords = []
-            if query:
-                # Split query into words and filter out very short ones
-                query_keywords = [word.lower() for word in query.split() if len(word) > 2]
+        # Store keywords - either from article['keywords'] or parse from query
+        if created:
+            parsed_keywords = []
             
-            # Store in database
-            for keyword in query_keywords:
-                if keyword:
-                    keyword_obj, _ = Keyword.objects.get_or_create(keyword=keyword)
+            # First priority: use keywords already parsed and included in the article object
+            if 'keywords' in article and article['keywords']:
+                parsed_keywords = article['keywords']
+                logger.debug(f"Using pre-parsed keywords: {parsed_keywords}")
+            # Second priority: parse from query
+            elif query:
+                parsed_keywords = _parse_query(query)
+                logger.debug(f"Using keywords parsed from query: {parsed_keywords}")
+            
+            # Get existing keywords if article is being updated
+            existing_keywords = set(article_obj.keywords.values_list('keyword', flat=True)) if not created else set()
+            
+            # Add new keywords
+            added_keywords = 0
+            for keyword in parsed_keywords:
+                if keyword.lower() not in existing_keywords:
+                    keyword_obj, _ = Keyword.objects.get_or_create(keyword=keyword.lower())
                     article_obj.keywords.add(keyword_obj)
+                    added_keywords += 1
                     
-            logger.debug(f"Added {len(query_keywords)} keywords from query to article {article_obj.id}")
+            logger.debug(f"Added {added_keywords} keywords to article {article_obj.id}")
 
         article_data = {
             "id": article_obj.id,
@@ -191,17 +201,43 @@ def store_article_async(self, article, query=None):
         # Retry with exponential backoff
         raise self.retry(exc=e, countdown=2 ** self.request.retries)
 
+# Helper function for parsing queries into keywords
+def _parse_query(query):
+    """Parse a query string into a list of keywords and phrases."""
+    import re
+    # Extract quoted phrases
+    phrases = re.findall(r'"(.*?)"', query)
+    # Remove quoted phrases from query
+    remaining_query = re.sub(r'"(.*?)"', '', query)
+    # Extract individual keywords, ignoring logical operators
+    keywords = re.findall(r'([+-]?\b(?!AND\b|OR\b|NOT\b)\w+\b)', remaining_query)
+    keywords = [k for k in keywords if k.strip() and len(k.strip()) > 2]  # Skip very short words
+    return phrases + keywords
+
 @shared_task
 def store_articles_batch(articles, query=None):
     """Process a batch of articles, queueing each for individual processing"""
     logger.info(f"Processing batch of {len(articles)} articles for query: {query}")
+    
+    # Parse query once for all articles if not already done
+    if query and not any('keywords' in article for article in articles):
+        parsed_keywords = _parse_query(query)
+        logger.info(f"Parsed query '{query}' into keywords: {parsed_keywords}")
+    else:
+        parsed_keywords = None
+        
     for article in articles:
         # If the article doesn't already have query info, add it
         if query and 'query' not in article:
             article['query'] = query
             
+        # If parsed keywords available but article doesn't have keywords, add them
+        if parsed_keywords and 'keywords' not in article:
+            article['keywords'] = parsed_keywords
+            
         # Process each article in its own task
         store_article_async.delay(article, query)
+        
     return {"queued_articles": len(articles)}
 
 User = get_user_model()

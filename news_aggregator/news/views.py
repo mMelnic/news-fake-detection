@@ -49,32 +49,25 @@ class NewsAggregatorView(APIView):
         
         queryset = Articles.objects.all()
         
-        # Apply keyword filtering
-        keywords = query.split()
-        if keywords:
-            keyword_filter = Q()
-            for keyword in keywords:
-                keyword = keyword.lower().strip()
-                if len(keyword) > 2:  # Skip very short words
-                    keyword_filter |= Q(keywords__keyword__icontains=keyword)
-                    # Also search in title for better results
-                    keyword_filter |= Q(title__icontains=keyword)
-            
-            queryset = queryset.filter(keyword_filter)
-        
+        # Apply keyword filtering using improved parsing
+        if query:
+            keyword_filter = self._build_keyword_filter(query)
+            if keyword_filter:
+                queryset = queryset.filter(keyword_filter)
+    
         # Apply language filter if available
         if language:
-            queryset = queryset.filter(source__language=language)
+            queryset = queryset.filter(Q(source__language=language) | Q(source__language__isnull=True))
             
         # Apply country filter if available
         if country:
-            queryset = queryset.filter(country=country)
+            queryset = queryset.filter(Q(country=country) | Q(country__isnull=True))
             
         # Apply freshness filter if requested
         if fresh_only:
             # Get articles less than 24 hours old
             one_day_ago = timezone.now() - timedelta(days=1)
-            queryset = queryset.filter(published_date__gte=one_day_ago)
+            queryset = queryset.filter(Q(published_date__gte=one_day_ago) | Q(published_date__isnull=True))
             
         # Order by most recent first
         queryset = queryset.order_by('-published_date').distinct()
@@ -99,13 +92,48 @@ class NewsAggregatorView(APIView):
             for article in queryset[:50]  # Limit to 50 most recent matching articles
         ]
         
+    def _build_keyword_filter(self, query):
+        """Build a Q filter for keywords based on parsed query."""
+        import re
+        
+        # Extract phrases (quoted text)
+        phrases = re.findall(r'"(.*?)"', query)
+        
+        # Remove phrases from query
+        remaining_query = re.sub(r'"(.*?)"', '', query)
+        
+        # Extract individual keywords, ignoring logical operators
+        keywords = re.findall(r'([+-]?\b(?!AND\b|OR\b|NOT\b)\w+\b)', remaining_query)
+        keywords = [k.lower() for k in keywords if k.strip() and len(k.strip()) > 2]
+        
+        # Combine with phrases
+        all_terms = keywords + phrases
+        
+        if not all_terms:
+            return None
+        
+        # Build Q filter for exact phrase matches and individual keywords
+        keyword_filter = Q()
+        
+        # Add phrase matches (title contains the exact phrase)
+        for phrase in phrases:
+            keyword_filter |= Q(title__icontains=phrase)
+    
+        # Add keyword matches (either in keywords table or title)
+        for keyword in keywords:
+            keyword_filter |= Q(keywords__keyword=keyword) | Q(title__icontains=keyword)
+    
+        return keyword_filter
+    
     def fetch_new_articles(self, query, language, country):
         """Fetch new articles from APIs in background"""
         try:
             logger.info(f"Fetching new articles from APIs: query={query}, language={language}, country={country}")
             
-            # Create a unique identifier for this query to avoid duplicates
-            query_hash = hashlib.md5(f"{query}:{language}:{country}".encode()).hexdigest()
+            # Parse query to extract keywords for better article matching
+            from .tasks import _parse_query
+            keywords = _parse_query(query)
+            logger.info(f"Extracted keywords from query: {keywords}")
             
             news_fetcher = NewsApiFetcher()
             gnews_fetcher = GNewsApiFetcher()
@@ -121,6 +149,7 @@ class NewsAggregatorView(APIView):
                     article['language'] = language
                     article['country'] = country
                     article['query'] = query
+                    article['keywords'] = keywords  # Add parsed keywords
                 articles.extend(news_api_articles)
                 logger.info(f"Fetched {len(news_api_articles)} articles from NewsAPI")
             except Exception as e:
@@ -131,6 +160,7 @@ class NewsAggregatorView(APIView):
                 # Add query information
                 for article in gnews_articles:
                     article['query'] = query
+                    article['keywords'] = keywords  # Add parsed keywords
                 articles.extend(gnews_articles)
                 logger.info(f"Fetched {len(gnews_articles)} articles from GNewsAPI")
             except Exception as e:
@@ -138,12 +168,15 @@ class NewsAggregatorView(APIView):
                 
             try:
                 rss_articles = rss_fetcher.fetch_feed(query, language, country)
-                # RSS articles are already normalized in the fetcher
+                # Add keywords to RSS articles
+                for article in rss_articles:
+                    if 'keywords' not in article:
+                        article['keywords'] = keywords
                 articles.extend(rss_articles)
                 logger.info(f"Fetched {len(rss_articles)} articles from RSS feed")
             except Exception as e:
                 logger.error(f"Error fetching from RSS feed: {e}")
-            
+        
             logger.info(f"Total articles fetched from all sources: {len(articles)}")
             
             # Send to background processing - in batches to avoid overloading
