@@ -58,6 +58,21 @@ class AuthService {
 
       if (response.statusCode == 200) {
         await _storeCookies(response);
+        
+        // Extract and store tokens if they exist in the response
+        if (response.data != null && response.data is Map) {
+          final data = response.data;
+          if (data.containsKey('data') && data['data'] is Map) {
+            final tokenData = data['data'];
+            if (tokenData.containsKey('access')) {
+              await storage.write(key: 'access_token', value: tokenData['access']);
+            }
+            if (tokenData.containsKey('refresh')) {
+              await storage.write(key: 'refresh_token', value: tokenData['refresh']);
+            }
+          }
+        }
+        
         DioClient.setupInterceptors();
       }
       return response;

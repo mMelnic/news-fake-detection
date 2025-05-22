@@ -324,3 +324,697 @@ Text: The president announced a new tax plan today that ...
 2025-05-21 20:23:43,431 - INFO - Fake news: No
 2025-05-21 20:23:43,431 - INFO - Sentiment: negative
 2025-05-21 20:23:43,432 - INFO - NLP model test completed successfully!
+INFO 2025-05-22 01:34:18,419 tasks 5664 13652 Initializing SentenceTransformer model...
+INFO 2025-05-22 01:34:20,963 tasks 5664 13652 SentenceTransformer model initialized successfully
+INFO 2025-05-22 02:19:56,852 views 5664 36192 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 02:19:57,019 views 5664 36192 Found 3 articles in database matching criteria
+INFO 2025-05-22 02:19:57,059 views 5664 36192 Fetching new articles from APIs: query=technology, language=en, country=None
+INFO 2025-05-22 02:19:57,063 views 5664 36192 Extracted keywords from query: ['technology']
+INFO 2025-05-22 02:19:58,285 views 5664 36192 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 02:19:58,902 views 5664 36192 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 02:19:58,904 google_rss_fetcher 5664 36192 Fetching RSS feed from: https://news.google.com/rss/search?q=technology&hl=en&gl=None&ceid=None:en
+INFO 2025-05-22 02:20:00,146 google_rss_fetcher 5664 36192 Found 100 articles from RSS feed
+INFO 2025-05-22 02:20:00,147 views 5664 36192 Fetched 100 articles from RSS feed
+INFO 2025-05-22 02:20:00,147 views 5664 36192 Total articles fetched from all sources: 210
+INFO 2025-05-22 02:31:05,783 tasks 13996 31316 Initializing SentenceTransformer model...
+INFO 2025-05-22 02:31:08,576 tasks 13996 31316 SentenceTransformer model initialized successfully
+INFO 2025-05-22 02:32:03,606 views 13996 22464 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 02:32:03,721 views 13996 22464 Found 91 articles in database matching criteria
+INFO 2025-05-22 02:33:37,992 views 13996 38884 Searching database for articles matching: query=technologynature, language=en, country=None, fresh_only=True
+INFO 2025-05-22 02:33:38,035 views 13996 38884 Found 0 articles in database matching criteria
+INFO 2025-05-22 02:33:38,046 views 13996 38884 Fetching new articles from APIs: query=technologynature, language=en, country=None
+INFO 2025-05-22 02:33:38,047 views 13996 38884 Extracted keywords from query: ['technologynature']
+INFO 2025-05-22 02:33:38,666 views 13996 38884 Fetched 0 articles from NewsAPI
+INFO 2025-05-22 02:33:39,113 views 13996 38884 Fetched 0 articles from GNewsAPI
+INFO 2025-05-22 02:33:39,114 google_rss_fetcher 13996 38884 Fetching RSS feed from: https://news.google.com/rss/search?q=technologynature&hl=en&gl=None&ceid=None:en
+INFO 2025-05-22 02:33:40,329 google_rss_fetcher 13996 38884 Found 100 articles from RSS feed
+INFO 2025-05-22 02:33:40,331 views 13996 38884 Fetched 100 articles from RSS feed
+INFO 2025-05-22 02:33:40,332 views 13996 38884 Total articles fetched from all sources: 100
+INFO 2025-05-22 02:33:48,284 views 13996 19796 Searching database for articles matching: query=nature, language=en, country=None, fresh_only=True
+INFO 2025-05-22 02:33:48,317 views 13996 19796 Found 77 articles in database matching criteria
+INFO 2025-05-22 02:33:48,409 views 13996 19796 Fetching new articles from APIs: query=nature, language=en, country=None
+INFO 2025-05-22 02:33:48,409 views 13996 19796 Extracted keywords from query: ['nature']
+INFO 2025-05-22 02:33:49,400 views 13996 19796 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 02:33:49,864 views 13996 19796 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 02:33:49,867 google_rss_fetcher 13996 19796 Fetching RSS feed from: https://news.google.com/rss/search?q=nature&hl=en&gl=None&ceid=None:en
+INFO 2025-05-22 02:33:50,988 google_rss_fetcher 13996 19796 Found 100 articles from RSS feed
+INFO 2025-05-22 02:33:50,989 views 13996 19796 Fetched 100 articles from RSS feed
+INFO 2025-05-22 02:33:50,989 views 13996 19796 Total articles fetched from all sources: 210
+INFO 2025-05-22 02:35:56,774 views 13996 34048 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 02:35:56,812 views 13996 34048 Found 91 articles in database matching criteria
+INFO 2025-05-22 02:36:21,989 views 13996 24316 Searching database for articles matching: query=innovation, language=en, country=None, fresh_only=True
+INFO 2025-05-22 02:36:22,009 views 13996 24316 Found 3 articles in database matching criteria
+INFO 2025-05-22 02:36:22,024 views 13996 24316 Fetching new articles from APIs: query=innovation, language=en, country=None
+INFO 2025-05-22 02:36:22,024 views 13996 24316 Extracted keywords from query: ['innovation']
+INFO 2025-05-22 02:36:23,123 views 13996 24316 Fetched 99 articles from NewsAPI
+INFO 2025-05-22 02:36:23,596 views 13996 24316 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 02:36:23,599 google_rss_fetcher 13996 24316 Fetching RSS feed from: https://news.google.com/rss/search?q=innovation&hl=en&gl=None&ceid=None:en
+INFO 2025-05-22 02:36:24,628 google_rss_fetcher 13996 24316 Found 100 articles from RSS feed
+INFO 2025-05-22 02:36:24,629 views 13996 24316 Fetched 100 articles from RSS feed
+INFO 2025-05-22 02:36:24,629 views 13996 24316 Total articles fetched from all sources: 209
+INFO 2025-05-22 02:36:50,098 views 13996 37200 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 02:36:50,120 views 13996 37200 Found 93 articles in database matching criteria
+INFO 2025-05-22 03:39:32,707 views 13996 39168 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 03:39:32,711 views 13996 17936 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 03:39:32,712 views 13996 24556 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 03:39:32,723 views 13996 33108 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 03:39:32,810 views 13996 17936 Found 3 articles in database matching criteria
+INFO 2025-05-22 03:39:32,810 views 13996 39168 Found 1 articles in database matching criteria
+INFO 2025-05-22 03:39:32,810 views 13996 33108 Found 93 articles in database matching criteria
+INFO 2025-05-22 03:39:32,816 views 13996 24556 Found 9 articles in database matching criteria
+INFO 2025-05-22 03:39:32,853 views 13996 39168 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 03:39:32,855 views 13996 17936 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 03:39:32,857 views 13996 39168 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 03:39:32,859 views 13996 17936 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 03:39:32,914 views 13996 24556 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 03:39:32,919 views 13996 24556 Extracted keywords from query: ['Science']
+INFO 2025-05-22 03:39:32,991 views 13996 33108 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 03:39:32,992 views 13996 33108 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 03:39:34,029 views 13996 24556 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 03:39:34,040 views 13996 39168 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 03:39:34,051 views 13996 33108 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 03:39:34,061 views 13996 17936 Fetched 100 articles from NewsAPI
+ERROR 2025-05-22 03:39:34,503 base_fetcher 13996 33108 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 03:39:34,506 views 13996 33108 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 03:39:34,508 google_rss_fetcher 13996 33108 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 03:39:34,653 views 13996 24556 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 03:39:34,654 google_rss_fetcher 13996 24556 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 03:39:34,835 views 13996 39168 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 03:39:34,836 google_rss_fetcher 13996 39168 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 03:39:34,936 views 13996 17936 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 03:39:34,937 google_rss_fetcher 13996 17936 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 03:39:35,919 google_rss_fetcher 13996 24556 Found 100 articles from RSS feed
+INFO 2025-05-22 03:39:35,921 views 13996 24556 Fetched 100 articles from RSS feed
+INFO 2025-05-22 03:39:35,923 views 13996 24556 Total articles fetched from all sources: 210
+INFO 2025-05-22 03:39:36,128 google_rss_fetcher 13996 33108 Found 100 articles from RSS feed
+INFO 2025-05-22 03:39:37,915 views 13996 33108 Fetched 100 articles from RSS feed
+INFO 2025-05-22 03:39:37,919 google_rss_fetcher 13996 39168 Found 100 articles from RSS feed
+INFO 2025-05-22 03:39:37,920 views 13996 33108 Total articles fetched from all sources: 200
+INFO 2025-05-22 03:39:37,920 views 13996 39168 Fetched 100 articles from RSS feed
+INFO 2025-05-22 03:39:37,924 views 13996 39168 Total articles fetched from all sources: 210
+INFO 2025-05-22 03:39:38,009 google_rss_fetcher 13996 17936 Found 102 articles from RSS feed
+INFO 2025-05-22 03:39:38,010 views 13996 17936 Fetched 102 articles from RSS feed
+INFO 2025-05-22 03:39:38,011 views 13996 17936 Total articles fetched from all sources: 212
+INFO 2025-05-22 03:39:42,965 views 13996 32048 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 03:39:43,004 views 13996 32048 Found 93 articles in database matching criteria
+INFO 2025-05-22 03:39:57,825 views 13996 21804 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 03:39:57,860 views 13996 21804 Found 93 articles in database matching criteria
+INFO 2025-05-22 03:39:57,938 views 13996 21804 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 03:39:57,939 views 13996 21804 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 03:39:58,179 views 13996 15392 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 03:39:58,191 views 13996 27872 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 03:39:58,194 views 13996 14136 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 03:39:58,217 views 13996 15392 Found 32 articles in database matching criteria
+INFO 2025-05-22 03:39:58,228 views 13996 14136 Found 4 articles in database matching criteria
+INFO 2025-05-22 03:39:58,235 views 13996 27872 Found 3 articles in database matching criteria
+INFO 2025-05-22 03:39:58,248 views 13996 14136 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 03:39:58,250 views 13996 14136 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 03:39:58,257 views 13996 27872 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 03:39:58,259 views 13996 27872 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 03:39:58,279 views 13996 15392 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 03:39:58,280 views 13996 15392 Extracted keywords from query: ['Science']
+INFO 2025-05-22 03:39:58,732 views 13996 15392 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 03:39:58,924 views 13996 21804 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 03:39:59,205 views 13996 27872 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 03:39:59,215 views 13996 14136 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 03:39:59,241 views 13996 15392 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 03:39:59,242 google_rss_fetcher 13996 15392 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 03:39:59,376 views 13996 21804 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 03:39:59,377 google_rss_fetcher 13996 21804 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 03:39:59,613 base_fetcher 13996 14136 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 03:39:59,614 views 13996 14136 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 03:39:59,615 google_rss_fetcher 13996 14136 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 03:39:59,646 views 13996 27872 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 03:39:59,647 google_rss_fetcher 13996 27872 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 03:39:59,771 google_rss_fetcher 13996 15392 Found 100 articles from RSS feed
+INFO 2025-05-22 03:39:59,773 views 13996 15392 Fetched 100 articles from RSS feed
+INFO 2025-05-22 03:39:59,774 views 13996 15392 Total articles fetched from all sources: 210
+INFO 2025-05-22 03:39:59,961 google_rss_fetcher 13996 21804 Found 100 articles from RSS feed
+INFO 2025-05-22 03:39:59,963 views 13996 21804 Fetched 100 articles from RSS feed
+INFO 2025-05-22 03:39:59,963 views 13996 21804 Total articles fetched from all sources: 210
+INFO 2025-05-22 03:40:00,215 google_rss_fetcher 13996 27872 Found 100 articles from RSS feed
+INFO 2025-05-22 03:40:00,216 views 13996 27872 Fetched 100 articles from RSS feed
+INFO 2025-05-22 03:40:00,218 views 13996 27872 Total articles fetched from all sources: 210
+INFO 2025-05-22 03:40:00,298 google_rss_fetcher 13996 14136 Found 102 articles from RSS feed
+INFO 2025-05-22 03:40:00,299 views 13996 14136 Fetched 102 articles from RSS feed
+INFO 2025-05-22 03:40:00,299 views 13996 14136 Total articles fetched from all sources: 202
+INFO 2025-05-22 04:54:07,439 views 13996 4380 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:07,441 views 13996 5236 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:07,590 views 13996 4380 Found 124 articles in database matching criteria
+INFO 2025-05-22 04:54:07,590 views 13996 5236 Found 81 articles in database matching criteria
+INFO 2025-05-22 04:54:07,838 views 13996 22268 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:07,846 views 13996 5236 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 04:54:07,847 views 13996 34820 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:07,852 views 13996 5236 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 04:54:07,852 views 13996 4380 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 04:54:07,877 views 13996 4380 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 04:54:07,879 views 13996 22268 Found 100 articles in database matching criteria
+INFO 2025-05-22 04:54:07,888 views 13996 34820 Found 84 articles in database matching criteria
+INFO 2025-05-22 04:54:08,063 views 13996 22268 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 04:54:08,066 views 13996 22268 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 04:54:08,073 views 13996 34820 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 04:54:08,079 views 13996 34820 Extracted keywords from query: ['Science']
+INFO 2025-05-22 04:54:09,020 views 13996 4380 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:09,076 views 13996 5236 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:09,146 views 13996 34820 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:09,154 views 13996 22268 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:09,607 views 13996 5236 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:09,609 google_rss_fetcher 13996 5236 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 04:54:09,642 base_fetcher 13996 34820 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 04:54:09,684 views 13996 34820 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 04:54:09,691 google_rss_fetcher 13996 34820 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:09,774 views 13996 22268 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:09,776 google_rss_fetcher 13996 22268 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:09,916 views 13996 4380 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:09,917 google_rss_fetcher 13996 4380 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:11,067 google_rss_fetcher 13996 22268 Found 102 articles from RSS feed
+INFO 2025-05-22 04:54:11,069 views 13996 22268 Fetched 102 articles from RSS feed
+INFO 2025-05-22 04:54:11,080 views 13996 22268 Total articles fetched from all sources: 212
+INFO 2025-05-22 04:54:11,383 google_rss_fetcher 13996 34820 Found 100 articles from RSS feed
+INFO 2025-05-22 04:54:11,421 views 13996 34820 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:54:11,483 views 13996 34820 Total articles fetched from all sources: 200
+INFO 2025-05-22 04:54:11,588 google_rss_fetcher 13996 5236 Found 100 articles from RSS feed
+INFO 2025-05-22 04:54:11,590 views 13996 5236 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:54:11,656 views 13996 5236 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:54:11,834 google_rss_fetcher 13996 4380 Found 100 articles from RSS feed
+INFO 2025-05-22 04:54:11,846 views 13996 4380 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:54:11,853 views 13996 4380 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:54:18,635 views 13996 34128 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:18,635 views 13996 36120 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:18,636 views 13996 26664 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:18,669 views 13996 34128 Found 84 articles in database matching criteria
+INFO 2025-05-22 04:54:18,672 views 13996 36120 Found 100 articles in database matching criteria
+INFO 2025-05-22 04:54:18,680 views 13996 26664 Found 81 articles in database matching criteria
+INFO 2025-05-22 04:54:18,744 views 13996 22324 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:18,775 views 13996 22324 Found 124 articles in database matching criteria
+INFO 2025-05-22 04:54:18,937 views 13996 34128 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 04:54:18,938 views 13996 26664 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 04:54:18,945 views 13996 34128 Extracted keywords from query: ['Science']
+INFO 2025-05-22 04:54:18,950 views 13996 36120 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 04:54:18,951 views 13996 26664 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 04:54:18,958 views 13996 36120 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 04:54:19,007 views 13996 22324 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 04:54:19,008 views 13996 22324 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 04:54:19,421 views 13996 34128 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:19,988 views 13996 36120 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:19,999 views 13996 26664 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:20,019 views 13996 22324 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:20,035 views 13996 34128 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:20,037 google_rss_fetcher 13996 34128 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 04:54:20,497 base_fetcher 13996 22324 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 04:54:20,503 views 13996 22324 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 04:54:20,506 google_rss_fetcher 13996 22324 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:20,578 views 13996 26664 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:20,623 google_rss_fetcher 13996 26664 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:20,926 google_rss_fetcher 13996 34128 Found 100 articles from RSS feed
+INFO 2025-05-22 04:54:20,926 views 13996 36120 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:20,927 views 13996 34128 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:54:20,928 google_rss_fetcher 13996 36120 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:20,929 views 13996 34128 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:54:21,542 google_rss_fetcher 13996 22324 Found 100 articles from RSS feed
+INFO 2025-05-22 04:54:21,544 views 13996 22324 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:54:21,545 views 13996 22324 Total articles fetched from all sources: 200
+INFO 2025-05-22 04:54:21,751 google_rss_fetcher 13996 26664 Found 100 articles from RSS feed
+INFO 2025-05-22 04:54:21,754 views 13996 26664 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:54:21,758 views 13996 26664 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:54:21,974 google_rss_fetcher 13996 36120 Found 102 articles from RSS feed
+INFO 2025-05-22 04:54:21,977 views 13996 36120 Fetched 102 articles from RSS feed
+INFO 2025-05-22 04:54:21,979 views 13996 36120 Total articles fetched from all sources: 212
+INFO 2025-05-22 04:54:34,290 views 13996 21412 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 04:54:34,357 views 13996 21412 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:54:39,385 views 13996 3660 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 04:54:39,419 views 13996 3660 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:54:39,607 views 13996 32776 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:39,640 views 13996 21824 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:39,644 views 13996 36056 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:39,644 views 13996 36620 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:54:39,651 views 13996 32776 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:54:39,681 views 13996 21824 Found 118 articles in database matching criteria
+INFO 2025-05-22 04:54:39,681 views 13996 36056 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:54:39,691 views 13996 36620 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:54:39,847 views 13996 32776 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 04:54:39,851 views 13996 32776 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 04:54:39,888 views 13996 36056 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 04:54:39,893 views 13996 21824 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 04:54:39,894 views 13996 36620 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 04:54:39,895 views 13996 36056 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 04:54:39,896 views 13996 21824 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 04:54:39,896 views 13996 36620 Extracted keywords from query: ['Science']
+INFO 2025-05-22 04:54:40,380 views 13996 32776 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:40,405 views 13996 36056 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:40,878 views 13996 32776 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:40,879 google_rss_fetcher 13996 32776 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:40,975 views 13996 36056 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:40,976 google_rss_fetcher 13996 36056 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:40,980 views 13996 36620 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:54:40,991 views 13996 21824 Fetched 100 articles from NewsAPI
+ERROR 2025-05-22 04:54:41,544 base_fetcher 13996 36620 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 04:54:41,589 views 13996 36620 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 04:54:41,652 google_rss_fetcher 13996 36620 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:41,683 views 13996 21824 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:54:41,714 google_rss_fetcher 13996 21824 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:54:41,763 google_rss_fetcher 13996 32776 Found 100 articles from RSS feed
+INFO 2025-05-22 04:54:41,870 views 13996 32776 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:54:41,947 views 13996 32776 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:54:42,113 google_rss_fetcher 13996 36056 Found 100 articles from RSS feed
+INFO 2025-05-22 04:54:42,114 views 13996 36056 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:54:42,115 views 13996 36056 Total articles fetched from all sources: 210
+ERROR 2025-05-22 04:55:46,567 views 13996 21824 Error fetching from RSS feed: [WinError 10053] An established connection was aborted by the software in your host machine
+ERROR 2025-05-22 04:55:46,567 views 13996 36620 Error fetching from RSS feed: [WinError 10053] An established connection was aborted by the software in your host machine
+INFO 2025-05-22 04:55:46,585 views 13996 21824 Total articles fetched from all sources: 110
+INFO 2025-05-22 04:55:46,599 views 13996 36620 Total articles fetched from all sources: 100
+INFO 2025-05-22 04:55:56,610 views 13996 28552 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 04:55:56,635 views 13996 28552 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:55:56,728 views 13996 28552 Fetching new articles from APIs: query=technology, language=en, country=None
+INFO 2025-05-22 04:55:56,729 views 13996 28552 Extracted keywords from query: ['technology']
+INFO 2025-05-22 04:55:58,449 views 13996 28552 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:55:59,351 views 13996 28552 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:55:59,353 google_rss_fetcher 13996 28552 Fetching RSS feed from: https://news.google.com/rss/search?q=technology&hl=en&gl=None&ceid=None:en
+INFO 2025-05-22 04:56:00,771 google_rss_fetcher 13996 28552 Found 100 articles from RSS feed
+INFO 2025-05-22 04:56:00,772 views 13996 28552 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:56:00,773 views 13996 28552 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:56:21,531 views 13996 22984 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:56:21,560 views 13996 22984 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:56:21,657 views 13996 22984 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 04:56:21,658 views 13996 22984 Extracted keywords from query: ['Science']
+INFO 2025-05-22 04:56:21,885 views 13996 32104 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:56:21,886 views 13996 3860 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:56:21,886 views 13996 20548 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:56:21,917 views 13996 3860 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:56:21,918 views 13996 32104 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:56:21,924 views 13996 20548 Found 118 articles in database matching criteria
+INFO 2025-05-22 04:56:22,112 views 13996 20548 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 04:56:22,113 views 13996 3860 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 04:56:22,113 views 13996 32104 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 04:56:22,114 views 13996 20548 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 04:56:22,114 views 13996 3860 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 04:56:22,115 views 13996 32104 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 04:56:22,832 views 13996 22984 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:56:23,398 views 13996 3860 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:56:23,408 views 13996 32104 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:56:23,409 views 13996 22984 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:56:23,414 views 13996 20548 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:56:23,416 google_rss_fetcher 13996 22984 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:56:23,919 views 13996 3860 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:56:23,920 google_rss_fetcher 13996 3860 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 04:56:24,083 base_fetcher 13996 20548 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 04:56:24,084 views 13996 20548 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 04:56:24,084 google_rss_fetcher 13996 20548 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:56:24,162 views 13996 32104 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:56:24,163 google_rss_fetcher 13996 32104 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:56:24,386 views 13996 37248 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 04:56:24,418 views 13996 37248 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:56:24,606 google_rss_fetcher 13996 22984 Found 100 articles from RSS feed
+INFO 2025-05-22 04:56:24,609 views 13996 22984 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:56:24,613 views 13996 22984 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:56:25,106 google_rss_fetcher 13996 3860 Found 100 articles from RSS feed
+INFO 2025-05-22 04:56:25,109 views 13996 3860 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:56:25,109 views 13996 3860 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:56:25,328 google_rss_fetcher 13996 32104 Found 100 articles from RSS feed
+INFO 2025-05-22 04:56:25,332 views 13996 32104 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:56:25,334 views 13996 32104 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:56:25,557 google_rss_fetcher 13996 20548 Found 102 articles from RSS feed
+INFO 2025-05-22 04:56:25,559 views 13996 20548 Fetched 102 articles from RSS feed
+INFO 2025-05-22 04:56:25,560 views 13996 20548 Total articles fetched from all sources: 202
+INFO 2025-05-22 04:56:25,777 views 13996 21280 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 04:56:25,824 views 13996 21280 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:56:25,830 views 13996 35752 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:56:25,874 views 13996 35752 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:56:25,916 views 13996 33844 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:56:25,956 views 13996 18296 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:56:25,963 views 13996 33844 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:56:25,976 views 13996 34272 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:56:26,000 views 13996 18296 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:56:26,030 views 13996 35752 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 04:56:26,053 views 13996 34272 Found 118 articles in database matching criteria
+INFO 2025-05-22 04:56:26,057 views 13996 35752 Extracted keywords from query: ['Science']
+INFO 2025-05-22 04:56:26,198 views 13996 33844 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 04:56:26,203 views 13996 33844 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 04:56:26,217 views 13996 18296 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 04:56:26,219 views 13996 18296 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 04:56:26,230 views 13996 34272 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 04:56:26,230 views 13996 34272 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 04:56:26,763 views 13996 34272 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:56:27,191 views 13996 35752 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:56:27,211 views 13996 18296 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:56:27,247 views 13996 33844 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:56:27,275 views 13996 34272 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:56:27,276 google_rss_fetcher 13996 34272 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 04:56:27,706 base_fetcher 13996 33844 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 04:56:27,751 views 13996 33844 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 04:56:27,812 google_rss_fetcher 13996 33844 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:56:27,840 google_rss_fetcher 13996 34272 Found 102 articles from RSS feed
+INFO 2025-05-22 04:56:27,842 views 13996 18296 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:56:27,859 views 13996 34272 Fetched 102 articles from RSS feed
+INFO 2025-05-22 04:56:27,905 google_rss_fetcher 13996 18296 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:56:27,926 views 13996 34272 Total articles fetched from all sources: 212
+INFO 2025-05-22 04:56:28,009 views 13996 35752 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:56:28,011 google_rss_fetcher 13996 35752 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:56:28,669 google_rss_fetcher 13996 33844 Found 100 articles from RSS feed
+INFO 2025-05-22 04:56:28,671 views 13996 33844 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:56:28,672 views 13996 33844 Total articles fetched from all sources: 200
+INFO 2025-05-22 04:56:28,894 google_rss_fetcher 13996 18296 Found 100 articles from RSS feed
+INFO 2025-05-22 04:56:28,896 views 13996 18296 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:56:28,897 views 13996 18296 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:56:29,142 google_rss_fetcher 13996 35752 Found 100 articles from RSS feed
+INFO 2025-05-22 04:56:29,147 views 13996 35752 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:56:29,153 views 13996 35752 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:58:48,649 views 13996 35616 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:58:48,653 views 13996 9204 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:58:48,662 views 13996 31280 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:58:48,684 views 13996 35616 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:58:48,687 views 13996 9204 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:58:48,699 views 13996 31280 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:58:48,870 views 13996 35616 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 04:58:48,873 views 13996 35616 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 04:58:48,881 views 13996 9204 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 04:58:48,888 views 13996 9204 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 04:58:48,910 views 13996 31280 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 04:58:48,913 views 13996 31280 Extracted keywords from query: ['Science']
+INFO 2025-05-22 04:58:48,993 views 13996 22492 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:58:49,027 views 13996 22492 Found 138 articles in database matching criteria
+INFO 2025-05-22 04:58:49,098 views 13996 22492 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 04:58:49,098 views 13996 22492 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 04:58:50,222 views 13996 31280 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:58:50,334 views 13996 9204 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:58:50,404 views 13996 35616 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:58:50,408 views 13996 22492 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:58:50,866 views 13996 31280 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:58:50,866 google_rss_fetcher 13996 31280 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:58:51,009 views 13996 35616 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:58:51,010 google_rss_fetcher 13996 35616 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:58:51,314 views 13996 22492 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:58:51,315 google_rss_fetcher 13996 22492 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:58:51,807 google_rss_fetcher 13996 31280 Found 100 articles from RSS feed
+INFO 2025-05-22 04:58:51,809 views 13996 31280 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:58:51,809 views 13996 31280 Total articles fetched from all sources: 210
+ERROR 2025-05-22 04:58:51,913 base_fetcher 13996 9204 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 04:58:51,913 views 13996 9204 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 04:58:51,914 google_rss_fetcher 13996 9204 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:58:52,145 google_rss_fetcher 13996 35616 Found 100 articles from RSS feed
+INFO 2025-05-22 04:58:52,146 views 13996 35616 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:58:52,147 views 13996 35616 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:58:52,816 google_rss_fetcher 13996 22492 Found 102 articles from RSS feed
+INFO 2025-05-22 04:58:52,818 views 13996 22492 Fetched 102 articles from RSS feed
+INFO 2025-05-22 04:58:52,819 views 13996 22492 Total articles fetched from all sources: 212
+INFO 2025-05-22 04:58:53,148 google_rss_fetcher 13996 9204 Found 100 articles from RSS feed
+INFO 2025-05-22 04:58:53,150 views 13996 9204 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:58:53,153 views 13996 9204 Total articles fetched from all sources: 200
+INFO 2025-05-22 04:58:57,432 views 13996 16988 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 04:58:57,471 views 13996 16988 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:59:36,272 views 13996 23420 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 04:59:36,312 views 13996 23420 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:59:40,125 views 13996 30296 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:59:40,135 views 13996 32108 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:59:40,156 views 13996 30296 Found 89 articles in database matching criteria
+INFO 2025-05-22 04:59:40,177 views 13996 32108 Found 127 articles in database matching criteria
+INFO 2025-05-22 04:59:40,288 views 13996 30296 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 04:59:40,291 views 13996 30296 Extracted keywords from query: ['Science']
+INFO 2025-05-22 04:59:40,303 views 13996 32108 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 04:59:40,305 views 13996 32108 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 04:59:40,463 views 13996 4984 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:59:40,466 views 13996 8856 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 04:59:40,487 views 13996 4984 Found 110 articles in database matching criteria
+INFO 2025-05-22 04:59:40,498 views 13996 8856 Found 140 articles in database matching criteria
+INFO 2025-05-22 04:59:40,621 views 13996 4984 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 04:59:40,623 views 13996 8856 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 04:59:40,624 views 13996 4984 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 04:59:40,625 views 13996 8856 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 04:59:41,364 views 13996 32108 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:59:41,376 views 13996 30296 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:59:41,631 views 13996 4984 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:59:41,636 views 13996 8856 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 04:59:41,876 views 13996 32108 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:59:41,877 google_rss_fetcher 13996 32108 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:59:42,173 views 13996 8856 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:59:42,175 google_rss_fetcher 13996 8856 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:59:42,266 views 13996 30296 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:59:42,271 google_rss_fetcher 13996 30296 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:59:42,384 views 13996 4984 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 04:59:42,385 google_rss_fetcher 13996 4984 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 04:59:42,723 google_rss_fetcher 13996 32108 Found 100 articles from RSS feed
+INFO 2025-05-22 04:59:42,724 views 13996 32108 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:59:42,725 views 13996 32108 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:59:42,998 google_rss_fetcher 13996 8856 Found 102 articles from RSS feed
+INFO 2025-05-22 04:59:42,999 views 13996 8856 Fetched 102 articles from RSS feed
+INFO 2025-05-22 04:59:43,003 views 13996 8856 Total articles fetched from all sources: 212
+INFO 2025-05-22 04:59:43,220 google_rss_fetcher 13996 4984 Found 100 articles from RSS feed
+INFO 2025-05-22 04:59:43,224 views 13996 4984 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:59:43,269 views 13996 4984 Total articles fetched from all sources: 210
+INFO 2025-05-22 04:59:43,445 google_rss_fetcher 13996 30296 Found 100 articles from RSS feed
+INFO 2025-05-22 04:59:43,448 views 13996 30296 Fetched 100 articles from RSS feed
+INFO 2025-05-22 04:59:43,450 views 13996 30296 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:07:01,236 views 13996 27856 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:07:01,237 views 13996 38852 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:07:01,282 views 13996 38852 Found 89 articles in database matching criteria
+INFO 2025-05-22 05:07:01,282 views 13996 27856 Found 127 articles in database matching criteria
+INFO 2025-05-22 05:07:01,443 views 13996 27856 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 05:07:01,444 views 13996 38852 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 05:07:01,448 views 13996 27856 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 05:07:01,451 views 13996 38852 Extracted keywords from query: ['Science']
+INFO 2025-05-22 05:07:01,589 views 13996 39644 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:07:01,589 views 13996 20184 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:07:01,630 views 13996 20184 Found 110 articles in database matching criteria
+INFO 2025-05-22 05:07:01,631 views 13996 39644 Found 140 articles in database matching criteria
+INFO 2025-05-22 05:07:01,782 views 13996 20184 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 05:07:01,782 views 13996 39644 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 05:07:01,784 views 13996 20184 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 05:07:01,784 views 13996 39644 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 05:07:02,459 views 13996 27856 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:07:02,592 views 13996 38852 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:07:02,802 views 13996 39644 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:07:02,804 views 13996 20184 Fetched 100 articles from NewsAPI
+ERROR 2025-05-22 05:07:03,438 base_fetcher 13996 39644 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 05:07:03,439 views 13996 39644 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 05:07:03,442 google_rss_fetcher 13996 39644 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:07:03,824 views 13996 38852 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:07:03,826 google_rss_fetcher 13996 38852 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:07:03,883 views 13996 27856 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:07:03,904 google_rss_fetcher 13996 27856 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:07:04,239 views 13996 20184 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:07:04,242 google_rss_fetcher 13996 20184 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:07:05,175 google_rss_fetcher 13996 39644 Found 102 articles from RSS feed
+INFO 2025-05-22 05:07:05,176 views 13996 39644 Fetched 102 articles from RSS feed
+INFO 2025-05-22 05:07:05,177 views 13996 39644 Total articles fetched from all sources: 202
+INFO 2025-05-22 05:07:05,354 google_rss_fetcher 13996 38852 Found 100 articles from RSS feed
+INFO 2025-05-22 05:07:05,358 views 13996 38852 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:07:05,371 views 13996 38852 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:07:05,555 google_rss_fetcher 13996 27856 Found 100 articles from RSS feed
+INFO 2025-05-22 05:07:05,557 views 13996 27856 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:07:05,560 views 13996 27856 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:07:05,795 google_rss_fetcher 13996 20184 Found 100 articles from RSS feed
+INFO 2025-05-22 05:07:05,799 views 13996 20184 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:07:05,804 views 13996 20184 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:07:10,261 views 13996 2860 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 05:07:10,303 views 13996 2860 Found 127 articles in database matching criteria
+INFO 2025-05-22 05:07:27,497 views 13996 38676 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 05:07:27,530 views 13996 38676 Found 128 articles in database matching criteria
+INFO 2025-05-22 05:07:56,626 views 13996 29712 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:07:56,627 views 13996 27556 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:07:56,631 views 13996 37944 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:07:56,656 views 13996 29712 Found 113 articles in database matching criteria
+INFO 2025-05-22 05:07:56,667 views 13996 27556 Found 128 articles in database matching criteria
+INFO 2025-05-22 05:07:56,674 views 13996 37944 Found 91 articles in database matching criteria
+INFO 2025-05-22 05:07:56,855 views 13996 29712 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 05:07:56,859 views 13996 29712 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 05:07:56,860 views 13996 27556 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 05:07:56,871 views 13996 27556 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 05:07:56,876 views 13996 37944 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 05:07:56,883 views 13996 37944 Extracted keywords from query: ['Science']
+INFO 2025-05-22 05:07:56,986 views 13996 34264 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:07:57,012 views 13996 34264 Found 141 articles in database matching criteria
+INFO 2025-05-22 05:07:57,121 views 13996 34264 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 05:07:57,122 views 13996 34264 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 05:07:58,186 views 13996 27556 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:07:58,189 views 13996 29712 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:07:58,194 views 13996 37944 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:07:58,333 views 13996 34264 Fetched 100 articles from NewsAPI
+ERROR 2025-05-22 05:07:58,833 base_fetcher 13996 34264 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-22 05:07:58,834 views 13996 37944 Fetched 10 articles from GNewsAPI
+ERROR 2025-05-22 05:07:58,835 views 13996 34264 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 05:07:58,835 google_rss_fetcher 13996 37944 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:07:58,836 google_rss_fetcher 13996 34264 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:07:59,020 views 13996 29712 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:07:59,023 google_rss_fetcher 13996 29712 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:07:59,148 views 13996 27556 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:07:59,149 google_rss_fetcher 13996 27556 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:07:59,734 google_rss_fetcher 13996 34264 Found 102 articles from RSS feed
+INFO 2025-05-22 05:07:59,735 views 13996 34264 Fetched 102 articles from RSS feed
+INFO 2025-05-22 05:07:59,737 views 13996 34264 Total articles fetched from all sources: 202
+INFO 2025-05-22 05:07:59,919 google_rss_fetcher 13996 37944 Found 100 articles from RSS feed
+INFO 2025-05-22 05:07:59,962 views 13996 37944 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:07:59,992 views 13996 37944 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:08:00,178 google_rss_fetcher 13996 29712 Found 100 articles from RSS feed
+INFO 2025-05-22 05:08:00,243 views 13996 29712 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:08:00,316 google_rss_fetcher 13996 27556 Found 100 articles from RSS feed
+INFO 2025-05-22 05:08:00,317 views 13996 29712 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:08:00,319 views 13996 27556 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:08:00,322 views 13996 27556 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:08:59,643 views 13996 39908 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:08:59,644 views 13996 20552 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:08:59,676 views 13996 39908 Found 128 articles in database matching criteria
+INFO 2025-05-22 05:08:59,677 views 13996 20552 Found 91 articles in database matching criteria
+INFO 2025-05-22 05:08:59,816 views 13996 20552 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 05:08:59,816 views 13996 39908 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 05:08:59,817 views 13996 20552 Extracted keywords from query: ['Science']
+INFO 2025-05-22 05:08:59,818 views 13996 39908 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 05:08:59,963 views 13996 37140 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:08:59,964 views 13996 33048 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:08:59,997 views 13996 37140 Found 141 articles in database matching criteria
+INFO 2025-05-22 05:09:00,007 views 13996 33048 Found 113 articles in database matching criteria
+INFO 2025-05-22 05:09:00,097 views 13996 37140 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 05:09:00,099 views 13996 37140 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 05:09:00,100 views 13996 33048 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 05:09:00,102 views 13996 33048 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 05:09:00,936 views 13996 20552 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:09:00,941 views 13996 39908 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:09:01,094 views 13996 37140 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:09:01,112 views 13996 33048 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:09:01,489 views 13996 39908 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:09:01,490 google_rss_fetcher 13996 39908 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 05:09:01,553 base_fetcher 13996 33048 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 05:09:01,572 views 13996 33048 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 05:09:01,574 google_rss_fetcher 13996 33048 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:09:01,657 views 13996 37140 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:09:01,658 google_rss_fetcher 13996 37140 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:09:01,743 views 13996 20552 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:09:01,744 google_rss_fetcher 13996 20552 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:09:02,330 google_rss_fetcher 13996 39908 Found 100 articles from RSS feed
+INFO 2025-05-22 05:09:02,332 views 13996 39908 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:09:02,333 views 13996 39908 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:09:02,540 google_rss_fetcher 13996 33048 Found 100 articles from RSS feed
+INFO 2025-05-22 05:09:02,572 views 13996 33048 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:09:02,589 views 13996 33048 Total articles fetched from all sources: 200
+INFO 2025-05-22 05:09:02,752 google_rss_fetcher 13996 20552 Found 100 articles from RSS feed
+INFO 2025-05-22 05:09:02,776 views 13996 20552 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:09:02,836 views 13996 20552 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:09:02,982 google_rss_fetcher 13996 37140 Found 102 articles from RSS feed
+INFO 2025-05-22 05:09:02,984 views 13996 37140 Fetched 102 articles from RSS feed
+INFO 2025-05-22 05:09:02,988 views 13996 37140 Total articles fetched from all sources: 212
+INFO 2025-05-22 05:16:30,906 views 13996 6472 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:16:30,907 views 13996 22644 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:16:30,943 views 13996 22644 Found 128 articles in database matching criteria
+INFO 2025-05-22 05:16:30,943 views 13996 6472 Found 91 articles in database matching criteria
+INFO 2025-05-22 05:16:31,092 views 13996 22644 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 05:16:31,093 views 13996 6472 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 05:16:31,094 views 13996 22644 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 05:16:31,095 views 13996 6472 Extracted keywords from query: ['Science']
+INFO 2025-05-22 05:16:31,243 views 13996 20616 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:16:31,249 views 13996 22308 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:16:31,272 views 13996 20616 Found 141 articles in database matching criteria
+INFO 2025-05-22 05:16:31,310 views 13996 22308 Found 112 articles in database matching criteria
+INFO 2025-05-22 05:16:31,438 views 13996 20616 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 05:16:31,441 views 13996 20616 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 05:16:31,464 views 13996 22308 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 05:16:31,466 views 13996 22308 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 05:16:32,181 views 13996 6472 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:16:32,208 views 13996 22644 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:16:32,459 views 13996 20616 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:16:32,497 views 13996 22308 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:16:32,762 views 13996 6472 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:16:32,763 google_rss_fetcher 13996 6472 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 05:16:32,945 base_fetcher 13996 22308 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 05:16:32,947 views 13996 22308 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 05:16:32,948 google_rss_fetcher 13996 22308 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:16:33,018 views 13996 20616 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:16:33,034 views 13996 22644 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:16:33,037 google_rss_fetcher 13996 20616 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:16:33,038 google_rss_fetcher 13996 22644 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:16:33,918 google_rss_fetcher 13996 6472 Found 100 articles from RSS feed
+INFO 2025-05-22 05:16:33,919 views 13996 6472 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:16:33,920 views 13996 6472 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:16:34,257 google_rss_fetcher 13996 22308 Found 100 articles from RSS feed
+INFO 2025-05-22 05:16:34,263 views 13996 22308 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:16:34,270 views 13996 22308 Total articles fetched from all sources: 200
+INFO 2025-05-22 05:16:34,560 google_rss_fetcher 13996 20616 Found 102 articles from RSS feed
+INFO 2025-05-22 05:16:34,621 views 13996 20616 Fetched 102 articles from RSS feed
+INFO 2025-05-22 05:16:34,699 views 13996 20616 Total articles fetched from all sources: 212
+INFO 2025-05-22 05:16:34,758 google_rss_fetcher 13996 22644 Found 100 articles from RSS feed
+INFO 2025-05-22 05:16:34,761 views 13996 22644 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:16:34,763 views 13996 22644 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:16:38,332 views 13996 21224 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 05:16:38,370 views 13996 21224 Found 128 articles in database matching criteria
+INFO 2025-05-22 05:16:43,180 views 13996 24876 Searching database for articles matching: query=technology, language=en, country=None, fresh_only=True
+INFO 2025-05-22 05:16:43,220 views 13996 24876 Found 128 articles in database matching criteria
+INFO 2025-05-22 05:16:48,255 views 13996 9932 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:16:48,259 views 13996 38064 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:16:48,259 views 13996 39652 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:16:48,260 views 13996 35376 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:16:48,292 views 13996 9932 Found 130 articles in database matching criteria
+INFO 2025-05-22 05:16:48,303 views 13996 38064 Found 116 articles in database matching criteria
+INFO 2025-05-22 05:16:48,306 views 13996 39652 Found 92 articles in database matching criteria
+INFO 2025-05-22 05:16:48,308 views 13996 35376 Found 142 articles in database matching criteria
+INFO 2025-05-22 05:16:48,524 views 13996 39652 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 05:16:48,524 views 13996 38064 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 05:16:48,528 views 13996 35376 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 05:16:48,529 views 13996 39652 Extracted keywords from query: ['Science']
+INFO 2025-05-22 05:16:48,531 views 13996 38064 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 05:16:48,532 views 13996 35376 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 05:16:48,533 views 13996 9932 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 05:16:48,540 views 13996 9932 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 05:16:49,021 views 13996 39652 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:16:49,044 views 13996 35376 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:16:49,574 views 13996 39652 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:16:49,575 google_rss_fetcher 13996 39652 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:16:49,639 views 13996 38064 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:16:49,641 views 13996 9932 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:16:49,818 views 13996 35376 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:16:49,819 google_rss_fetcher 13996 35376 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 05:16:50,049 base_fetcher 13996 9932 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 05:16:50,050 views 13996 9932 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 05:16:50,052 google_rss_fetcher 13996 9932 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:16:50,116 views 13996 38064 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:16:50,117 google_rss_fetcher 13996 38064 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:16:50,369 google_rss_fetcher 13996 39652 Found 100 articles from RSS feed
+INFO 2025-05-22 05:16:50,369 views 13996 39652 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:16:50,370 views 13996 39652 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:16:50,647 google_rss_fetcher 13996 35376 Found 102 articles from RSS feed
+INFO 2025-05-22 05:16:50,648 views 13996 35376 Fetched 102 articles from RSS feed
+INFO 2025-05-22 05:16:50,649 views 13996 35376 Total articles fetched from all sources: 212
+INFO 2025-05-22 05:16:50,847 google_rss_fetcher 13996 9932 Found 100 articles from RSS feed
+INFO 2025-05-22 05:16:50,851 views 13996 9932 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:16:50,861 views 13996 9932 Total articles fetched from all sources: 200
+INFO 2025-05-22 05:16:51,038 google_rss_fetcher 13996 38064 Found 100 articles from RSS feed
+INFO 2025-05-22 05:16:51,041 views 13996 38064 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:16:51,047 views 13996 38064 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:18:39,161 views 13996 5676 Searching database for articles matching: query=Technology, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:18:39,162 views 13996 34908 Searching database for articles matching: query=Science, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:18:39,192 views 13996 5676 Found 130 articles in database matching criteria
+INFO 2025-05-22 05:18:39,196 views 13996 34908 Found 92 articles in database matching criteria
+INFO 2025-05-22 05:18:39,357 views 13996 34908 Fetching new articles from APIs: query=Science, language=en, country=us
+INFO 2025-05-22 05:18:39,358 views 13996 5676 Fetching new articles from APIs: query=Technology, language=en, country=us
+INFO 2025-05-22 05:18:39,359 views 13996 34908 Extracted keywords from query: ['Science']
+INFO 2025-05-22 05:18:39,360 views 13996 5676 Extracted keywords from query: ['Technology']
+INFO 2025-05-22 05:18:39,528 views 13996 32108 Searching database for articles matching: query=Sports, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:18:39,532 views 13996 36976 Searching database for articles matching: query=Entertainment, language=en, country=us, fresh_only=True
+INFO 2025-05-22 05:18:39,551 views 13996 32108 Found 142 articles in database matching criteria
+INFO 2025-05-22 05:18:39,579 views 13996 36976 Found 116 articles in database matching criteria
+INFO 2025-05-22 05:18:39,694 views 13996 32108 Fetching new articles from APIs: query=Sports, language=en, country=us
+INFO 2025-05-22 05:18:39,697 views 13996 32108 Extracted keywords from query: ['Sports']
+INFO 2025-05-22 05:18:39,706 views 13996 36976 Fetching new articles from APIs: query=Entertainment, language=en, country=us
+INFO 2025-05-22 05:18:39,708 views 13996 36976 Extracted keywords from query: ['Entertainment']
+INFO 2025-05-22 05:18:39,771 views 13996 34908 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:18:40,146 views 13996 36976 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:18:40,313 views 13996 34908 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:18:40,314 google_rss_fetcher 13996 34908 Fetching RSS feed from: https://news.google.com/rss/search?q=Science&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:18:40,396 views 13996 5676 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:18:40,603 views 13996 36976 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:18:40,604 google_rss_fetcher 13996 36976 Fetching RSS feed from: https://news.google.com/rss/search?q=Entertainment&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:18:40,705 views 13996 32108 Fetched 100 articles from NewsAPI
+INFO 2025-05-22 05:18:40,881 views 13996 5676 Fetched 10 articles from GNewsAPI
+INFO 2025-05-22 05:18:40,882 google_rss_fetcher 13996 5676 Fetching RSS feed from: https://news.google.com/rss/search?q=Technology&hl=en&gl=us&ceid=us:en
+ERROR 2025-05-22 05:18:41,128 base_fetcher 13996 32108 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-22 05:18:41,129 views 13996 32108 Error fetching from GNewsAPI: 'GNewsApiFetcher' object has no attribute 'logger'
+INFO 2025-05-22 05:18:41,131 google_rss_fetcher 13996 32108 Fetching RSS feed from: https://news.google.com/rss/search?q=Sports&hl=en&gl=us&ceid=us:en
+INFO 2025-05-22 05:18:41,634 google_rss_fetcher 13996 34908 Found 100 articles from RSS feed
+INFO 2025-05-22 05:18:41,635 views 13996 34908 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:18:41,636 views 13996 34908 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:18:41,799 google_rss_fetcher 13996 36976 Found 100 articles from RSS feed
+INFO 2025-05-22 05:18:41,801 views 13996 36976 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:18:41,803 views 13996 36976 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:18:42,080 google_rss_fetcher 13996 5676 Found 100 articles from RSS feed
+INFO 2025-05-22 05:18:42,083 views 13996 5676 Fetched 100 articles from RSS feed
+INFO 2025-05-22 05:18:42,085 views 13996 5676 Total articles fetched from all sources: 210
+INFO 2025-05-22 05:18:42,459 google_rss_fetcher 13996 32108 Found 102 articles from RSS feed
+INFO 2025-05-22 05:18:42,461 views 13996 32108 Fetched 102 articles from RSS feed
+INFO 2025-05-22 05:18:42,467 views 13996 32108 Total articles fetched from all sources: 202

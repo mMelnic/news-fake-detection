@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'news_feed_page.dart';
 import 'news_page.dart';
-import '../services/auth_service.dart';
-import '../services/auth_state.dart';
-import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
+import 'account_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,8 +15,8 @@ class HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
 
   final List<Widget> _pages = [
+    const NewsFeedPage(),
     const NewsPage(),
-    const NewsPage(), // We'll reuse NewsPage since it has search functionality
     const AccountPage(),
   ];
 
@@ -69,46 +67,6 @@ class HomePageState extends State<HomePage> {
             label: 'Account',
           ),
         ],
-      ),
-    );
-  }
-}
-
-// Basic Account page
-class AccountPage extends StatelessWidget {
-  const AccountPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Account')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CircleAvatar(
-              radius: 60,
-              child: Icon(Icons.person, size: 80),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'My Account',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () async {
-                // Logout logic
-                await AuthService().logout();
-                if (context.mounted) {
-                  Provider.of<AuthState>(context, listen: false).logout();
-                  context.go('/login');
-                }
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        ),
       ),
     );
   }

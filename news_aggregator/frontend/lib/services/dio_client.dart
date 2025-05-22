@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'dart:async';
 
 class DioClient {
+  // Add a callback for auth state changes
+  static Function(bool loggedIn)? onAuthStateChanged;
+  
   static final Dio dio = Dio(
     BaseOptions(
       baseUrl:
@@ -50,6 +53,11 @@ class DioClient {
 
             final updatedCookies = _mergeCookies(existingCookies, newCookies);
             await storage.write(key: 'cookies', value: updatedCookies);
+            
+            // Notify auth state change if this is an auth-related endpoint
+            if (response.requestOptions.path.contains('/auth/')) {
+              onAuthStateChanged?.call(true);
+            }
           }
           handler.next(response);
         },
@@ -88,17 +96,20 @@ class DioClient {
                   );
                 }
                 
-                _setupAutoRefresh();
+                // Notify successful refresh
+                onAuthStateChanged?.call(true);
                 
                 final response = await dio.fetch(options);
                 return handler.resolve(response);
               }
               
-              // If refresh failed, redirect to login
+              // If refresh failed, redirect to login and notify auth change
+              onAuthStateChanged?.call(false);
               navigatorKey.currentState?.pushReplacementNamed('/login');
               
             } catch (e) {
               debugPrint('Token refresh failed: $e');
+              onAuthStateChanged?.call(false);
               navigatorKey.currentState?.pushReplacementNamed('/login');
             }
           }
@@ -121,13 +132,15 @@ class DioClient {
         final success = await refreshTokens();
         if (success) {
           debugPrint('Token automatically refreshed');
+          // Notify auth state change on successful auto-refresh
+          onAuthStateChanged?.call(true);
         } else {
           debugPrint('Automatic token refresh failed');
+          // Notify auth state change on failed auto-refresh
+          onAuthStateChanged?.call(false);
         }
       } catch (e) {
         debugPrint('Automatic token refresh error: $e');
-        // Don't logout on background refresh failure, 
-        // interceptor handles it on the next request
       }
     });
   }
@@ -199,15 +212,19 @@ class DioClient {
       final success = await refreshTokens();
       if (success) {
         setupInterceptors();
+        // Notify auth state change
+        onAuthStateChanged?.call(true);
         return true;
       }
+      onAuthStateChanged?.call(false);
       return false;
     } catch (e) {
       debugPrint('Auto-login error: $e');
+      onAuthStateChanged?.call(false);
       return false;
     }
   }
-
+  
   static void cancelRefreshTimer() {
     _refreshTimer?.cancel();
     _refreshTimer = null;

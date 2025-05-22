@@ -2,7 +2,6 @@ from django.shortcuts import render
 from news.fetchers.news_api_fetcher import NewsApiFetcher
 from news.fetchers.gnews_api_fetcher import GNewsApiFetcher
 from news.fetchers.google_rss_fetcher import RssFeedFetcher
-from news.services.article_service import ArticleService
 from news.utils.storage import get_cached_result, cache_result
 from rest_framework.views import APIView
 from rest_framework.response import Response
