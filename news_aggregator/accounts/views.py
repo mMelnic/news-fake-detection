@@ -10,6 +10,7 @@ from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -179,3 +180,35 @@ class ChangePasswordView(APIView):
         user.save()
 
         return Response({"success": "Password changed successfully."}, status=status.HTTP_200_OK)
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'display_name': user.display_name,
+            'bio': user.bio,
+            'email': user.email
+        })
+
+    def patch(self, request):
+        user = request.user
+        display_name = request.data.get('display_name')
+        bio = request.data.get('bio')
+
+        if display_name is not None:
+            user.display_name = display_name
+        if bio is not None:
+            user.bio = bio
+
+        user.save()
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'display_name': user.display_name,
+            'bio': user.bio,
+            'email': user.email
+        })

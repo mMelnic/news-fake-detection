@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from news.fetchers.news_api_fetcher import NewsApiFetcher
 from news.fetchers.gnews_api_fetcher import GNewsApiFetcher
 from news.fetchers.google_rss_fetcher import RssFeedFetcher
@@ -6,7 +6,8 @@ from news.utils.storage import get_cached_result, cache_result
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Recommendation, Articles, UserInteraction
+from rest_framework.decorators import api_view, permission_classes
+from .models import Recommendation, Articles, UserInteraction, Like, Comment
 from .tasks import generate_recommendations, store_articles_batch, store_article_async
 from django.utils import timezone
 from datetime import timedelta
@@ -252,3 +253,45 @@ class RecommendationView(APIView):
     def post(self, request):
         generate_recommendations.delay(request.user.id)
         return Response({'status': 'Recommendation task started'})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def toggle_like(request):
+    article_id = request.data.get('article_id')
+    article = get_object_or_404(Articles, pk=article_id)
+    like, created = Like.objects.get_or_create(user=request.user, article=article)
+    if not created:
+        like.delete()
+        return Response({'liked': False})
+    return Response({'liked': True})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def is_article_liked(request, article_id):
+    article = get_object_or_404(Articles, pk=article_id)
+    liked = Like.objects.filter(user=request.user, article=article).exists()
+    return Response({'liked': liked})
+
+@api_view(['GET'])
+def get_article_like_count(request, article_id):
+    article = get_object_or_404(Articles, pk=article_id)
+    count = Like.objects.filter(article=article).count()
+    return Response({'count': count})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_comment(request):
+    article_id = request.data.get('article_id')
+    content = request.data.get('content')
+    article = get_object_or_404(Articles, pk=article_id)
+    comment = Comment.objects.create(user=request.user, article=article, content=content)
+    return Response({'id': comment.id, 'content': comment.content})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_article_comments(request, article_id):
+    article = get_object_or_404(Articles, pk=article_id)
+    comments = Comment.objects.filter(article=article).order_by('-created_at')
+    data = [{'id': c.id, 'content': c.content} for c in comments]
+    return Response({'comments': data})

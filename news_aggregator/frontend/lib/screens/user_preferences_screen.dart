@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/user_preferences.dart';
 import 'package:go_router/go_router.dart';  // Add import for GoRouter
 
 class UserPreferencesScreen extends StatefulWidget {
   final bool isInitialSetup;
   
   const UserPreferencesScreen({
-    Key? key, 
+    super.key, 
     this.isInitialSetup = false
-  }) : super(key: key);
+  });
 
   @override
   UserPreferencesScreenState createState() => UserPreferencesScreenState();

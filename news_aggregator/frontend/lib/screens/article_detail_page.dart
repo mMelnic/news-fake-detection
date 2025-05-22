@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/article.dart';
-import '../screens/article_webview_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/social_service.dart';
 import '../models/comment.dart';
@@ -156,14 +155,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     );
   }
   
-  void _openWebView() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ArticleWebViewPage(article: widget.article),
-      ),
-    );
-  }
 
   Future<void> _launchUrl(String url) async {
     try {
@@ -281,16 +272,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             // Read article buttons
             Row(
               children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.web),
-                    label: const Text('Read in App'),
-                    onPressed: _openWebView,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: OutlinedButton.icon(
