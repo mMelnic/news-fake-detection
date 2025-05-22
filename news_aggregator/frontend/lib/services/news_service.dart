@@ -23,7 +23,7 @@ class NewsService {
       }
       
       final response = await DioClient.dio.get(
-        '/news/',
+        '/api/news/',
         queryParameters: queryParams,
       );
       

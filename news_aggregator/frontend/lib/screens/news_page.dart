@@ -7,7 +7,7 @@ import 'article_detail_page.dart';
 import 'dart:async';
 
 class NewsPage extends StatefulWidget {
-  const NewsPage({Key? key}) : super(key: key);
+  const NewsPage({super.key});
 
   @override
   NewsPageState createState() => NewsPageState();
