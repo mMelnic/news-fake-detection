@@ -7,20 +7,11 @@ import 'package:go_router/go_router.dart';
 import 'services/auth_state.dart';
 import 'package:provider/provider.dart';
 import 'screens/home_page.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-// Only import webview_flutter for web
-import 'package:webview_flutter/webview_flutter.dart';
-// Conditionally import webview platform implementations
-import 'package:webview_flutter_web/webview_flutter_web.dart'; // For web support
+import 'theme/app_theme.dart'; // Import our new theme
 
 void main() async {
   setupLogging();
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Register WebView for web platform
-  if (kIsWeb) {
-    WebViewPlatform.instance = WebWebViewPlatform();
-  }
   
   final authState = AuthState();
   await authState.checkInitialLoginStatus();
@@ -34,31 +25,27 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  MyAppState createState() => MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyAppState extends State<MyApp> {
-  late GoRouter _router;
+class _MyAppState extends State<MyApp> {
   bool _isCheckingAuth = true;
-  
+  late final GoRouter _router;
+
   @override
   void initState() {
     super.initState();
-    _initializeRouter();
+    _setupRouter();
   }
-  
-  void _initializeRouter() {
+
+  // Update the GoRouter configuration to use a history state router to properly handle browser history
+
+  void _setupRouter() {
     setState(() {
       _isCheckingAuth = false;
       _router = GoRouter(
-        refreshListenable: Provider.of<AuthState>(context, listen: false),
         navigatorKey: DioClient.navigatorKey,
-        initialLocation: Provider.of<AuthState>(context, listen: false).isLoggedIn ? '/home' : '/login',
         routes: [
-          GoRoute(
-            path: '/home',
-            builder: (context, state) => const HomePage(),
-          ),
           GoRoute(
             path: '/login',
             builder: (context, state) => const LoginScreen(),
@@ -67,24 +54,34 @@ class MyAppState extends State<MyApp> {
             path: '/register',
             builder: (context, state) => const RegisterScreen(),
           ),
+          GoRoute(
+            path: '/home',
+            builder: (context, state) => const HomePage(),
+          ),
+          // Add other routes as needed
         ],
+        initialLocation: '/login',
         redirect: (BuildContext context, GoRouterState state) {
           final bool isLoggedIn = Provider.of<AuthState>(context, listen: false).isLoggedIn;
           final String path = state.path ?? '';
           
-          // If the user is not logged in and not on login or register page, redirect to login
+          // Don't redirect when pressing back button (only check auth for direct navigation attempts)
+          final extra = state.extra;
+          if (extra is Map && extra['fromBack'] == true) {
+            return null;
+          }
+          
           if (!isLoggedIn && 
               !path.startsWith('/login') && 
               !path.startsWith('/register')) {
             return '/login';
           }
-          // If the user is logged in and tries to access login or register, redirect to home
           if (isLoggedIn && 
               (path.startsWith('/login') || 
                path.startsWith('/register'))) {
             return '/home';
           }
-          return null; // No redirect needed
+          return null;
         },
       );
     });
@@ -92,20 +89,24 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Listen to auth state changes
     Provider.of<AuthState>(context);
     
     if (_isCheckingAuth) {
-      return const MaterialApp(
-        home: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
+      return MaterialApp(
+        home: Container(
+          color: AppTheme.backgroundColor,
+          child: const Center(
+            child: CircularProgressIndicator(
+              color: AppTheme.primaryColor,
+            ),
+          ),
         ),
       );
     }
 
     return MaterialApp.router(
       title: 'News App',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: AppTheme.lightTheme,
       routerConfig: _router,
     );
   }

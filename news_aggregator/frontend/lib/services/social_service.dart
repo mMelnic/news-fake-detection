@@ -5,7 +5,6 @@ import 'dio_client.dart';
 class SocialService {
   final Dio dio = DioClient.dio;
   
-  // Like an article - handle both int and String IDs
   Future<bool> toggleLike(dynamic articleId) async {
     try {
       final response = await dio.post(
@@ -18,7 +17,6 @@ class SocialService {
     }
   }
   
-  // Get like status for an article - handle both int and String IDs
   Future<bool> isArticleLiked(dynamic articleId) async {
     try {
       final response = await dio.get(
@@ -33,7 +31,6 @@ class SocialService {
     }
   }
   
-  // Get like count for an article - handle both int and String IDs
   Future<int> getArticleLikeCount(dynamic articleId) async {
     try {
       final response = await dio.get(
@@ -45,7 +42,6 @@ class SocialService {
     }
   }
   
-  // Comment on an article - handle both int and String IDs
   Future<Comment> addComment(dynamic articleId, String content) async {
     try {
       final response = await dio.post(
@@ -61,7 +57,6 @@ class SocialService {
     }
   }
   
-  // Get comments for an article - handle both int and String IDs
   Future<List<Comment>> getArticleComments(dynamic articleId) async {
     try {
       final response = await dio.get(

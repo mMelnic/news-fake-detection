@@ -173,7 +173,7 @@ class NewsPageState extends State<NewsPage> {
                 autofocus: true,
                 onSubmitted: _handleSearch,
                 onChanged: (value) {
-                  // Optional: Live search as user types
+                  // ToDo: Live search as user types
                 },
               )
             : const Text('News Feed'),

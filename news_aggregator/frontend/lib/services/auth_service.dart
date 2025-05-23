@@ -70,6 +70,29 @@ class AuthService {
             if (tokenData.containsKey('refresh')) {
               await storage.write(key: 'refresh_token', value: tokenData['refresh']);
             }
+            
+            // Get user info after successful login to ensure display name is available
+            try {
+              final userResponse = await getCurrentUser();
+              if (userResponse.statusCode == 200 && userResponse.data != null) {
+                // Store user display name for comments
+                if (userResponse.data['display_name'] != null) {
+                  await storage.write(
+                    key: 'user_display_name', 
+                    value: userResponse.data['display_name']
+                  );
+                }
+                if (userResponse.data['username'] != null) {
+                  await storage.write(
+                    key: 'username',
+                    value: userResponse.data['username']
+                  );
+                }
+              }
+            } catch (e) {
+              // Non-critical error, continue login flow
+              debugPrint('Error fetching user data: $e');
+            }
           }
         }
         

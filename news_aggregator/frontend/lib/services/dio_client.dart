@@ -15,7 +15,9 @@ class DioClient {
               ? 'http://localhost:8000'
               : 'http://10.0.2.2:8000', // Android emulator
       headers: {'Content-Type': 'application/json'},
-      connectTimeout: const Duration(seconds: 5),
+      connectTimeout: const Duration(seconds: 20),  // Increase from 5 to 20 seconds
+      receiveTimeout: const Duration(seconds: 20),  // Add receive timeout
+      sendTimeout: const Duration(seconds: 20),     // Add send timeout
       // Enable cookies and credentials for all requests
       extra: {'withCredentials': true},
     ),
