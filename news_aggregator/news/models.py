@@ -83,3 +83,22 @@ class Comment(models.Model):
     article = models.ForeignKey(Articles, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Feed(models.Model):
+    url = models.URLField(unique=True)
+    title = models.TextField()
+    description = models.TextField(blank=True, null=True)
+    source = models.ForeignKey('Sources', on_delete=models.CASCADE, blank=True, null=True)
+    category = models.TextField(blank=True, null=True)
+    country = models.TextField(blank=True, null=True)
+    language = models.TextField(blank=True, null=True)
+    last_built = models.DateTimeField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'feeds'
+
+    def __str__(self):
+        return f"{self.title} ({self.url})"
