@@ -13,7 +13,6 @@ from django.utils import timezone
 from datetime import timedelta
 import logging
 from django.db.models import Q
-import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -34,20 +33,13 @@ class NewsAggregatorView(APIView):
             message = "Fetched from database. Additional articles are being loaded from external sources."
         else:
             message = "Fetched from database only. Use refresh=true parameter to fetch new articles."
-        
-        # Include WebSocket information in the response
-        websocket_info = {
-            "use_websocket": True,
-            "websocket_url": f"ws://{request.get_host()}/ws/news/?query={query}&language={language}&country={country or 'all'}"
-        }
-        
+
         # Return the database articles immediately
         return Response({
             "message": message,
             "articles": db_articles,
             "article_count": len(db_articles),
             "from_db_only": not (force_refresh or len(db_articles) < 5),
-            "websocket": websocket_info
         })
     
     def get_db_articles(self, query, language, country, fresh_only):
@@ -227,7 +219,8 @@ class ArticleDetailView(APIView):
                 "has_embedding": article.embedding is not None,
                 "is_fake": article.is_fake,
                 "fake_score": article.fake_score,  # Keep for backward compatibility
-                "sentiment": article.sentiment
+                "sentiment": article.sentiment,
+                "language": article.language,
             })
         except Articles.DoesNotExist:
             return Response({"error": "Article not found"}, status=404)
