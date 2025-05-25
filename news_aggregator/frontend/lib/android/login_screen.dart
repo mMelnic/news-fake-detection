@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'signup_page.dart';
 
 // import 'home.dart';
 // import 'signup.dart';
@@ -242,10 +243,10 @@ class _LoginState extends State<Login> {
                       TextButton(
                         onPressed: () {
                           _formKey.currentState?.reset();
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (_) => const Signup()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SignUp()),
+                          );
                         },
                         child: const Text("Signup"),
                       ),
