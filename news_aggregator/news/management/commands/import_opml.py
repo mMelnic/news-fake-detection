@@ -98,7 +98,7 @@ class Command(BaseCommand):
                     'country': country_code,
                     'category': category,
                     'language': feed_info.get('language_code'),
-                    'last_built': feed_info.get('last_built'),
+                    'last_built': feed_info.get('last_built'), # TODO: Switch to updated_parsed
                     'is_active': True
                 }
             )
