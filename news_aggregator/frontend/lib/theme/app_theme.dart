@@ -14,6 +14,12 @@ class AppTheme {
   static const Color textPrimaryColor = Color(0xFF262626);
   static const Color textSecondaryColor = Color(0xFF8E8E8E);
   static const Color dividerColor = Color(0xFFDBDBDB);
+  static LinearGradient textOverlayGradient = LinearGradient(
+    colors: [Colors.black.withOpacity(0.45), Colors.black.withOpacity(0.0)],
+    begin: Alignment.bottomCenter,
+    end: Alignment.topCenter,
+  );
+  static Color softBorderColor = Color(0xFFE2E2E2);
 
   static const LinearGradient instagramGradient = LinearGradient(
     colors: [gradientStart, gradientMiddle, gradientEnd],

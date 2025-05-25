@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/android/view/widgets/calendar_popup_view.dart';
+import 'android/view/screens/news_page.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'services/logger.dart';
@@ -10,6 +12,7 @@ import 'screens/home_page.dart';
 import 'theme/app_theme.dart'; // Import our new theme
 import 'package:hive_flutter/hive_flutter.dart';
 import 'android/login_screen.dart';
+import 'android/view/screens/discovery_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,12 +36,26 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Demo Login',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromRGBO(32, 63, 129, 1.0),
+        ),
         fontFamily: 'Abel',
       ),
-      home: const Login(),
+      home: const NewsPage(),
       debugShowCheckedModeBanner: false,
     );
+  }
+}
+
+class HexColor extends Color {
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
   }
 }
 
