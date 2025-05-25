@@ -6,14 +6,10 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 import logging
 import traceback
-from django.utils import timezone
-from datetime import timedelta
-import re
 from dateutil import parser
 
 logger = logging.getLogger(__name__)
 
-# Load embedding model (use a lightweight option) - outside of tasks
 # This will be loaded once when the module is imported
 try:
     logger.info("Initializing SentenceTransformer model...")
@@ -39,10 +35,10 @@ def store_article_async(self, article, query=None):
                 # NewsAPI and GNews format
                 source_name = article["source"].get("name", "Unknown")
                 
-                # Handle case when URL might be null
+                # Case when URL might be null
                 source_url = article["source"].get("url", "")
                 if not source_url and "id" in article["source"]:
-                    # Try to use ID to generate a URL if explicit URL is missing
+                    # Use ID to generate a URL if explicit URL is missing
                     source_id = article["source"].get("id", "")
                     if source_id:
                         source_url = f"https://www.{source_id.lower()}.com"
@@ -56,19 +52,17 @@ def store_article_async(self, article, query=None):
                 source_name = article["source"]
                 source_url = article.get("source_url", "")
                 
-        # If we still don't have a URL, generate one from the name
+        # If no URL, generate one from the name
         if not source_url and source_name:
-            # Create a slug from the source name
             name_slug = source_name.lower().replace(' ', '').replace('.', '')
             source_url = f"https://www.{name_slug}.com"
         
-        # If we still have no URL (very unlikely at this point), use a placeholder
+        # Placeholder for unknown source URL
         if not source_url:
             source_url = "https://unknown-source.com"
             
         logger.debug(f"Source data normalized: name={source_name}, url={source_url}")
         
-        # Create source object
         try:
             source_obj, _ = Sources.objects.get_or_create(
                 url=source_url,
@@ -80,7 +74,7 @@ def store_article_async(self, article, query=None):
             )
         except Exception as source_error:
             logger.error(f"Error creating source: {str(source_error)}")
-            # Create a fallback source if needed
+            # Fallback source
             source_obj, _ = Sources.objects.get_or_create(
                 url="https://unknown-source.com",
                 defaults={"name": "Unknown Source"}
