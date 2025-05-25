@@ -32,6 +32,9 @@ class Articles(models.Model):
     embedding = VectorField(dimensions=384, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword, related_name='articles')
+    language = models.CharField(max_length=10, blank=True, null=True)
+    categories = models.TextField(blank=True, null=True)
+    feed = models.ForeignKey('Feed', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         managed = True
