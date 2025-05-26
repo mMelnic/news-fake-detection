@@ -12,15 +12,14 @@ class NewsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Connect your NewsDetailPage here:
         Navigator.of(
           context,
         ).push(SlidePageRoute(child: NewsDetailPage(data: data)));
       },
       child: Container(
         height: 84,
-        width: MediaQuery.of(context).size.width,
         color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -36,9 +35,8 @@ class NewsTile extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 16),
-            SizedBox(
-              width: MediaQuery.of(context).size.width - 16 - 16 - 84,
+            const SizedBox(width: 16),
+            Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
