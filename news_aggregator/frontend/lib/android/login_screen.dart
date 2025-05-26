@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:frontend/services/auth_service.dart';
 import 'signup_page.dart';
 
 class Login extends StatefulWidget {
@@ -17,17 +17,12 @@ class _LoginState extends State<Login> {
   final TextEditingController _controllerPassword = TextEditingController();
 
   bool _obscurePassword = true;
-  final Box _boxLogin = Hive.box("login");
-  final Box _boxAccounts = Hive.box("accounts");
 
   bool _showSpinner = false;
 
-  // Simulate a login delay for UI feedback
-  Future<void> _simulateLogin() async {
-    setState(() => _showSpinner = true);
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() => _showSpinner = false);
-  }
+  final AuthService _authService = AuthService();
+
+  String? _loginError;
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +62,11 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     onEditingComplete: () => _focusNodePassword.requestFocus(),
-                    validator: (String? value) {
+                    validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter username.";
-                      } else if (!_boxAccounts.containsKey(value)) {
-                        return "Username is not registered.";
                       }
-                      return null;
+                      return null; // no local existence check anymore
                     },
                   ),
                   const SizedBox(height: 10),
@@ -103,16 +96,20 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    validator: (String? value) {
+                    validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter password.";
-                      } else if (value !=
-                          _boxAccounts.get(_controllerUsername.text)) {
-                        return "Wrong password.";
                       }
-                      return null;
+                      return null; // no local password check
                     },
                   ),
+                  if (_loginError != null) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      _loginError!,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    ),
+                  ],
                   const SizedBox(height: 60),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -123,16 +120,44 @@ class _LoginState extends State<Login> {
                     ),
                     onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        await _simulateLogin();
-                        _boxLogin.put("loginStatus", true);
-                        _boxLogin.put("userName", _controllerUsername.text);
+                        setState(() {
+                          _showSpinner = true;
+                          _loginError = null;
+                        });
+                        try {
+                          final response = await _authService.login(
+                            _controllerUsername.text,
+                            _controllerPassword.text,
+                          );
 
-                        if (!mounted) return;
-                        // Navigate to home or dashboard
-                        // Navigator.pushReplacement(
-                        //   context,
-                        //   MaterialPageRoute(builder: (_) => const Home()),
-                        // );
+                          if (response.statusCode == 200) {
+                            // Login successful, optionally save non-sensitive info
+                            // e.g. SharedPreferences or Hive if you want
+                            // but do NOT save password or tokens here.
+
+                            if (!mounted) return;
+
+                            // Navigate to home/dashboard screen
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(builder: (_) => const Home()),
+                            // );
+                          } else {
+                            setState(() {
+                              _loginError = 'Invalid username or password.';
+                            });
+                          }
+                        } catch (e) {
+                          setState(() {
+                            _loginError = 'Login error: $e';
+                          });
+                        } finally {
+                          if (mounted) {
+                            setState(() {
+                              _showSpinner = false;
+                            });
+                          }
+                        }
                       }
                     },
                     child: const Text("Login"),
