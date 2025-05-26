@@ -36,55 +36,63 @@ class NewsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Cached image
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-            child: CachedNetworkImage(
-              imageUrl: data.image.isNotEmpty ? data.image : defaultImageUrl,
-              width: itemWidth,
-              height: 140,
-              fit: BoxFit.cover,
-              placeholder:
-                  (context, url) => Container(
-                    width: itemWidth,
-                    height: 140,
-                    color: Colors.grey[200],
-                    child: const Center(child: CircularProgressIndicator()),
+          // Cached image with tag overlay
+          Stack(
+            children: [
+              // Image
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: data.image.isNotEmpty ? data.image : defaultImageUrl,
+                  width: itemWidth,
+                  height: 140,
+                  fit: BoxFit.cover,
+                  placeholder:
+                      (context, url) => Container(
+                        width: itemWidth,
+                        height: 140,
+                        color: Colors.grey[200],
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                  errorWidget:
+                      (context, url, error) => Container(
+                        width: itemWidth,
+                        height: 140,
+                        color: Colors.grey[300],
+                        child: const Icon(
+                          Icons.image_not_supported,
+                          color: Colors.white,
+                        ),
+                      ),
+                ),
+              ),
+              
+              // Category tags positioned at bottom left of image
+              if (showCategoryTag && data.category.isNotEmpty)
+                Positioned(
+                  bottom: 8,
+                  left: 8,
+                  child: Wrap(
+                    spacing: 4,
+                    runSpacing: 4,
+                    children: data.category
+                        .split(',')
+                        .take(1) // Only take the first category to avoid overcrowding
+                        .map((cat) => TagCard(tagName: cat.trim()))
+                        .toList(),
                   ),
-              errorWidget:
-                  (context, url, error) => Container(
-                    width: itemWidth,
-                    height: 140,
-                    color: Colors.grey[300],
-                    child: const Icon(
-                      Icons.image_not_supported,
-                      color: Colors.white,
-                    ),
-                  ),
-            ),
+                ),
+            ],
           ),
+          
           Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Dynamic category tags
-                if (showCategoryTag && data.category.isNotEmpty)
-                  Wrap(
-                    spacing: 4,
-                    runSpacing: 4,
-                    children:
-                        data.category
-                            .split(',')
-                            .map((cat) => TagCard(tagName: cat.trim()))
-                            .toList(),
-                  ),
-
-                const SizedBox(height: 6),
-
                 // Title
                 Text(
                   data.title,
