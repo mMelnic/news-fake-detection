@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../services/auth_service.dart';
+import 'view/screens/news_page.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -200,7 +201,12 @@ class _SignUpState extends State<SignUp> {
                             );
 
                             _formKey.currentState?.reset();
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const NewsPage(),
+                              ),
+                            );
                           } else {
                             // Registration failed (e.g., 400 - user exists, invalid data, etc.)
                             final error =

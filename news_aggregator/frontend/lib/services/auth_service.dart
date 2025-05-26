@@ -146,4 +146,19 @@ class AuthService {
     final cookies = await storage.read(key: 'cookies');
     return cookies != null;
   }
+
+  Future<bool> checkInitialLoginStatus() async {
+    try {
+      final hasCookies = await storage.read(key: 'cookies') != null;
+
+      if (hasCookies) {
+        final success = await DioClient.tryAutoLogin();
+        return success;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }

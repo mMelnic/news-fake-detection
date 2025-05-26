@@ -3,6 +3,7 @@ import 'package:frontend/android/view/widgets/calendar_popup_view.dart';
 import 'android/view/screens/news_page.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
+import 'services/auth_service.dart';
 import 'services/logger.dart';
 import 'services/dio_client.dart';
 // import 'package:go_router/go_router.dart';
@@ -17,20 +18,14 @@ import 'android/view/screens/discovery_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('login');
-  await Hive.openBox('accounts');
-
-  // For demo, pre-populate some user:
-  var accountsBox = Hive.box('accounts');
-  if (!accountsBox.containsKey('testuser')) {
-    accountsBox.put('testuser', 'testpass');
-  }
-
-  runApp(const MyApp());
+  final authService = AuthService();
+  final isLoggedIn = await authService.checkInitialLoginStatus();
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+  const MyApp({super.key, required this.isLoggedIn});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         fontFamily: 'Abel',
       ),
-      home: const NewsPage(),
+      home: isLoggedIn ? const NewsPage() : const Login(),
       debugShowCheckedModeBanner: false,
     );
   }

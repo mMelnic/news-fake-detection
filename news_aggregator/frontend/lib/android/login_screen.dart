@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'signup_page.dart';
+import 'view/screens/news_page.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -131,17 +132,13 @@ class _LoginState extends State<Login> {
                           );
 
                           if (response.statusCode == 200) {
-                            // Login successful, optionally save non-sensitive info
-                            // e.g. SharedPreferences or Hive if you want
-                            // but do NOT save password or tokens here.
-
                             if (!mounted) return;
 
                             // Navigate to home/dashboard screen
-                            // Navigator.pushReplacement(
-                            //   context,
-                            //   MaterialPageRoute(builder: (_) => const Home()),
-                            // );
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => const NewsPage()),
+                            );
                           } else {
                             setState(() {
                               _loginError = 'Invalid username or password.';
