@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -24,44 +22,6 @@ class _SignUpState extends State<SignUp> {
 
   final Box _boxAccounts = Hive.box("accounts");
   bool _obscurePassword = true;
-
-  // Firebase and Google sign-in instances
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  // Future<User?> _handleGoogleSignIn() async {
-  //   User? user;
-  //   bool isSignedIn = await _googleSignIn.isSignedIn();
-  //   if (isSignedIn) {
-  //     user = _auth.currentUser;
-  //   } else {
-  //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-  //     if (googleUser == null) return null; // user canceled sign-in
-  //     final GoogleSignInAuthentication googleAuth =
-  //         await googleUser.authentication;
-  //     final credential = GoogleAuthProvider.credential(
-  //       accessToken: googleAuth.accessToken,
-  //       idToken: googleAuth.idToken,
-  //     );
-  //     final userCredential = await _auth.signInWithCredential(credential);
-  //     user = userCredential.user;
-  //   }
-  //   return user;
-  // }
-
-  void _onGoogleSignIn() async {
-      ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Google Sign-In pressed (not implemented)')),
-    );
-    // final user = await _handleGoogleSignIn();
-    // if (user != null) {
-    //   // Navigate or show success as you want
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text('Google sign in successful: ${user.email}')),
-    //   );
-    //   // Example: Navigator.pushReplacementNamed(context, '/home');
-    // }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +123,7 @@ class _SignUpState extends State<SignUp> {
                   if (value == null || value.isEmpty) {
                     return "Please enter password.";
                   } else if (value.length < 8) {
-                    return "Password must be at least 8 character.";
+                    return "Password must be at least 8 characters.";
                   }
                   return null;
                 },
@@ -255,89 +215,6 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ],
               ),
-
-              // Added OR divider and social sign-in buttons from second class:
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(height: 1, width: 60, color: Colors.black87),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text("Or", style: TextStyle(fontSize: 20)),
-                  ),
-                  Container(height: 1, width: 60, color: Colors.black87),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        side: BorderSide(
-                          color: Colors.grey.shade400,
-                          width: 0.5,
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        shape: ContinuousRectangleBorder(),
-                      ),
-                      onPressed: _onGoogleSignIn,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/google.png',
-                            fit: BoxFit.contain,
-                            width: 30,
-                            height: 30,
-                          ),
-                          const SizedBox(width: 10),
-                          const Text('Google', style: TextStyle(fontSize: 18)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        side: BorderSide(
-                          color: Colors.grey.shade400,
-                          width: 0.5,
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        shape: ContinuousRectangleBorder(),
-                      ),
-                      onPressed: () {
-                        // TODO: Implement Facebook sign-in
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/facebook.png',
-                            fit: BoxFit.contain,
-                            width: 30,
-                            height: 30,
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'Facebook',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
             ],
           ),
         ),

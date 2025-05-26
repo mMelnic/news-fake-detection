@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'signup_page.dart';
 
-// import 'home.dart';
-// import 'signup.dart';
-
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -32,32 +29,8 @@ class _LoginState extends State<Login> {
     setState(() => _showSpinner = false);
   }
 
-  // Placeholder Google sign-in
-  Future<void> _onGoogleSignIn() async {
-    await _simulateLogin();
-    // TODO: Implement Google sign-in logic later
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Google Sign-In pressed (not implemented)')),
-    );
-  }
-
-  // Placeholder Facebook sign-in
-  Future<void> _onFacebookSignIn() async {
-    await _simulateLogin();
-    // TODO: Implement Facebook sign-in logic later
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Facebook Sign-In pressed (not implemented)'),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    // if (_boxLogin.get("loginStatus") ?? false) {
-    //   return const Home();
-    // }
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: Stack(
@@ -155,6 +128,7 @@ class _LoginState extends State<Login> {
                         _boxLogin.put("userName", _controllerUsername.text);
 
                         if (!mounted) return;
+                        // Navigate to home or dashboard
                         // Navigator.pushReplacement(
                         //   context,
                         //   MaterialPageRoute(builder: (_) => const Home()),
@@ -162,78 +136,6 @@ class _LoginState extends State<Login> {
                       }
                     },
                     child: const Text("Login"),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text("Or"),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                width: 0.5,
-                                color: Colors.grey[400]!,
-                              ),
-                            ),
-                          ),
-                          onPressed: _onGoogleSignIn,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/google.png',
-                                fit: BoxFit.contain,
-                                width: 40,
-                                height: 40,
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                'Google',
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                width: 0.5,
-                                color: Colors.grey[400]!,
-                              ),
-                            ),
-                          ),
-                          onPressed: _onFacebookSignIn,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/facebook.png',
-                                fit: BoxFit.contain,
-                                width: 40,
-                                height: 40,
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                'Facebook',
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                   const SizedBox(height: 20),
                   Row(
