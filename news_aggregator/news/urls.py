@@ -19,7 +19,7 @@ urlpatterns = [
     path('articles/category/<str:category>/', ArticleCategoryView.as_view(), name='article-category'),
     path('search/and/', search_and, name='search-and'),
     path('search/or/', search_or, name='search-or'),
-    path('search/poll/<str:task_id>/', poll_task_articles, name='poll-task-articles'),
+    path('poll-task-articles/<str:task_id>/', poll_task_articles, name='poll-task-articles'),
     path('feed/categories/', FeedCategoryListView.as_view(), name='feed-category-list'),
     path('feed/categories/<str:category>/', FeedCategoryArticlesView.as_view(), name='feed-category-articles'),
     path('sources/', SourceListView.as_view(), name='source-list'),
@@ -31,4 +31,6 @@ urlpatterns = [
     path('collections/<int:collection_id>/', views.collection_detail, name='collection_detail'),
     path('collections/<int:collection_id>/articles/', views.collection_articles, name='collection_articles'),
     path('user/stats/', views.user_interaction_stats, name='user_interaction_stats'),
+    path('articles/null-category/', views.articles_null_category, name='articles-null-category'),
+    path('direct-search/', views.direct_search, name='direct-search'),
 ]

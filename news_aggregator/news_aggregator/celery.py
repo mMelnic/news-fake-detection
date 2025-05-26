@@ -1,14 +1,18 @@
 import os
 from celery import Celery
-from dotenv import load_dotenv
-load_dotenv()
 
+# Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'news_aggregator.settings')
-app = Celery('news_app')
+
+app = Celery('news_aggregator')
+
+# Using a string here means the worker doesn't have to serialize
+# the configuration object to child processes.
 app.config_from_object('django.conf:settings', namespace='CELERY')
+
+# Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
-# Use solo pool for Windows to prevent worker crashes
-app.conf.worker_pool = 'solo'
-# Set concurrency to avoid memory issues with SentenceTransformer
-app.conf.worker_concurrency = 1
+@app.task(bind=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')

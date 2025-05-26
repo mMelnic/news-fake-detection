@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import os
+import logging
 from .base_fetcher import BaseFetcher
 from .fetcher_interface import FetcherInterface
 
@@ -10,6 +11,7 @@ VALID_LANGUAGES = {'ar', 'de', 'en', 'es', 'fr', 'he', 'it', 'nl', 'no', 'pt', '
 
 class NewsApiFetcher(BaseFetcher, FetcherInterface):
     def __init__(self):
+        super().__init__()  # Call parent constructor to initialize logger
         self.api_key = NEWS_API_KEY
 
     def fetch_articles(self, query, language=None, country=None):

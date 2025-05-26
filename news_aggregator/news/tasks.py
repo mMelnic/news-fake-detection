@@ -8,6 +8,8 @@ from news.services.nlp_service import NLPPredictionService
 import logging
 import traceback
 from django.db import transaction
+from datetime import datetime
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -281,3 +283,63 @@ def process_articles_nlp(article_ids):
         logger.error(f"Error processing articles with NLP: {str(e)}")
         logger.error(traceback.format_exc())
         return {"status": "error", "error": str(e)}
+
+import uuid
+from celery import shared_task
+from datetime import datetime
+
+@shared_task
+def process_search_results(articles):
+    """Process and format search results from external APIs"""
+    DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg'
+    
+    processed_articles = []
+    for article in articles:
+        # Extract data from the article
+        title = article.get('title', '')
+        url = article.get('url', '')
+        content = article.get('content', '') or article.get('description', '')
+        image_url = article.get('urlToImage') or article.get('image') or DEFAULT_IMAGE_URL
+        author = article.get('author', 'Unknown')
+        published_at = article.get('publishedAt', '') or article.get('published_date', '')
+        
+        # Handle source which might be a string or a dict
+        if isinstance(article.get('source'), dict):
+            source_name = article.get('source', {}).get('name', 'Unknown')
+        else:
+            source_name = article.get('source', 'Unknown')
+        
+        # Format published date
+        if published_at:
+            try:
+                # Try to parse ISO format
+                if isinstance(published_at, str):
+                    # Remove the Z and replace with timezone offset
+                    published_at = published_at.replace('Z', '+00:00')
+                    published_date = published_at
+                else:
+                    published_date = published_at.isoformat()
+            except (ValueError, TypeError, AttributeError):
+                # Fallback to current date
+                published_date = datetime.now().isoformat()
+        else:
+            published_date = datetime.now().isoformat()
+        
+        # Create article dict
+        processed_article = {
+            'id': str(uuid.uuid4()),  # Generate a temporary ID as string
+            'title': title,
+            'content': content,
+            'url': url,
+            'image_url': image_url,
+            'author': author,
+            'published_date': published_date,
+            'source': source_name,
+            'categories': '',
+            'is_fake': False,  # Default, would need actual classification
+            'sentiment': 'neutral'
+        }
+        
+        processed_articles.append(processed_article)
+    
+    return processed_articles

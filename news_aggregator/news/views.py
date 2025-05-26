@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-
+from news.tasks import process_search_results
 from news.services.nlp_service import NLPPredictionService
 from .models import Recommendation, Articles, UserInteraction, Like, Comment, Feed, Sources, Keyword, SavedCollection, SavedArticle
 from .tasks import generate_recommendations, process_and_store_articles
@@ -21,6 +21,7 @@ from django.core.cache import cache
 import numpy as np
 from pgvector.django import CosineDistance
 from news.utils.article_serializer import ArticleSerializer
+import uuid
 
 logger = logging.getLogger(__name__)
 DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg'
@@ -405,43 +406,38 @@ class ArticleOrSearchView(APIView):
 
 @api_view(['GET'])
 def search_and(request):
-    raw_query = request.GET.get('q', '')
-    language = request.GET.get('language')
-    country = request.GET.get('country')
-
-    if not raw_query:
-        return Response({"error": "Missing query param 'q'"}, status=400)
-
-    # Extract terms and phrases
-    terms = []
-    phrases = []
-    matches = re.findall(r'"([^"]+)"|(\S+)', raw_query)
-    for phrase, term in matches:
-        if phrase:
-            phrases.append(f'"{phrase}"')
-        else:
-            terms.append(term)
-
-    operator = "AND"
-
-    # Build query strings per API
-    newsapi_query = build_query_string(terms, phrases, operator)
-    gnews_query = newsapi_query
-    rss_query = build_rss_query(terms, phrases, operator)
-
-    # Fetch articles...
-    newsapi_articles = NewsApiFetcher().fetch_articles(newsapi_query, language=language)
-    gnews_articles = GNewsApiFetcher().fetch_articles(gnews_query, language=language, country=country)
-    rss_articles = RssFeedFetcher().fetch_feed(query=rss_query, language=(language or 'en').lower(), country=(country or 'US').upper())
-
-    all_articles = newsapi_articles + gnews_articles + rss_articles
-
-    # Enrich each article with extracted keywords (store as list)
-    # Pass extracted terms and phrases to celery task for storage
-    task = process_and_store_articles.delay(all_articles, language, country, extracted_terms=terms, extracted_phrases=phrases)
-
-    return Response({"task_id": task.id, "status": "started", "search_type": "AND"})
-
+    """Search articles using AND logic (all search terms must match)"""
+    query = request.query_params.get('q', '')
+    language = request.query_params.get('language', None)
+    country = request.query_params.get('country', None)
+    
+    if not query:
+        return Response({"error": "Query parameter 'q' is required"}, status=400)
+    
+    try:
+        # Process the search using the NewsAPI fetcher
+        newsapi_fetcher = NewsApiFetcher()
+        newsapi_articles = newsapi_fetcher.fetch_articles(query, language=language)
+        
+        # Process the search using GNews fetcher
+        gnews_fetcher = GNewsApiFetcher()
+        gnews_articles = gnews_fetcher.fetch_articles(query, language=language)
+        
+        # Combine results
+        all_articles = newsapi_articles + gnews_articles
+        
+        # Process and return results
+        task = process_search_results.delay(all_articles)
+        
+        # Return the task ID as a string
+        return Response({
+            'status': 'started',
+            'task_id': str(task.id)
+        })
+    
+    except Exception as e:
+        logging.error(f"Search error: {e}")
+        return Response({"error": str(e)}, status=500)
 
 @api_view(['GET'])
 def search_or(request):
@@ -511,24 +507,28 @@ def build_rss_query(terms, phrases, operator):
         parts += terms
     return " ".join(parts)
 
+from celery.result import AsyncResult
+
 @api_view(['GET'])
 def poll_task_articles(request, task_id):
-    redis_key = f"articles_task:{task_id}"
-    progress = cache.get(redis_key)
-
-    if not progress:
-        return Response({"status": "not_found"}, status=404)
-
-    article_ids = progress.get("article_ids", [])
-    articles = Articles.objects.filter(id__in=article_ids).order_by('-published_date')
-    serialized = ArticleSerializer(articles, many=True)
-
-    return Response({
-        "status": progress.get("status", "processing"),
-        "articles": serialized.data,
-        "count": len(serialized.data)
-    })
-
+    """Poll for the status of a search task and return results if ready"""
+    task = AsyncResult(task_id)
+    
+    if task.ready():
+        if task.successful():
+            return Response({
+                'status': 'completed',
+                'articles': task.result
+            })
+        else:
+            return Response({
+                'status': 'error',
+                'error': str(task.result)
+            }, status=500)
+    else:
+        return Response({
+            'status': 'processing'
+        })
 
 # class NewsAggregatorView(APIView):
 #     def get(self, request):
@@ -1057,3 +1057,145 @@ def user_interaction_stats(request):
         'comments_count': comments_count,
         'saved_count': saved_count
     })
+
+@api_view(['GET'])
+def articles_null_category(request):
+    """Get articles with null or empty categories"""
+    try:
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('page_size', 10))
+        
+        # Query articles with null or empty categories
+        from django.db import models
+        from .models import Articles
+        
+        articles = Articles.objects.filter(
+            models.Q(categories__isnull=True) | models.Q(categories='')
+        ).order_by('-published_date')
+        
+        # Count total for pagination info
+        total_count = articles.count()
+        
+        # Paginate
+        start_idx = (page - 1) * page_size
+        end_idx = start_idx + page_size
+        paginated_articles = articles[start_idx:end_idx]
+        
+        # Serialize
+        DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg'
+        
+        data = []
+        for a in paginated_articles:
+            article_data = {
+                'id': a.id,
+                'title': a.title,
+                'content': a.content[:200] + "..." if len(a.content) > 200 else a.content,
+                'url': a.url,
+                'image_url': a.image_url if a.image_url and a.image_url != 'null' else DEFAULT_IMAGE_URL,
+                'source': a.source.name if a.source else "Unknown",
+                'published_date': a.published_date.isoformat() if a.published_date else None,
+                'author': a.author,
+                'categories': '',
+                'is_fake': a.is_fake,
+                'sentiment': a.sentiment
+            }
+            data.append(article_data)
+        
+        return Response({
+            'articles': data,
+            'page': page,
+            'page_size': page_size,
+            'total_count': total_count,
+            'has_more': total_count > (page * page_size)
+        })
+    
+    except Exception as e:
+        import traceback
+        logging.error(f"Error fetching null category articles: {e}")
+        logging.error(traceback.format_exc())
+        return Response({"error": str(e)}, status=500)
+
+@api_view(['GET'])
+def direct_search(request):
+    """Direct synchronous search that returns articles immediately"""
+    query = request.query_params.get('q', '')
+    language = request.query_params.get('language', None)
+    country = request.query_params.get('country', None)
+    search_mode = request.query_params.get('mode', 'and')  # 'and' or 'or'
+    
+    if not query:
+        return Response({"error": "Query parameter 'q' is required"}, status=400)
+    
+    try:
+        # Process the search using the NewsAPI fetcher
+        newsapi_fetcher = NewsApiFetcher()
+        newsapi_articles = newsapi_fetcher.fetch_articles(query, language=language)
+        
+        # Process the search using GNews fetcher
+        gnews_fetcher = GNewsApiFetcher()
+        gnews_articles = gnews_fetcher.fetch_articles(query, language=language)
+        
+        # Combine results
+        all_articles = newsapi_articles + gnews_articles
+        
+        # Process articles directly without using Celery
+        DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg'
+        
+        processed_articles = []
+        for article in all_articles:
+            # Extract data from the article
+            title = article.get('title', '')
+            url = article.get('url', '')
+            content = article.get('content', '') or article.get('description', '')
+            image_url = article.get('urlToImage') or article.get('image') or DEFAULT_IMAGE_URL
+            author = article.get('author', 'Unknown')
+            published_at = article.get('publishedAt', '') or article.get('published_date', '')
+            
+            # Handle source which might be a string or a dict
+            if isinstance(article.get('source'), dict):
+                source_name = article.get('source', {}).get('name', 'Unknown')
+            else:
+                source_name = article.get('source', 'Unknown')
+            
+            # Format published date
+            from datetime import datetime
+            if published_at:
+                try:
+                    from dateutil import parser
+                    if isinstance(published_at, str):
+                        parsed_date = parser.parse(published_at)
+                        published_date = parsed_date.isoformat()
+                    else:
+                        published_date = published_at.isoformat()
+                except Exception:
+                    published_date = datetime.now().isoformat()
+            else:
+                published_date = datetime.now().isoformat()
+            
+            # Create article dict
+            processed_article = {
+                'id': str(uuid.uuid4()),  # Generate a temporary ID as string
+                'title': title,
+                'content': content,
+                'url': url,
+                'image_url': image_url,
+                'author': author,
+                'published_date': published_date,
+                'source': source_name,
+                'categories': '',
+                'is_fake': False,  # Default, would need actual classification
+                'sentiment': 'neutral'
+            }
+            
+            processed_articles.append(processed_article)
+        
+        return Response({
+            'articles': processed_articles,
+            'count': len(processed_articles)
+        })
+    
+    except Exception as e:
+        import traceback
+        logging.error(f"Search error: {e}")
+        logging.error(traceback.format_exc())
+        return Response({"error": str(e)}, status=500)

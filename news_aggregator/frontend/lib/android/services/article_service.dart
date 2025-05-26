@@ -200,4 +200,112 @@ class ArticleService {
       throw Exception('Failed to classify article topic: $e');
     }
   }
+  
+  // Get articles with optional category filter
+  static Future<ArticleResponse> getArticles({
+    int page = 1, 
+    int pageSize = 10,
+    String sort = 'newest',
+    String? category,
+  }) async {
+    try {
+      Map<String, dynamic> params = {
+        'page': page.toString(),
+        'page_size': pageSize.toString(),
+        'sort': sort,
+      };
+      
+      final String endpoint = category != null && category.toLowerCase() != 'all categories'
+          ? '/category/${Uri.encodeComponent(category)}/'
+          : '/category/all%20categories/';
+      
+      final response = await _dio.get(endpoint, queryParameters: params);
+      
+      if (response.statusCode == 200) {
+        List<News> articles = [];
+        for (var articleData in response.data['articles']) {
+          articles.add(News(
+            id: articleData['id'].toString(),
+            title: articleData['title'] ?? '',
+            content: articleData['content'] ?? '',
+            image: articleData['image_url'] ?? '',
+            author: articleData['author'] ?? 'Unknown',
+            date: DateTime.tryParse(articleData['published_date'] ?? '') ?? DateTime.now(),
+            sourceUrl: articleData['url'] ?? '',
+            sourceName: articleData['source'] ?? '',
+            category: articleData['categories'] ?? '',
+            isFake: articleData['is_fake'] ?? false,
+            sentiment: articleData['sentiment'] ?? 'neutral',
+          ));
+        }
+        
+        return ArticleResponse(
+          articles: articles,
+          hasMore: response.data['has_more'] ?? false,
+        );
+      } else {
+        throw Exception('Failed to load articles');
+      }
+    } catch (e) {
+      throw Exception('Failed to load articles: $e');
+    }
+  }
+  
+  // Get articles with null category
+  static Future<ArticleResponse> getArticlesWithNullCategory({
+    int page = 1, 
+    int pageSize = 10,
+  }) async {
+    try {
+      Map<String, dynamic> params = {
+        'page': page.toString(),
+        'page_size': pageSize.toString(),
+      };
+      
+      final response = await _dio.get('/articles/null-category/', queryParameters: params);
+      
+      if (response.statusCode == 200) {
+        List<News> articles = [];
+        for (var articleData in response.data['articles']) {
+          articles.add(News(
+            id: articleData['id'].toString(),
+            title: articleData['title'] ?? '',
+            content: articleData['content'] ?? '',
+            image: articleData['image_url'] ?? '',
+            author: articleData['author'] ?? 'Unknown',
+            date: DateTime.tryParse(articleData['published_date'] ?? '') ?? DateTime.now(),
+            sourceUrl: articleData['url'] ?? '',
+            sourceName: articleData['source'] ?? '',
+            category: articleData['categories'] ?? '',
+            isFake: articleData['is_fake'] ?? false,
+            sentiment: articleData['sentiment'] ?? 'neutral',
+          ));
+        }
+        
+        return ArticleResponse(
+          articles: articles,
+          hasMore: response.data['has_more'] ?? false,
+          totalCount: response.data['total_count'] ?? 0,
+        );
+      } else {
+        throw Exception('Failed to load articles with null category');
+      }
+    } catch (e) {
+      print('Error fetching null category articles: $e');
+      throw Exception('Failed to load articles with null category: $e');
+    }
+  }
+}
+
+// Class to hold article response data
+class ArticleResponse {
+  final List<News> articles;
+  final bool hasMore;
+  final int totalCount;
+  
+  ArticleResponse({
+    required this.articles,
+    required this.hasMore,
+    this.totalCount = 0,
+  });
 }

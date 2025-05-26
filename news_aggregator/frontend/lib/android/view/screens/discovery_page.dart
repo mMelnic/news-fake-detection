@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../model/news.dart';
-import '../../model/news_helper.dart';
+import '../../services/article_service.dart';
 import '../../route/slide_page_route.dart';
 import '../widgets/custom_app_bar.dart';
-import '../widgets/news_tile.dart';
+import '../widgets/news_card.dart';
 import 'search_page.dart';
+import 'news_detail_page.dart';
 
 class DiscoverPage extends StatefulWidget {
   final Function? openDrawer;
@@ -17,51 +17,113 @@ class DiscoverPage extends StatefulWidget {
   State<DiscoverPage> createState() => _DiscoverPageState();
 }
 
-class _DiscoverPageState extends State<DiscoverPage>
-    with TickerProviderStateMixin {
-  late TabController _categoryTabController;
-
-  final List<String> _categories = [
-    'All categories',
-    'Covid19',
-    'International',
-    'Europe',
-    'American',
-    'Asian',
-    'Sports',
-  ];
-
-  final List<News> allCategoriesNews = NewsHelper.allCategoriesNews;
+class _DiscoverPageState extends State<DiscoverPage> {
+  List<News> _articles = [];
+  bool _isLoading = true;
+  bool _hasError = false;
+  String _errorMessage = '';
+  final ScrollController _scrollController = ScrollController();
+  
+  int _page = 1;
+  final int _pageSize = 20;
+  bool _hasMore = true;
 
   @override
   void initState() {
     super.initState();
-    _categoryTabController = TabController(
-      length: _categories.length,
-      vsync: this,
-    );
+    _loadArticles();
+    
+    // Add scroll listener for pagination
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
-    _categoryTabController.dispose();
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
     super.dispose();
   }
-
-  void _changeTab(int index) {
-    setState(() {
-      _categoryTabController.index = index;
-    });
+  
+  void _scrollListener() {
+    // Check if we're near the bottom of the list
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      // Load more articles if we're not already loading and there are more to load
+      if (!_isLoading && _hasMore) {
+        _loadMoreArticles();
+      }
+    }
   }
 
-  // Filter news by category
-  List<News> _filterNewsByCategory(String category) {
-    if (category == 'All categories') return allCategoriesNews;
-    return allCategoriesNews
-        .where(
-          (news) => news.title.toLowerCase().contains(category.toLowerCase()),
-        )
-        .toList();
+  Future<void> _loadArticles() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
+    
+    try {
+      // Get articles with null categories from API
+      final articlesData = await ArticleService.getArticlesWithNullCategory(
+        page: _page,
+        pageSize: _pageSize,
+      );
+      
+      setState(() {
+        _articles = articlesData.articles;
+        _hasMore = articlesData.hasMore;
+        _isLoading = false;
+        _page = 2; // Next page to load
+      });
+      
+      // Debug info
+      print('Loaded ${articlesData.articles.length} articles with null category');
+      print('Has more: ${articlesData.hasMore}');
+      print('Total count: ${articlesData.totalCount}');
+      
+    } catch (e) {
+      print('Error loading null category articles: $e');
+      setState(() {
+        _hasError = true;
+        _errorMessage = 'Failed to load articles: $e';
+        _isLoading = false;
+      });
+    }
+  }
+  
+  Future<void> _loadMoreArticles() async {
+    if (_isLoading || !_hasMore) return;
+    
+    setState(() {
+      _isLoading = true;
+    });
+    
+    try {
+      final articlesData = await ArticleService.getArticlesWithNullCategory(
+        page: _page,
+        pageSize: _pageSize,
+      );
+      
+      setState(() {
+        _articles.addAll(articlesData.articles);
+        _hasMore = articlesData.hasMore;
+        _isLoading = false;
+        _page++; // Increment page for next load
+      });
+    } catch (e) {
+      setState(() {
+        _hasError = true;
+        _errorMessage = 'Failed to load more articles: $e';
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _refreshArticles() async {
+    setState(() {
+      _page = 1;
+      _hasMore = true;
+    });
+    
+    await _loadArticles();
   }
 
   @override
@@ -96,49 +158,95 @@ class _DiscoverPageState extends State<DiscoverPage>
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: TabBar(
-              isScrollable: true,
-              controller: _categoryTabController,
-              labelStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'inter',
-              ),
-              labelColor: Colors.black,
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'inter',
-              ),
-              unselectedLabelColor: Colors.black.withOpacity(0.6),
-              indicatorColor: Colors.transparent,
-              onTap: _changeTab,
-              tabs: _categories.map((category) => Tab(text: category)).toList(),
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _categoryTabController,
-              children: _categories.map((category) {
-                final filteredNews = _filterNewsByCategory(category);
-                if (filteredNews.isEmpty) {
-                  return Center(child: Text('No news for $category'));
-                }
-                return ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  itemCount: filteredNews.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 16),
-                  itemBuilder: (_, index) => NewsTile(data: filteredNews[index]),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
+      body: RefreshIndicator(
+        onRefresh: _refreshArticles,
+        child: _buildBody(),
       ),
+    );
+  }
+  
+  Widget _buildBody() {
+    if (_hasError) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(_errorMessage),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _refreshArticles,
+              child: const Text('Try Again'),
+            ),
+          ],
+        ),
+      );
+    }
+    
+    if (_isLoading && _articles.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    
+    if (_articles.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.article_outlined, size: 64, color: Colors.grey),
+            const SizedBox(height: 16),
+            const Text(
+              'No articles found',
+              style: TextStyle(fontSize: 18, color: Colors.grey),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _refreshArticles,
+              child: const Text('Refresh'),
+            ),
+          ],
+        ),
+      );
+    }
+    
+    return GridView.builder(
+      controller: _scrollController,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.75,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 10,
+      ),
+      itemCount: _articles.length + (_hasMore ? 1 : 0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      itemBuilder: (context, index) {
+        // Show loading indicator at the end if there are more items
+        if (index == _articles.length) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+        
+        final article = _articles[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              SlidePageRoute(
+                child: NewsDetailPage(data: article),
+              ),
+            );
+          },
+          child: NewsCard(
+            data: article,
+            showCategoryTag: false, // No need to show category since it's null
+          ),
+        );
+      },
     );
   }
 }

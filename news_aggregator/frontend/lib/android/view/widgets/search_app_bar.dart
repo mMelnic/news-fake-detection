@@ -1,78 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-// Adapted SearchAppBar with null safety and cleaner code
-class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
+class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController searchInputController;
   final VoidCallback? searchPressed;
+  final ValueChanged<String>? onChanged;
 
   const SearchAppBar({
     super.key,
     required this.searchInputController,
     this.searchPressed,
+    this.onChanged,
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(60);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
-  @override
-  SearchAppBarState createState() => SearchAppBarState();
-}
-
-class SearchAppBarState extends State<SearchAppBar> {
   @override
   Widget build(BuildContext context) {
-    final isEmpty = widget.searchInputController.text.isEmpty;
-
     return AppBar(
       backgroundColor: Colors.black,
-      automaticallyImplyLeading: false,
-      titleSpacing: 0,
-      title: Container(
-        margin: const EdgeInsets.only(left: 16, right: 10),
-        height: 40,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(5),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+      title: TextField(
+        controller: searchInputController,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: 'Search news...',
+          hintStyle: const TextStyle(color: Colors.white70),
+          border: InputBorder.none,
+          suffix: searchInputController.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.clear,
+                    color: Colors.white70,
+                    size: 16,
+                  ),
+                  onPressed: () {
+                    searchInputController.clear();
+                    if (onChanged != null) {
+                      onChanged!('');
+                    }
+                  },
+                )
+              : null,
         ),
-        child: TextField(
-          controller: widget.searchInputController,
-          onChanged: (_) => setState(() {}),
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-          ),
-          maxLines: 1,
-          decoration: InputDecoration(
-            prefixIcon: Visibility(
-              visible: isEmpty,
-              child: Container(
-                margin: const EdgeInsets.only(left: 10, right: 12),
-                child: SvgPicture.asset(
-                  'assets/icons/Search.svg',
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            prefixIconConstraints: const BoxConstraints(maxHeight: 20),
-            hintText: 'Search...',
-            hintStyle: TextStyle(color: Colors.white.withOpacity(0.2)),
-            contentPadding: const EdgeInsets.only(left: 16, bottom: 9),
-            focusColor: Colors.white,
-            border: InputBorder.none,
-          ),
-        ),
+        onChanged: onChanged,
+        onSubmitted: (_) => searchPressed?.call(),
+        textInputAction: TextInputAction.search,
       ),
       actions: [
-        ElevatedButton(
-          onPressed:
-              isEmpty ? () => Navigator.pop(context) : widget.searchPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            textStyle: const TextStyle(fontWeight: FontWeight.w400),
+        IconButton(
+          onPressed: searchPressed,
+          icon: SvgPicture.asset(
+            'assets/icons/Search.svg',
+            color: Colors.white,
           ),
-          child: Text(isEmpty ? 'Cancel' : 'Search'),
         ),
       ],
     );

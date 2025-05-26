@@ -1,6 +1,7 @@
 from .base_fetcher import BaseFetcher
 from .fetcher_interface import FetcherInterface
 import os
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,6 +14,7 @@ class GNewsApiFetcher(BaseFetcher, FetcherInterface):
     VALID_COUNTRIES = {'au', 'br', 'ca', 'cn', 'eg', 'fr', 'de', 'gr', 'hk', 'in', 'ie', 'il', 'it', 'jp', 'nl', 'no', 'pk', 'pe', 'ph', 'pt', 'ro', 'ru', 'sg', 'es', 'se', 'ch', 'tw', 'ua', 'gb', 'us'}
 
     def __init__(self):
+        super().__init__()  # Call parent constructor to initialize logger
         self.api_key = GNEWS_API_KEY
 
     def fetch_articles(self, query, language=None, country=None):
