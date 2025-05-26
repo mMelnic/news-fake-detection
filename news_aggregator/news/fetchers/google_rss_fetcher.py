@@ -78,20 +78,19 @@ class RssFeedFetcher:
                 domain = source_name.lower().replace(' ', '').replace('.', '')
                 source_url = f"https://www.{domain}.com"
             
-            # Create normalized article structure matching other sources
             normalized_article = {
                 "title": entry.get("title", ""),
                 "url": entry.get("link", ""),  # Use link as the URL
                 "content": clean_description,
-                "publishedAt": entry.get("published", ""),  # Normalize date field name
-                "author": "",  # RSS usually doesn't provide author
+                "publishedAt": entry.get("published", ""),
+                "author": "",
                 "source": {
                     "name": source_name,
                     "url": source_url
                 },
-                "language": language,  # Add from the query parameters
-                "country": country,    # Add from the query parameters
-                "query": query         # Store original query for keyword extraction
+                "language": language,
+                "country": country,
+                "query": query
             }
             
             normalized_articles.append(normalized_article)
