@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../model/news.dart';
 import '../../services/article_service.dart';
+import '../../services/user_profile_service.dart';
 import '../widgets/custom_app_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -72,26 +73,31 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
         actions: [
           IconButton(
             onPressed: () {
-              // Like functionality (view only)
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Like functionality coming soon!')),
-              );
+              // Like functionality
+              ArticleService.toggleLike(widget.data.id).then((_) {
+                setState(() {
+                  isLiked = !isLiked;
+                  likeCount += isLiked ? 1 : -1;
+                });
+              }).catchError((e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to toggle like: $e')),
+                );
+              });
             },
             icon: Icon(
               isLiked ? Icons.favorite : Icons.favorite_border,
-              color: Colors.white,
+              color: isLiked ? Colors.red : Colors.white,
             ),
           ),
           IconButton(
             onPressed: () {
-              // Save functionality (view only)
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Save functionality coming soon!')),
-              );
+              // Save functionality
+              _showSaveDialog();
             },
-            icon: SvgPicture.asset(
-              isSaved ? 'assets/icons/Bookmark_filled.svg' : 'assets/icons/Bookmark.svg',
-              color: Colors.white,
+            icon: Icon(
+              isSaved ? Icons.bookmark : Icons.bookmark_border,
+              color: isSaved ? Colors.blue : Colors.white,
             ),
           ),
         ],
@@ -387,5 +393,168 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
   
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year} at ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+  }
+  
+  void _showSaveDialog() async {
+    String suggestedTopic = "";
+    
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text("Classifying article topic..."),
+          ],
+        ),
+      ),
+    );
+    
+    try {
+      // Get topic classification
+      suggestedTopic = await ArticleService.classifyArticleTopic(widget.data.id);
+      Navigator.pop(context); // Close loading dialog
+    } catch (e) {
+      Navigator.pop(context); // Close loading dialog
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to classify article: $e')),
+      );
+      suggestedTopic = "Other"; // Default if classification fails
+    }
+    
+    // Fetch existing collections
+    List<Map<String, dynamic>> collections = [];
+    try {
+      collections = await UserProfileService.getSavedCollections();
+    } catch (e) {
+      print('Failed to load collections: $e');
+    }
+    
+    // Show dialog to save article
+    final TextEditingController newCollectionController = TextEditingController(text: suggestedTopic);
+    bool useNewCollection = true;
+    String selectedCollection = collections.isNotEmpty ? collections.first['name'] : "Favorites";
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Save Article'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('We suggest saving this to: "$suggestedTopic"'),
+                    const SizedBox(height: 16),
+                    
+                    // Choose existing or new collection
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<bool>(
+                            title: const Text('Use existing'),
+                            value: false,
+                            groupValue: useNewCollection,
+                            onChanged: (value) {
+                              setState(() {
+                                useNewCollection = value!;
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<bool>(
+                            title: const Text('Create new'),
+                            value: true,
+                            groupValue: useNewCollection,
+                            onChanged: (value) {
+                              setState(() {
+                                useNewCollection = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    // Show appropriate input based on selection
+                    useNewCollection
+                        ? TextField(
+                            controller: newCollectionController,
+                            decoration: const InputDecoration(
+                              labelText: 'Collection Name',
+                              hintText: 'Enter collection name',
+                            ),
+                          )
+                        : collections.isEmpty
+                            ? const Text('No existing collections. Create a new one.')
+                            : DropdownButtonFormField<String>(
+                                value: selectedCollection,
+                                decoration: const InputDecoration(
+                                  labelText: 'Choose Collection',
+                                ),
+                                items: collections
+                                    .map((c) => DropdownMenuItem<String>(
+                                          value: c['name'],
+                                          child: Text(c['name']),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedCollection = value!;
+                                  });
+                                },
+                              ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    
+                    final collectionName = useNewCollection
+                        ? newCollectionController.text
+                        : selectedCollection;
+                    
+                    if (collectionName.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Collection name cannot be empty')),
+                      );
+                      return;
+                    }
+                    
+                    try {
+                      await ArticleService.toggleSaved(widget.data.id, collectionName);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Article saved to $collectionName')),
+                      );
+                      // Refresh the UI to show saved status
+                      _loadSocialData();
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to save article: $e')),
+                      );
+                    }
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }
