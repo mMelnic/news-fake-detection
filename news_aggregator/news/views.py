@@ -681,3 +681,83 @@ def poll_task_articles(request, task_id):
 #         except Exception as e:
 #             # Log error but continue - we already returned DB results
 #             logger.error(f"Error fetching new articles: {str(e)}")
+
+class ArticleCategoryView(APIView):
+    """
+    Return articles by category with pagination support and filtering
+    """
+    def get(self, request, category):
+        page = int(request.query_params.get('page', 1))
+        page_size = int(request.query_params.get('page_size', 10))
+        sort = request.query_params.get('sort', 'newest')
+        
+        # Start with all articles if category is "All categories"
+        if category.lower() == 'all categories':
+            qs = Articles.objects.all()
+        else:
+            # Filter by specific category
+            qs = Articles.objects.filter(categories__icontains=category)
+        
+        # Apply sorting
+        if sort == 'newest':
+            qs = qs.order_by('-published_date')
+        elif sort == 'oldest':
+            qs = qs.order_by('published_date')
+        elif sort == 'popular':
+            qs = qs.annotate(num_likes=Count('like')).order_by('-num_likes', '-published_date')
+        elif sort == 'random':
+            qs = list(qs)
+            random.shuffle(qs)
+            # Convert back to a sliceable object
+            start_idx = (page - 1) * page_size
+            end_idx = start_idx + page_size
+            articles = qs[start_idx:end_idx]
+            
+            data = [{
+                'id': a.id,
+                'title': a.title,
+                'content': a.content[:200] + "..." if len(a.content) > 200 else a.content,
+                'url': a.url,
+                'image_url': a.image_url if a.image_url else DEFAULT_IMAGE_URL,
+                'source': a.source.name if a.source else "Unknown",
+                'published_date': a.published_date,
+                'author': a.author,
+                'categories': a.categories,
+                'is_fake': a.is_fake,
+                'sentiment': a.sentiment
+            } for a in articles]
+            
+            return Response({
+                'category': category,
+                'articles': data,
+                'page': page,
+                'page_size': page_size,
+                'has_more': len(qs) > (page * page_size)
+            })
+        
+        # Paginate results for non-random sorting
+        start_idx = (page - 1) * page_size
+        end_idx = start_idx + page_size
+        articles = qs[start_idx:end_idx]
+        
+        data = [{
+            'id': a.id,
+            'title': a.title,
+            'content': a.content[:200] + "..." if len(a.content) > 200 else a.content,
+            'url': a.url,
+            'image_url': a.image_url if a.image_url else DEFAULT_IMAGE_URL,
+            'source': a.source.name if a.source else "Unknown",
+            'published_date': a.published_date,
+            'author': a.author,
+            'categories': a.categories,
+            'is_fake': a.is_fake,
+            'sentiment': a.sentiment
+        } for a in articles]
+        
+        return Response({
+            'category': category,
+            'articles': data,
+            'page': page,
+            'page_size': page_size,
+            'has_more': qs.count() > (page * page_size)
+        })

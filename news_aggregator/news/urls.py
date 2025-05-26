@@ -2,7 +2,8 @@ from django.urls import path
 from .views import  (
     ArticleListView, ArticleOrSearchView, search_and, search_or, poll_task_articles,
     FeedCategoryListView, FeedCategoryArticlesView,
-    SourceListView, SourceArticlesView, RecommendationView, ArticleTopicClassificationAPIView
+    SourceListView, SourceArticlesView, RecommendationView, ArticleTopicClassificationAPIView,
+    ArticleCategoryView,
 )
 from . import views
 
@@ -15,6 +16,7 @@ urlpatterns = [
     path('social/comments/<int:article_id>/', views.get_article_comments, name='get_article_comments'),
     path('articles/', ArticleListView.as_view(), name='article-list'),
     path('articles/or/', ArticleOrSearchView.as_view(), name='article-or-search'),
+    path('articles/category/<str:category>/', ArticleCategoryView.as_view(), name='article-category'),
     path('search/and/', search_and, name='search-and'),
     path('search/or/', search_or, name='search-or'),
     path('search/poll/<str:task_id>/', poll_task_articles, name='poll-task-articles'),
