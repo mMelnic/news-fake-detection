@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TagCard extends StatelessWidget {
   final String tagName;
 
-  const TagCard({required this.tagName, Key? key}) : super(key: key);
+  const TagCard({required this.tagName, super.key});
 
   @override
   Widget build(BuildContext context) {
