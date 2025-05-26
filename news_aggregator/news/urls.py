@@ -25,4 +25,10 @@ urlpatterns = [
     path('sources/', SourceListView.as_view(), name='source-list'),
     path('sources/<int:source_id>/articles/', SourceArticlesView.as_view(), name='source-articles'),
     path('api/classify-topic/<int:article_id>/', ArticleTopicClassificationAPIView.as_view(), name='classify-topic'),
+    path('social/saved/', views.toggle_saved, name='toggle_saved'),
+    path('social/saved/<int:article_id>/', views.is_article_saved, name='is_article_saved'),
+    path('collections/', views.collection_list, name='collection_list'),
+    path('collections/<int:collection_id>/', views.collection_detail, name='collection_detail'),
+    path('collections/<int:collection_id>/articles/', views.collection_articles, name='collection_articles'),
+    path('user/stats/', views.user_interaction_stats, name='user_interaction_stats'),
 ]

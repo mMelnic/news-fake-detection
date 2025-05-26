@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 from news.services.nlp_service import NLPPredictionService
-from .models import Recommendation, Articles, UserInteraction, Like, Comment, Feed, Sources, Keyword
+from .models import Recommendation, Articles, UserInteraction, Like, Comment, Feed, Sources, Keyword, SavedCollection, SavedArticle
 from .tasks import generate_recommendations, process_and_store_articles
 from django.utils import timezone
 from datetime import timedelta
@@ -761,3 +761,145 @@ class ArticleCategoryView(APIView):
             'page_size': page_size,
             'has_more': qs.count() > (page * page_size)
         })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def toggle_saved(request):
+    article_id = request.data.get('article_id')
+    collection_name = request.data.get('collection_name')
+    
+    if not article_id or not collection_name:
+        return Response({'error': 'Article ID and collection name are required'}, status=400)
+    
+    article = get_object_or_404(Articles, pk=article_id)
+    
+    # Get or create the collection
+    collection, created = SavedCollection.objects.get_or_create(
+        user=request.user,
+        name=collection_name
+    )
+    
+    # Check if article already saved in this collection
+    saved_article = SavedArticle.objects.filter(
+        user=request.user,
+        article=article,
+        collection=collection
+    ).first()
+    
+    if saved_article:
+        # Remove from collection
+        saved_article.delete()
+        return Response({'saved': False, 'collection': collection_name})
+    
+    # Save to collection
+    SavedArticle.objects.create(
+        user=request.user,
+        article=article,
+        collection=collection
+    )
+    
+    return Response({'saved': True, 'collection': collection_name})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def is_article_saved(request, article_id):
+    article = get_object_or_404(Articles, pk=article_id)
+    saved_articles = SavedArticle.objects.filter(
+        user=request.user,
+        article=article
+    )
+    
+    if not saved_articles.exists():
+        return Response({'saved': False})
+    
+    collections = [sa.collection.name for sa in saved_articles]
+    return Response({'saved': True, 'collections': collections})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def collection_list(request):
+    collections = SavedCollection.objects.filter(user=request.user)
+    
+    # Get count of articles in each collection
+    data = []
+    for collection in collections:
+        article_count = SavedArticle.objects.filter(
+            user=request.user,
+            collection=collection
+        ).count()
+        
+        # Get a sample article for cover image
+        sample_article = SavedArticle.objects.filter(
+            user=request.user,
+            collection=collection
+        ).first()
+        
+        image_url = None
+        if sample_article and sample_article.article.image_url:
+            image_url = sample_article.article.image_url
+        
+        data.append({
+            'id': collection.id,
+            'name': collection.name,
+            'article_count': article_count,
+            'created_at': collection.created_at,
+            'cover_image': image_url or DEFAULT_IMAGE_URL
+        })
+    
+    return Response({'collections': data})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def collection_detail(request, collection_id):
+    collection = get_object_or_404(SavedCollection, pk=collection_id, user=request.user)
+    article_count = SavedArticle.objects.filter(
+        user=request.user,
+        collection=collection
+    ).count()
+    
+    return Response({
+        'id': collection.id,
+        'name': collection.name,
+        'article_count': article_count,
+        'created_at': collection.created_at
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def collection_articles(request, collection_id):
+    collection = get_object_or_404(SavedCollection, pk=collection_id, user=request.user)
+    saved_articles = SavedArticle.objects.filter(
+        user=request.user,
+        collection=collection
+    ).select_related('article').order_by('-created_at')
+    
+    articles = [{
+        'id': sa.article.id,
+        'title': sa.article.title,
+        'content': sa.article.content[:200] + "..." if len(sa.article.content) > 200 else sa.article.content,
+        'url': sa.article.url,
+        'image_url': sa.article.image_url if sa.article.image_url else DEFAULT_IMAGE_URL,
+        'source': sa.article.source.name if sa.article.source else "Unknown",
+        'published_date': sa.article.published_date,
+        'author': sa.article.author,
+        'saved_at': sa.created_at
+    } for sa in saved_articles]
+    
+    return Response({
+        'collection_id': collection.id,
+        'collection_name': collection.name,
+        'articles': articles
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_interaction_stats(request):
+    likes_count = Like.objects.filter(user=request.user).count()
+    comments_count = Comment.objects.filter(user=request.user).count()
+    saved_count = SavedArticle.objects.filter(user=request.user).count()
+    
+    return Response({
+        'likes_count': likes_count,
+        'comments_count': comments_count,
+        'saved_count': saved_count
+    })
