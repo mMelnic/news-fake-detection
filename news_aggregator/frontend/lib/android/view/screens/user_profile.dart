@@ -6,6 +6,7 @@ import 'package:language_picker/languages.dart';
 import '../../model/user.dart';
 import '../../model/collection.dart';
 import '../../services/user_profile_service.dart';
+import 'collections_page.dart';
 
 class CombinedProfilePage extends StatefulWidget {
   const CombinedProfilePage({super.key});
@@ -470,8 +471,9 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
                                     collection.coverImage,
                                     onTap: () {
                                       // Navigate to collection detail screen
-                                      // You'll implement this later
+                                      // Implement this later
                                     },
+                                    collectionIndex: index, // Pass the index here
                                   ),
                                 );
                               },
@@ -494,9 +496,23 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
     int articleCount,
     String imageUrl, {
     VoidCallback? onTap,
+    int? collectionIndex,
   }) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        // Navigate to collection detail screen
+        if (collectionIndex != null) {
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => CollectionsPage(
+                collections: _collections,
+                initialCollectionIndex: collectionIndex,
+              ),
+            ),
+          ).then((_) => _loadUserData()); // Refresh data when returning
+        }
+      },
       child: SizedBox(
         width: 150,
         height: 150,
