@@ -71,7 +71,7 @@ class Article {
       author: json['author'],
       content: json['content'],
       url: json['url'],
-      imageUrl: json['image_url'] ?? 'default_image_url_here',
+      imageUrl: json['image_url'] ??'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg',
       sourceName: json['source'] ?? 'Unknown',
       publishedDate: DateTime.parse(json['published_date']),
       country: json['country'],
