@@ -61,11 +61,16 @@ class Sources(models.Model):
 class UserInteraction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     article = models.ForeignKey('Articles', on_delete=models.CASCADE)
-    interaction_type = models.CharField(max_length=50, default='view')  # e.g., 'view', 'like'
+    interaction_type = models.CharField(max_length=50, default='view')  # e.g., 'view', 'like', 'save', 'comment'
     timestamp = models.DateTimeField(auto_now_add=True)
+    strength = models.FloatField(default=1.0)  # Higher for explicit likes/saves, lower for views
 
     class Meta:
-        unique_together = ('user', 'article')
+        indexes = [
+            models.Index(fields=['user', 'interaction_type']),
+            models.Index(fields=['article']),
+            models.Index(fields=['timestamp']),
+        ]
 
 class Recommendation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
