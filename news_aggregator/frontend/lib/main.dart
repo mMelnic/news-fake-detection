@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'Demo Login',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromRGBO(32, 63, 129, 1.0),
+          seedColor: const Color.fromARGB(255, 0, 8, 38),
         ),
         fontFamily: 'Abel',
       ),

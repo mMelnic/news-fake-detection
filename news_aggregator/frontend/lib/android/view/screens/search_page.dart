@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../theme/app_theme.dart';
 import '../../model/news.dart';
 import '../../services/search_service.dart';
 import '../../services/user_profile_service.dart';
@@ -121,7 +121,7 @@ class SearchPageState extends State<SearchPage> {
           children: [
             // Search options row (AND/OR toggle)
             Container(
-              color: Colors.black,
+              color: AppTheme.lightBrown,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
@@ -143,7 +143,7 @@ class SearchPageState extends State<SearchPage> {
                         }
                       }
                     },
-                    selectedColor: Colors.blue,
+                    selectedColor: const Color.fromARGB(255, 182, 167, 138),
                     labelStyle: TextStyle(
                       color: _isSearchingWithAnd ? Colors.white : Colors.black,
                     ),
@@ -162,7 +162,7 @@ class SearchPageState extends State<SearchPage> {
                         }
                       }
                     },
-                    selectedColor: Colors.blue,
+                    selectedColor: const Color.fromARGB(255, 182, 167, 138),
                     labelStyle: TextStyle(
                       color: !_isSearchingWithAnd ? Colors.white : Colors.black,
                     ),
@@ -184,7 +184,7 @@ class SearchPageState extends State<SearchPage> {
             Container(
               alignment: Alignment.center,
               height: 60,
-              color: Colors.black,
+              color: AppTheme.lightBrown,
               child: ListView.separated(
                 padding: const EdgeInsets.only(left: 16),
                 scrollDirection: Axis.horizontal,

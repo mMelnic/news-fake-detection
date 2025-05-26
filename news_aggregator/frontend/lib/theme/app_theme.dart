@@ -20,6 +20,7 @@ class AppTheme {
   static const Color nearlyBlack = Color(0xFF213333);
   static const Color grey = Color(0xFF3A5160);
   static const Color dark_grey = Color(0xFF313A44);
+  static const Color lightBrown = Color.fromARGB(255, 26, 24, 21);
 
   static LinearGradient textOverlayGradient = LinearGradient(
     colors: [Colors.black.withOpacity(0.45), Colors.black.withOpacity(0.0)],

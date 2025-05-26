@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../theme/app_theme.dart';
+
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController searchInputController;
   final VoidCallback? searchPressed;
@@ -19,7 +21,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.black,
+      backgroundColor: AppTheme.lightBrown,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         onPressed: () => Navigator.of(context).pop(),
