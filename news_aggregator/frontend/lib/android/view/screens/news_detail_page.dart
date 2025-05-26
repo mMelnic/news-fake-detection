@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../model/news.dart';
 import '../../services/article_service.dart';
 import '../../services/user_profile_service.dart';
@@ -24,11 +25,22 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
   bool isLiked = false;
   bool isSaved = false;
   bool isLoading = true;
+  bool showComments = false;
+  List<Map<String, dynamic>> comments = [];
+  
+  // Text controller for new comments
+  final TextEditingController _commentController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _loadSocialData();
+  }
+  
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
   }
   
   Future<void> _loadSocialData() async {
@@ -47,7 +59,8 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
       
       setState(() {
         likeCount = results[0] as int;
-        commentCount = (results[1] as List).length;
+        comments = List<Map<String, dynamic>>.from(results[1] as List);
+        commentCount = comments.length;
         isLiked = results[2] as bool;
         isSaved = results[3] as bool;
         isLoading = false;
@@ -57,6 +70,32 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+  
+  Future<void> _addComment() async {
+    if (_commentController.text.trim().isEmpty) {
+      return;
+    }
+    
+    try {
+      await ArticleService.addComment(widget.data.id, _commentController.text);
+      _commentController.clear();
+      // Reload comments
+      _loadSocialData();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add comment: $e')),
+      );
+    }
+  }
+  
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not launch $url')),
+      );
     }
   }
 
@@ -229,52 +268,78 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               // Likes count
-                              Row(
-                                children: [
-                                  Icon(
-                                    isLiked ? Icons.favorite : Icons.favorite_border, 
-                                    color: isLiked ? Colors.red : Colors.grey[600]
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '$likeCount ${likeCount == 1 ? 'like' : 'likes'}',
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontWeight: FontWeight.w500,
+                              InkWell(
+                                onTap: () {
+                                  ArticleService.toggleLike(widget.data.id).then((_) {
+                                    setState(() {
+                                      isLiked = !isLiked;
+                                      likeCount += isLiked ? 1 : -1;
+                                    });
+                                  }).catchError((e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Failed to toggle like: $e')),
+                                    );
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      isLiked ? Icons.favorite : Icons.favorite_border, 
+                                      color: isLiked ? Colors.red : Colors.grey[600]
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '$likeCount ${likeCount == 1 ? 'like' : 'likes'}',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               // Comments count
-                              Row(
-                                children: [
-                                  Icon(Icons.chat_bubble_outline, color: Colors.grey[600]),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '$commentCount ${commentCount == 1 ? 'comment' : 'comments'}',
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontWeight: FontWeight.w500,
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    showComments = !showComments;
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.chat_bubble_outline, color: Colors.grey[600]),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '$commentCount ${commentCount == 1 ? 'comment' : 'comments'}',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               // Saved/Bookmarked status
-                              Row(
-                                children: [
-                                  Icon(
-                                    isSaved ? Icons.bookmark : Icons.bookmark_border, 
-                                    color: isSaved ? Colors.blue : Colors.grey[600]
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    isSaved ? 'Saved' : 'Save',
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontWeight: FontWeight.w500,
+                              InkWell(
+                                onTap: () {
+                                  _showSaveDialog();
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      isSaved ? Icons.bookmark : Icons.bookmark_border, 
+                                      color: isSaved ? Colors.blue : Colors.grey[600]
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      isSaved ? 'Saved' : 'Save',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -282,41 +347,46 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                   
                   const SizedBox(height: 20),
 
-                  // Source link
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.link, color: Colors.blue[700]),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Original Source',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue[700],
+                  // Source link - Made clickable
+                  GestureDetector(
+                    onTap: () => _launchURL(widget.data.sourceUrl),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.link, color: Colors.blue[700]),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Original Source',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue[700],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                widget.data.sourceUrl,
-                                style: TextStyle(
-                                  color: Colors.blue[700],
-                                  fontSize: 12,
+                                Text(
+                                  widget.data.sourceUrl,
+                                  style: TextStyle(
+                                    color: Colors.blue[700],
+                                    fontSize: 12,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Icon(Icons.open_in_new, size: 16, color: Colors.blue[700]),
+                        ],
+                      ),
                     ),
                   ),
                   
@@ -336,11 +406,138 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                   
                   // Sentiment indicator
                   _buildSentimentIndicator(widget.data.sentiment),
+                  
+                  const SizedBox(height: 30),
+                  
+                  // Comments section
+                  if (showComments) ...[
+                    const Divider(thickness: 1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Comments ($commentCount)',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.expand_less),
+                          onPressed: () {
+                            setState(() {
+                              showComments = false;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    
+                    // Comment input field
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _commentController,
+                            decoration: const InputDecoration(
+                              hintText: 'Add a comment...',
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            ),
+                            maxLines: 1,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          icon: const Icon(Icons.send),
+                          onPressed: _addComment,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ],
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // Comments list
+                    ...comments.map((comment) => _buildCommentItem(comment)).toList(),
+                    
+                    if (comments.isEmpty)
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            'No comments yet. Be the first to comment!',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ] else ...[
+                    // Show expand comments button
+                    Center(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.chat_bubble_outline),
+                        label: Text('Show $commentCount comments'),
+                        onPressed: () {
+                          setState(() {
+                            showComments = true;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+  
+  Widget _buildCommentItem(Map<String, dynamic> comment) {
+    final username = comment['username'] ?? 'Anonymous';
+    final content = comment['content'] ?? '';
+    final timestamp = comment['created_at'] != null 
+        ? DateTime.parse(comment['created_at'])
+        : DateTime.now();
+    
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.account_circle, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                username,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                _formatCommentDate(timestamp),
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(content),
+        ],
       ),
     );
   }
@@ -393,6 +590,21 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
   
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year} at ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+  }
+  
+  String _formatCommentDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+    
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
+    }
   }
   
   void _showSaveDialog() async {
