@@ -4,9 +4,10 @@ from .models import Articles, UserInteraction, Recommendation, Sources, Keyword
 from django.contrib.auth import get_user_model
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from news.services.nlp_service import NLPPredictionService
 import logging
 import traceback
-from dateutil import parser
+from django.db import transaction
 
 logger = logging.getLogger(__name__)
 
@@ -19,309 +20,154 @@ except Exception as e:
     logger.error(f"Error initializing SentenceTransformer: {str(e)}")
     embedding_model = None
 
-@shared_task(bind=True, max_retries=3)
-def store_article_async(self, article, query=None):
-    """Store a single article asynchronously"""
+
+DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg'
+nlp_service = NLPPredictionService()
+
+def normalize_article(article, source_name=None, source_url=None, default_language=None, default_country=None):
+    """Normalize article fields across different sources."""
+    # Use safe gets, fallback to empty strings or defaults
+    title = article.get("title", "") or ""
+    url = article.get("url") or article.get("link") or ""
+    content = article.get("content") or article.get("description") or ""
+    published_at = article.get("publishedAt") or article.get("pub_date") or article.get("published") or ""
+    author = article.get("author") or ""
+    image_url = article.get("urlToImage") or article.get("image") or DEFAULT_IMAGE_URL
+    language = article.get("language") or default_language or "en"
+    country = article.get("country") or default_country or ""
+    categories = article.get("categories") or ""
+    is_fake = article.get("is_fake")
+    sentiment = article.get("sentiment")
+    fake_score = article.get("fake_score")
+
+    # Source info normalization
+    if "source" in article:
+        if isinstance(article["source"], dict):
+            source_name = article["source"].get("name") or source_name
+            source_url = article["source"].get("url") or source_url
+        elif isinstance(article["source"], str):
+            source_name = article["source"]
+
+    if not source_url and source_name:
+        domain = source_name.lower().replace(" ", "").replace(".", "")
+        source_url = f"https://www.{domain}.com"
+
+    # Parse published date if string
+    from dateutil import parser
     try:
-        logger.debug(f"Processing article: {article.get('title', 'Unknown')[:50]}...")
-        
-        # Extract normalized source information based on different API formats
-        source_name = "Unknown"
-        source_url = ""
-        
-        if "source" in article:
-            # Handle different source formats
-            if isinstance(article["source"], dict):
-                # NewsAPI and GNews format
-                source_name = article["source"].get("name", "Unknown")
-                
-                # Case when URL might be null
-                source_url = article["source"].get("url", "")
-                if not source_url and "id" in article["source"]:
-                    # Use ID to generate a URL if explicit URL is missing
-                    source_id = article["source"].get("id", "")
-                    if source_id:
-                        source_url = f"https://www.{source_id.lower()}.com"
-                    else:
-                        # Generate URL from name as fallback
-                        name_slug = source_name.lower().replace(' ', '').replace('.', '')
-                        source_url = f"https://www.{name_slug}.com"
-                        
-            elif isinstance(article["source"], str):
-                # RSS feed format in some cases
-                source_name = article["source"]
-                source_url = article.get("source_url", "")
-                
-        # If no URL, generate one from the name
-        if not source_url and source_name:
-            name_slug = source_name.lower().replace(' ', '').replace('.', '')
-            source_url = f"https://www.{name_slug}.com"
-        
-        # Placeholder for unknown source URL
-        if not source_url:
-            source_url = "https://unknown-source.com"
-            
-        logger.debug(f"Source data normalized: name={source_name}, url={source_url}")
-        
-        try:
-            source_obj, _ = Sources.objects.get_or_create(
-                url=source_url,
-                defaults={
-                    "name": source_name,
-                    "country": article.get("country", None),
-                    "language": article.get("language", None)
-                }
-            )
-        except Exception as source_error:
-            logger.error(f"Error creating source: {str(source_error)}")
-            # Fallback source
-            source_obj, _ = Sources.objects.get_or_create(
-                url="https://unknown-source.com",
-                defaults={"name": "Unknown Source"}
-            )
-
-        # Normalize article fields
-        title = article.get("title", "")
-        
-        # Handle different URL field names
-        url = article.get("url", article.get("link", ""))
-        if not url:  # Ensure we have a URL
-            logger.warning(f"Article missing URL: {title}")
-            return None
-            
-        # Handle different content field names
-        content = article.get("content", article.get("description", ""))
-            
-        # Handle different image URL field names
-        image_url = article.get("urlToImage", article.get("image", ""))
-            
-        # Handle different published date field names
-        published_at_raw = article.get("publishedAt", article.get("pub_date", None))
+        if published_at:
+            published_at = parser.parse(published_at)
+    except Exception:
         published_at = None
-        if published_at_raw:
-            try:
-                published_at = parser.parse(published_at_raw)
-            except Exception as e:
-                logger.warning(f"Could not parse publishedAt '{published_at_raw}' for article '{title[:100]}': {e}")
-                    
-        logger.debug(f"Creating/updating article with URL: {url}")
-                    
-        # Create or update article - note we're removing the category field
-        article_obj, created = Articles.objects.update_or_create(
-            url=url,
-            defaults={
-                "title": title,
-                "author": article.get("author", "Unknown"),
-                "content": content,
-                "image_url": image_url,
-                "source": source_obj,
-                "published_date": published_at,
-                "country": article.get("country", None),
-                "fake_score": None,  # Placeholder
-                # No longer storing category
-            }
-        )
-        
-        logger.debug(f"Article {'created' if created else 'updated'} with ID: {article_obj.id}")
 
-        # Only compute embeddings if it's a new article or there's no existing embedding
-        if created or article_obj.embedding is None:
-            if embedding_model is not None:
-                # Combine title and content for better semantic representation
-                text_for_embedding = f"{article_obj.title} {article_obj.content}"
-                if not text_for_embedding.strip():
-                    logger.warning(f"Empty text for embedding for article {article_obj.id}")
-                    return None
-                    
-                try:
-                    logger.debug(f"Computing embedding for article {article_obj.id}")
-                    text_embedding = embedding_model.encode(text_for_embedding).tolist()
-                    logger.debug(f"Embedding computed, length: {len(text_embedding)}")
-                    article_obj.embedding = text_embedding
-                    article_obj.save(update_fields=['embedding'])
-                    logger.debug(f"Embedding saved for article {article_obj.id}")
-                except Exception as e:
-                    logger.error(f"Embedding error for article {article_obj.id}: {e}")
-                    logger.error(traceback.format_exc())
-            else:
-                logger.warning("Embedding model not available, skipping embedding generation")
-
-        # Store keywords - either from article['keywords'] or parse from query
-        if created:
-            parsed_keywords = []
-            
-            # First priority: use keywords already parsed and included in the article object
-            if 'keywords' in article and article['keywords']:
-                parsed_keywords = article['keywords']
-                logger.debug(f"Using pre-parsed keywords: {parsed_keywords}")
-            # Second priority: parse from query
-            elif query:
-                parsed_keywords = _parse_query(query)
-                logger.debug(f"Using keywords parsed from query: {parsed_keywords}")
-            
-            # Get existing keywords if article is being updated
-            existing_keywords = set(article_obj.keywords.values_list('keyword', flat=True)) if not created else set()
-            
-            # Add new keywords
-            added_keywords = 0
-            for keyword in parsed_keywords:
-                if keyword.lower() not in existing_keywords:
-                    keyword_obj, _ = Keyword.objects.get_or_create(keyword=keyword.lower())
-                    article_obj.keywords.add(keyword_obj)
-                    added_keywords += 1
-                    
-            logger.debug(f"Added {added_keywords} keywords to article {article_obj.id}")
-
-        # After storing the article, send a notification via WebSocket
-        if created:
-            try:
-                # Import here to avoid circular imports
-                from channels.layers import get_channel_layer
-                from asgiref.sync import async_to_sync
-                
-                channel_layer = get_channel_layer()
-                
-                # Format the article for sending
-                article_data = {
-                    "id": article_obj.id,
-                    "title": article_obj.title,
-                    "url": article_obj.url,
-                    "content": article_obj.content[:200] + "..." if len(article_obj.content) > 200 else article_obj.content,
-                    "image_url": article_obj.image_url,
-                    "author": article_obj.author,
-                    "published_date": article_obj.published_date.isoformat() if article_obj.published_date else None,
-                    "source": article_obj.source.name if article_obj.source else "Unknown",
-                    "has_embedding": article_obj.embedding is not None,
-                    "is_fake": article_obj.is_fake,
-                    "fake_score": article_obj.fake_score,
-                    "sentiment": article_obj.sentiment
-                }
-                
-                # Create a group name that matches the one in the consumer
-                if query:
-                    # Extract language and country from article
-                    language = article.get('language', 'en')
-                    country = article.get('country', 'all')
-                    room_group_name = f"news_{query}_{language}_{country}"
-                    
-                    # Send the update to the group
-                    async_to_sync(channel_layer.group_send)(
-                        room_group_name,
-                        {
-                            'type': 'article_update',
-                            'article': article_data
-                        }
-                    )
-                    logger.debug(f"WebSocket notification sent for article {article_obj.id} to group {room_group_name}")
-            except Exception as ws_error:
-                logger.error(f"WebSocket notification error: {str(ws_error)}")
-                # Don't raise here, just log the error and continue
-                
-        article_data = {
-            "id": article_obj.id,
-            "title": article_obj.title,
-            "url": article_obj.url,
-            "content": article_obj.content[:200] + "..." if len(article_obj.content) > 200 else article_obj.content,
-            "image_url": article_obj.image_url,
-            "author": article_obj.author,
-            "published_date": article_obj.published_date,
-            "source": article_obj.source.name if article_obj.source else "Unknown",
-            "created": created,
-            "has_embedding": article_obj.embedding is not None
-        }
-        
-        logger.debug(f"Article processing completed: {article_obj.id}")
-        return article_data
-
-    except Exception as e:
-        logger.error(f"Error storing article: {str(e)}")
-        logger.error(traceback.format_exc())
-        # Retry with exponential backoff
-        raise self.retry(exc=e, countdown=2 ** self.request.retries)
-
-# Helper function for parsing queries into keywords
-def _parse_query(query):
-    """Parse a query string into a list of keywords and phrases."""
-    import re
-    # Extract quoted phrases
-    phrases = re.findall(r'"(.*?)"', query)
-    # Remove quoted phrases from query
-    remaining_query = re.sub(r'"(.*?)"', '', query)
-    # Extract individual keywords, ignoring logical operators
-    keywords = re.findall(r'([+-]?\b(?!AND\b|OR\b|NOT\b)\w+\b)', remaining_query)
-    keywords = [k for k in keywords if k.strip() and len(k.strip()) > 2]  # Skip very short words
-    return phrases + keywords
-
-@shared_task
-def store_articles_batch(articles, query=None):
-    """Process a batch of articles, queueing each for individual processing"""
-    logger.info(f"Processing batch of {len(articles)} articles for query: {query}")
-    
-    # Parse query once for all articles if not already done
-    if query and not any('keywords' in article for article in articles):
-        parsed_keywords = _parse_query(query)
-        logger.info(f"Parsed query '{query}' into keywords: {parsed_keywords}")
+    # Cast is_fake to boolean or None
+    if is_fake is not None:
+        if isinstance(is_fake, str):
+            is_fake = is_fake.lower() in ("true", "1", "yes")
+        else:
+            is_fake = bool(is_fake)
     else:
-        parsed_keywords = None
-        
-    # Keep track of stored article IDs for NLP processing
-    stored_article_ids = []
-    
-    # Store all successfully processed articles for batch notification
-    processed_articles = []
-    
-    for article in articles:
-        # If the article doesn't already have query info, add it
-        if query and 'query' not in article:
-            article['query'] = query
-            
-        # If parsed keywords available but article doesn't have keywords, add them
-        if parsed_keywords and 'keywords' not in article:
-            article['keywords'] = parsed_keywords
-            
-        # Process each article in its own task
-        result = store_article_async(article, query)
-        
-        # If article was stored successfully, add its ID to the list for NLP processing
-        if result and isinstance(result, dict) and 'id' in result:
-            stored_article_ids.append(result['id'])
-            processed_articles.append(result)
-    
-    # Process stored articles with NLP in a separate task
-    if stored_article_ids:
-        logger.info(f"Queueing {len(stored_article_ids)} articles for NLP processing")
-        process_articles_nlp.delay(stored_article_ids)
-    
-    # Send batch notification via WebSocket
-    if processed_articles and query:
-        try:
-            # Import here to avoid circular imports
-            from channels.layers import get_channel_layer
-            from asgiref.sync import async_to_sync
-            
-            # Get the first article to extract language and country
-            first_article = articles[0]
-            language = first_article.get('language', 'en')
-            country = first_article.get('country', 'all')
-            
-            channel_layer = get_channel_layer()
-            room_group_name = f"news_{query}_{language}_{country}"
-            
-            # Send the batch update to the group
-            async_to_sync(channel_layer.group_send)(
-                room_group_name,
-                {
-                    'type': 'batch_update',
-                    'articles': processed_articles,
-                    'count': len(processed_articles)
-                }
-            )
-            logger.debug(f"WebSocket batch notification sent for {len(processed_articles)} articles to group {room_group_name}")
-        except Exception as ws_error:
-            logger.error(f"WebSocket batch notification error: {str(ws_error)}")
-            # Don't raise here, just log the error and continue
-    
-    return {"queued_articles": len(articles), "stored_articles": len(stored_article_ids)}
+        is_fake = None
+
+    return {
+        "title": title,
+        "url": url,
+        "content": content,
+        "published_date": published_at,
+        "author": author,
+        "image_url": image_url,
+        "source_name": source_name,
+        "source_url": source_url,
+        "language": language,
+        "country": country,
+        "categories": categories,
+        "is_fake": is_fake,
+        "sentiment": sentiment,
+        "fake_score": fake_score,
+    }
+
+
+from django.core.cache import cache
+import json
+
+@shared_task(bind=True)
+def process_and_store_articles(self, raw_articles, language=None, country=None, extracted_terms=None, extracted_phrases=None):
+    extracted_terms = extracted_terms or []
+    extracted_phrases = extracted_phrases or []
+    task_id = self.request.id
+    redis_key = f"articles_task:{task_id}"
+
+    normalized = []
+    for article in raw_articles:
+        norm = normalize_article(article, default_language=language, default_country=country)
+        norm['keywords'] = extracted_terms + extracted_phrases
+        normalized.append(norm)
+
+    stored_ids = []
+
+    batch_size = 20
+    for i in range(0, len(normalized), batch_size):
+        batch = normalized[i:i + batch_size]
+
+        with transaction.atomic():
+            for art in batch:
+                if not art["url"] or Articles.objects.filter(url=art["url"]).exists():
+                    continue
+
+                source_obj, _ = Sources.objects.get_or_create(
+                    url=art["source_url"],
+                    defaults={"name": art["source_name"] or ""}
+                )
+
+                article_obj = Articles.objects.create(
+                    title=art["title"],
+                    url=art["url"],
+                    content=art["content"],
+                    author=art["author"],
+                    image_url=art["image_url"] or DEFAULT_IMAGE_URL,
+                    source=source_obj,
+                    published_date=art["published_date"],
+                    language=art["language"],
+                    country=art["country"],
+                    categories=art["categories"],
+                    is_fake=art["is_fake"],
+                    sentiment=art["sentiment"],
+                    fake_score=art["fake_score"],
+                )
+
+                text = f"{article_obj.title} {article_obj.content}"
+                if embedding_model and text.strip():
+                    try:
+                        article_obj.embedding = embedding_model.encode(text).tolist()
+                    except Exception as e:
+                        logger.error(f"Embedding error for article {article_obj.id}: {e}")
+
+                try:
+                    nlp_preds = nlp_service.predict_batch([text])
+                    if nlp_preds and isinstance(nlp_preds[0], dict):
+                        article_obj.is_fake = nlp_preds[0].get("is_fake")
+                        article_obj.sentiment = nlp_preds[0].get("sentiment")
+                        article_obj.fake_score = 1.0 if article_obj.is_fake else 0.0
+                except Exception as e:
+                    logger.error(f"NLP error for article {article_obj.id}: {e}")
+
+                article_obj.save()
+                stored_ids.append(article_obj.id)
+
+        # Update Redis after each batch
+        cache.set(redis_key, {
+            "article_ids": stored_ids,
+            "status": "processing"
+        }, timeout=3600)
+
+    # Mark task as completed
+    cache.set(redis_key, {
+        "article_ids": stored_ids,
+        "status": "completed"
+    }, timeout=3600)
+
+    logger.info(f"Processed and stored {len(stored_ids)} articles.")
+    return {"stored": len(stored_ids)}
 
 User = get_user_model()
 
