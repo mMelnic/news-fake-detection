@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class NewsFilterSheet extends StatefulWidget {
-  const NewsFilterSheet({Key? key}) : super(key: key);
+  final Function(String)? onSortSelected;
+
+  const NewsFilterSheet({super.key, this.onSortSelected});
 
   @override
   State<NewsFilterSheet> createState() => _NewsFilterSheetState();
@@ -22,6 +24,10 @@ class _NewsFilterSheetState extends State<NewsFilterSheet> {
     setState(() {
       _selectedIndex = index;
     });
+
+    // Call the callback with the selected option
+    widget.onSortSelected?.call(_options[index]);
+
     Navigator.of(context).pop(); // Close sheet after selection
   }
 
@@ -29,6 +35,10 @@ class _NewsFilterSheetState extends State<NewsFilterSheet> {
     setState(() {
       _selectedIndex = 0;
     });
+
+    // Call the callback with the default option
+    widget.onSortSelected?.call(_options[0]);
+
     Navigator.of(context).pop();
   }
 
