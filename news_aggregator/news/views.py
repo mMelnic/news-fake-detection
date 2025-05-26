@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
-from news_aggregator.news.services.nlp_service import NLPPredictionService
+from news.services.nlp_service import NLPPredictionService
 from .models import Recommendation, Articles, UserInteraction, Like, Comment, Feed, Sources, Keyword
 from .tasks import generate_recommendations, process_and_store_articles
 from django.utils import timezone
