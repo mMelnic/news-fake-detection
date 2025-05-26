@@ -189,26 +189,36 @@ class UserProfileView(APIView):
         return Response({
             'id': user.id,
             'username': user.username,
-            'display_name': user.display_name,
-            'bio': user.bio,
-            'email': user.email
+            'display_name': user.display_name or user.username,
+            'bio': user.bio or '',
+            'email': user.email,
+            'preferred_language': user.preferred_language or '',
+            'country': str(user.country) if user.country else '',
         })
 
     def patch(self, request):
         user = request.user
         display_name = request.data.get('display_name')
         bio = request.data.get('bio')
+        preferred_language = request.data.get('preferred_language')
+        country = request.data.get('country')
 
         if display_name is not None:
             user.display_name = display_name
         if bio is not None:
             user.bio = bio
+        if preferred_language is not None:
+            user.preferred_language = preferred_language
+        if country is not None:
+            user.country = country
 
         user.save()
         return Response({
             'id': user.id,
             'username': user.username,
-            'display_name': user.display_name,
-            'bio': user.bio,
-            'email': user.email
+            'display_name': user.display_name or user.username,
+            'bio': user.bio or '',
+            'email': user.email,
+            'preferred_language': user.preferred_language or '',
+            'country': str(user.country) if user.country else '',
         })
