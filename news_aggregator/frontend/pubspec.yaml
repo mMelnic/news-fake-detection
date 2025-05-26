@@ -44,6 +44,8 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   cached_network_image: ^3.4.1
   shared_preferences: ^2.5.3
+  language_picker: ^0.4.5
+  country_picker: ^2.0.27
 
 dev_dependencies:
   flutter_test:
