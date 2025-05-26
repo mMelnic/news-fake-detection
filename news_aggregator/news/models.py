@@ -105,3 +105,23 @@ class Feed(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.url})"
+
+class SavedCollection(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'name')
+        
+    def __str__(self):
+        return f"{self.user.username} - {self.name}"
+
+class SavedArticle(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    article = models.ForeignKey(Articles, on_delete=models.CASCADE)
+    collection = models.ForeignKey(SavedCollection, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'article', 'collection')
