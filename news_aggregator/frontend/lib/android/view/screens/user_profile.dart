@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/network_image.dart';
-
 class CombinedProfilePage extends StatelessWidget {
-  final image = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg';
+  final image = 'assets/images/newspaper_beige.jpg';
 
   const CombinedProfilePage({super.key});
 
@@ -17,7 +15,12 @@ class CombinedProfilePage extends StatelessWidget {
             SizedBox(
               height: 250,
               width: double.infinity,
-              child: PNetworkImage(image, fit: BoxFit.cover),
+              child: Image.asset(
+                image,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
             ),
             Container(
               margin: const EdgeInsets.fromLTRB(16.0, 200.0, 16.0, 16.0),
@@ -90,7 +93,7 @@ class CombinedProfilePage extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           image: DecorationImage(
-                            image: NetworkImage(image),
+                            image: AssetImage(image),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -187,9 +190,7 @@ class CombinedProfilePage extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                  'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_hand.jpg',
-                ),
+                image: AssetImage('assets/images/newspaper_hand.jpg'),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(10.0),
