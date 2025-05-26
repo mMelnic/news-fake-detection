@@ -10,6 +10,7 @@ class DrawerUserController extends StatefulWidget {
     this.menuView,
     this.animatedIconData = AnimatedIcons.arrow_menu,
     this.drawerIsOpen,
+    this.onCategorySelectionChanged,
   });
 
   final double drawerWidth;
@@ -17,6 +18,7 @@ class DrawerUserController extends StatefulWidget {
   final Function(bool)? drawerIsOpen;
   final AnimatedIconData? animatedIconData;
   final Widget? menuView;
+  final Function(Map<String, bool>)? onCategorySelectionChanged;
 
   @override
   DrawerUserControllerState createState() => DrawerUserControllerState();
@@ -53,9 +55,9 @@ class DrawerUserControllerState extends State<DrawerUserController>
           });
           iconAnimationController.animateTo(1.0);
         } else {
-          iconAnimationController.animateTo(
-            (scrollController.offset / widget.drawerWidth).clamp(0.0, 1.0),
-          );
+          setState(() {
+            scrolloffset = scrollController.offset / widget.drawerWidth;
+          });
         }
       });
 
@@ -77,75 +79,31 @@ class DrawerUserControllerState extends State<DrawerUserController>
         physics: const ClampingScrollPhysics(),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width + widget.drawerWidth,
+          width: widget.drawerWidth + MediaQuery.of(context).size.width,
           child: Row(
             children: <Widget>[
               SizedBox(
                 width: widget.drawerWidth,
                 height: MediaQuery.of(context).size.height,
-                child: AnimatedBuilder(
-                  animation: iconAnimationController,
-                  builder: (BuildContext context, Widget? child) {
-                    return Transform(
-                      transform: Matrix4.translationValues(
-                        scrollController.offset,
-                        0.0,
-                        0.0,
-                      ),
-                      child: HomeDrawer(
-                        iconAnimationController: iconAnimationController,
-                      ),
-                    );
-                  },
+                child: HomeDrawer(
+                  iconAnimationController: iconAnimationController,
+                  onCategorySelectionChanged: widget.onCategorySelectionChanged,
                 ),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: Stack(
-                  children: <Widget>[
-                    IgnorePointer(
-                      ignoring: scrolloffset == 1,
-                      child: widget.screenView,
-                    ),
-                    if (scrolloffset == 1.0) InkWell(onTap: onDrawerClick),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).padding.top + 8,
-                        left: 8,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isLightMode ? Colors.white : AppTheme.nearlyBlack,
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: AppTheme.grey.withOpacity(0.6),
+                        blurRadius: 24,
                       ),
-                      child: SizedBox(
-                        width: AppBar().preferredSize.height - 8,
-                        height: AppBar().preferredSize.height - 8,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(
-                              AppBar().preferredSize.height,
-                            ),
-                            child: Center(
-                              child:
-                                  widget.menuView ??
-                                  AnimatedIcon(
-                                    icon:
-                                        widget.animatedIconData ??
-                                        AnimatedIcons.arrow_menu,
-                                    progress: iconAnimationController,
-                                    color:
-                                        isLightMode
-                                            ? AppTheme.dark_grey
-                                            : AppTheme.white,
-                                  ),
-                            ),
-                            onTap: () {
-                              FocusScope.of(context).unfocus();
-                              onDrawerClick();
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  child: widget.screenView,
                 ),
               ),
             ],

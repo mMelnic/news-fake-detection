@@ -1,24 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/theme/app_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/article_service.dart';
 
 class HomeDrawer extends StatefulWidget {
-  const HomeDrawer({super.key, this.iconAnimationController});
+  const HomeDrawer({super.key, this.iconAnimationController, this.onCategorySelectionChanged});
 
   final AnimationController? iconAnimationController;
+  final Function(Map<String, bool>)? onCategorySelectionChanged;
 
   @override
   HomeDrawerState createState() => HomeDrawerState();
 }
 
 class HomeDrawerState extends State<HomeDrawer> {
-  // Temporary category names and their checked state
-  final Map<String, bool> categories = {
-    'Category One': false,
-    'Category Two': true,
-    'Category Three': false,
-    'Category Four': true,
-    'Category Five': false,
-  };
+  // Fixed categories that cannot be toggled
+  final List<String> fixedCategories = ['All categories', 'News', 'Food', 'Sports', 'Fashion'];
+  
+  // Dynamic categories and their checked state
+  Map<String, bool> categories = {};
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    // Load saved preferences
+    final prefs = await SharedPreferences.getInstance();
+    
+    try {
+      // Fetch all available categories from the API
+      final List<String> availableCategories = await ArticleService.fetchCategories();
+      
+      // Initialize categories map
+      final Map<String, bool> newCategories = {};
+      
+      // Process each category
+      for (var category in availableCategories) {
+        // Skip fixed categories that will always be shown
+        if (fixedCategories.contains(category)) {
+          continue;
+        }
+        
+        // Get saved preference or default to false
+        final bool isSelected = prefs.getBool('category_$category') ?? false;
+        newCategories[category] = isSelected;
+      }
+      
+      // Update state
+      setState(() {
+        categories = newCategories;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading categories: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  // Save user preference when a category is toggled
+  Future<void> _toggleCategory(String category, bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('category_$category', value);
+    
+    setState(() {
+      categories[category] = value;
+    });
+    
+    // Notify parent about the change
+    if (widget.onCategorySelectionChanged != null) {
+      widget.onCategorySelectionChanged!(categories);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +118,19 @@ class HomeDrawerState extends State<HomeDrawer> {
             ),
           ),
 
+          // Fixed categories info
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              'Default categories (always visible): ${fixedCategories.join(", ")}',
+              style: TextStyle(
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+                color: isLightMode ? AppTheme.grey : AppTheme.nearlyWhite.withOpacity(0.7),
+              ),
+            ),
+          ),
+
           // Divider below subtitle
           Divider(
             color: AppTheme.grey.withOpacity(0.6),
@@ -64,37 +139,51 @@ class HomeDrawerState extends State<HomeDrawer> {
             endIndent: 16,
           ),
 
+          // Loading indicator if categories are being loaded
+          if (isLoading)
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+
           // List of categories with checkbox
-          Expanded(
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children:
-                  categories.keys.map((category) {
-                    return CheckboxListTile(
-                      activeColor: Colors.blue,
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                        category,
+          if (!isLoading)
+            Expanded(
+              child: categories.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No additional categories available',
                         style: TextStyle(
-                          color:
-                              isLightMode
-                                  ? AppTheme.nearlyBlack
-                                  : AppTheme.white,
-                          fontWeight: FontWeight.w500,
+                          color: isLightMode ? AppTheme.grey : AppTheme.nearlyWhite,
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
-                      value: categories[category],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          categories[category] = value ?? false;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.trailing,
-                    );
-                  }).toList(),
+                    )
+                  : ListView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      children: categories.keys.map((category) {
+                        return CheckboxListTile(
+                          activeColor: Colors.blue,
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                            category,
+                            style: TextStyle(
+                              color: isLightMode
+                                  ? AppTheme.nearlyBlack
+                                  : AppTheme.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          value: categories[category],
+                          onChanged: (bool? value) {
+                            _toggleCategory(category, value ?? false);
+                          },
+                          controlAffinity: ListTileControlAffinity.trailing,
+                        );
+                      }).toList(),
+                    ),
             ),
-          ),
         ],
       ),
     );

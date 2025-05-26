@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/android/model/news.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/news_helper.dart';
 import '../../route/slide_page_route.dart';
 import '../../services/article_service.dart';
@@ -21,8 +22,14 @@ class NewsPage extends StatefulWidget {
 class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
   late TabController _categoryTabController;
   
-  // Default categories
-  List<String> _categories = ['All categories', 'News', 'Food', 'Sports', 'Fashion'];
+  // Fixed categories that always appear
+  final List<String> _fixedCategories = ['All categories', 'News', 'Food', 'Sports', 'Fashion'];
+  
+  // All categories (fixed + selected optional ones)
+  List<String> _displayedCategories = [];
+  
+  // Selected optional categories
+  Map<String, bool> _selectedCategories = {};
   
   // Store articles for each category
   Map<String, List<News>> _categoryArticles = {};
@@ -42,50 +49,137 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _categoryTabController = TabController(length: _categories.length, vsync: this);
+    
+    // Initialize with fixed categories
+    _displayedCategories = List.from(_fixedCategories);
+    _categoryTabController = TabController(length: _displayedCategories.length, vsync: this);
     _categoryTabController.addListener(_handleTabChange);
     
-    // Initialize for each category
-    for (var category in _categories) {
+    // Initialize maps for each category
+    _initializeCategoryMaps(_displayedCategories);
+    
+    // Load saved category preferences
+    _loadCategoryPreferences().then((_) {
+      // Fetch all available categories and then load initial articles
+      _fetchCategories().then((_) => _loadArticlesForCurrentCategory());
+    });
+  }
+  
+  void _initializeCategoryMaps(List<String> categories) {
+    for (var category in categories) {
       _categoryArticles[category] = [];
       _loadingStates[category] = false;
       _hasMoreArticles[category] = true;
       _currentPage[category] = 1;
     }
+  }
+  
+  // Load saved category preferences from SharedPreferences
+  Future<void> _loadCategoryPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
     
-    // Fetch categories and then load initial articles
-    _fetchCategories().then((_) => _loadArticlesForCurrentCategory());
+    // Get all saved preferences
+    final Set<String> keys = prefs.getKeys();
+    Map<String, bool> selectedCategories = {};
+    
+    // Filter for category preferences
+    for (var key in keys) {
+      if (key.startsWith('category_')) {
+        final String category = key.substring(9); // Remove 'category_' prefix
+        final bool isSelected = prefs.getBool(key) ?? false;
+        
+        // Skip fixed categories
+        if (!_fixedCategories.contains(category)) {
+          selectedCategories[category] = isSelected;
+        }
+      }
+    }
+    
+    // Update selected categories
+    setState(() {
+      _selectedCategories = selectedCategories;
+    });
+    
+    // Update displayed categories based on selected ones
+    _updateDisplayedCategories();
+  }
+  
+  // Update the NewsPage when category selections change in the drawer
+  void updateSelectedCategories(Map<String, bool> categories) {
+    setState(() {
+      _selectedCategories = categories;
+    });
+    
+    // Update displayed categories based on the new selection
+    _updateDisplayedCategories();
+  }
+  
+  // Update the displayed categories based on fixed and selected ones
+  void _updateDisplayedCategories() {
+    // Create a new list with fixed categories
+    List<String> newDisplayedCategories = List.from(_fixedCategories);
+    
+    // Add selected optional categories
+    _selectedCategories.forEach((category, isSelected) {
+      if (isSelected && !newDisplayedCategories.contains(category)) {
+        // Capitalize first letter of the category
+        String formattedCategory = category.isNotEmpty 
+            ? category[0].toUpperCase() + category.substring(1) 
+            : category;
+        newDisplayedCategories.add(formattedCategory);
+      }
+    });
+    
+    // Check if categories have changed
+    if (_displayedCategories.length != newDisplayedCategories.length ||
+        !_displayedCategories.every((category) => newDisplayedCategories.contains(category))) {
+      
+      // Update displayed categories
+      setState(() {
+        _displayedCategories = newDisplayedCategories;
+      });
+      
+      // Initialize maps for new categories
+      _initializeCategoryMaps(newDisplayedCategories);
+      
+      // Create new tab controller with updated length
+      int currentTabIndex = _categoryTabController.index;
+      currentTabIndex = currentTabIndex.clamp(0, newDisplayedCategories.length - 1);
+      
+      _categoryTabController.dispose();
+      _categoryTabController = TabController(
+        length: newDisplayedCategories.length, 
+        vsync: this,
+        initialIndex: currentTabIndex,
+      );
+      _categoryTabController.addListener(_handleTabChange);
+      
+      // Load articles for the current tab
+      _loadArticlesForCurrentCategory();
+    }
   }
   
   Future<void> _fetchCategories() async {
     try {
-      // We'll keep the default categories but add any from the backend that are missing
+      // Get all available categories from the API
       final backendCategories = await ArticleService.fetchCategories();
       
-      // Add any categories from backend that aren't in our default list
-      for (var category in backendCategories) {
-        if (!_categories.contains(category)) {
-          _categories.add(category);
-          _categoryArticles[category] = [];
-          _loadingStates[category] = false;
-          _hasMoreArticles[category] = true;
-          _currentPage[category] = 1;
+      // No need to update fixed categories, just store them for potential selection
+      setState(() {
+        // Initialize empty map if needed
+        if (_selectedCategories.isEmpty) {
+          for (var category in backendCategories) {
+            // Skip fixed categories
+            if (!_fixedCategories.contains(category)) {
+              _selectedCategories[category] = false;
+            }
+          }
         }
-      }
+      });
       
-      // Update tab controller if we added new categories
-      if (_categories.length > _categoryTabController.length) {
-        setState(() {
-          _categoryTabController = TabController(
-            length: _categories.length, 
-            vsync: this,
-            initialIndex: _categoryTabController.index
-          );
-          _categoryTabController.addListener(_handleTabChange);
-        });
-      }
+      // Update displayed categories based on selections
+      _updateDisplayedCategories();
     } catch (e) {
-      // Keep default categories if there's an error
       print('Error fetching categories: $e');
     }
   }
@@ -98,7 +192,11 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
   }
   
   Future<void> _loadArticlesForCurrentCategory() async {
-    final currentCategory = _categories[_categoryTabController.index];
+    if (_categoryTabController.index >= _displayedCategories.length) {
+      return;
+    }
+    
+    final currentCategory = _displayedCategories[_categoryTabController.index];
     
     // Don't load if already loading or no more articles
     if (_loadingStates[currentCategory]! || !_hasMoreArticles[currentCategory]!) {
@@ -143,7 +241,7 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
       _currentSort = sort;
       
       // Reset pagination for all categories
-      for (var category in _categories) {
+      for (var category in _displayedCategories) {
         _categoryArticles[category] = [];
         _hasMoreArticles[category] = true;
         _currentPage[category] = 1;
@@ -236,12 +334,12 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
             ),
             unselectedLabelColor: Colors.black.withOpacity(0.6),
             indicatorColor: Colors.transparent,
-            tabs: _categories.map((category) => Tab(text: category)).toList(),
+            tabs: _displayedCategories.map((category) => Tab(text: category)).toList(),
           ),
           Expanded(
             child: TabBarView(
               controller: _categoryTabController,
-              children: _categories.map((category) {
+              children: _displayedCategories.map((category) {
                 return _buildCategoryArticles(category);
               }).toList(),
             ),

@@ -17,6 +17,7 @@ class _PageSwitchWithAnimationState extends State<PageSwitchWithAnimation> {
   int _selectedIndex = 0;
   late final PageController _pageSwitchController;
   final GlobalKey<DrawerUserControllerState> _drawerControllerKey = GlobalKey<DrawerUserControllerState>();
+  final GlobalKey<NewsPageState> _newsPageKey = GlobalKey<NewsPageState>();
 
   @override
   void initState() {
@@ -42,16 +43,23 @@ class _PageSwitchWithAnimationState extends State<PageSwitchWithAnimation> {
     _drawerControllerKey.currentState?.onDrawerClick();
   }
 
+  // Handle category selection changes from the drawer
+  void _handleCategorySelectionChanged(Map<String, bool> categories) {
+    // Forward the changes to the NewsPage
+    _newsPageKey.currentState?.updateSelectedCategories(categories);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DrawerUserController(
       key: _drawerControllerKey,
+      onCategorySelectionChanged: _handleCategorySelectionChanged,
       screenView: Scaffold(
         body: PageView(
           controller: _pageSwitchController,
           onPageChanged: (index) => setState(() => _selectedIndex = index),
           children: [
-            NewsPage(openDrawer: openDrawer),
+            NewsPage(key: _newsPageKey, openDrawer: openDrawer),
             DiscoverPage(openDrawer: openDrawer),
             const CombinedProfilePage()
           ],
