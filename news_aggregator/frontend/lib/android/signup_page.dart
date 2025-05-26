@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../services/auth_service.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
@@ -17,11 +19,11 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerConFirmPassword =
+  final TextEditingController _controllerConfirmPassword =
       TextEditingController();
 
-  final Box _boxAccounts = Hive.box("accounts");
   bool _obscurePassword = true;
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +59,9 @@ class _SignUpState extends State<SignUp> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter username.";
-                  } else if (_boxAccounts.containsKey(value)) {
-                    return "Username is already registered.";
                   }
                   return null;
                 },
@@ -132,7 +132,7 @@ class _SignUpState extends State<SignUp> {
               ),
               const SizedBox(height: 10),
               TextFormField(
-                controller: _controllerConFirmPassword,
+                controller: _controllerConfirmPassword,
                 obscureText: _obscurePassword,
                 focusNode: _focusNodeConfirmPassword,
                 keyboardType: TextInputType.visiblePassword,
@@ -176,29 +176,46 @@ class _SignUpState extends State<SignUp> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        _boxAccounts.put(
-                          _controllerUsername.text,
-                          _controllerConFirmPassword.text,
-                        );
+                        try {
+                          final response = await _authService.register(
+                            _controllerUsername.text,
+                            _controllerEmail.text,
+                            _controllerPassword.text,
+                          );
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            width: 200,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                            content: const Text("Registered Successfully"),
-                          ),
-                        );
+                          if (response.statusCode == 201) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                width: 200,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                                content: const Text("Registered Successfully"),
+                              ),
+                            );
 
-                        _formKey.currentState?.reset();
-
-                        Navigator.pop(context);
+                            _formKey.currentState?.reset();
+                            Navigator.pop(context);
+                          } else {
+                            // Registration failed (e.g., 400 - user exists, invalid data, etc.)
+                            final error =
+                                response.data?['error'] ??
+                                'Registration failed. Please try again.';
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(SnackBar(content: Text(error)));
+                          }
+                        } catch (e) {
+                          // Network or unexpected error
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Registration error: $e')),
+                          );
+                        }
                       }
                     },
                     child: const Text("Register"),
@@ -230,7 +247,7 @@ class _SignUpState extends State<SignUp> {
     _controllerUsername.dispose();
     _controllerEmail.dispose();
     _controllerPassword.dispose();
-    _controllerConFirmPassword.dispose();
+    _controllerConfirmPassword.dispose();
     super.dispose();
   }
 }
