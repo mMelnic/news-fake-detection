@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../../theme/app_theme.dart';
 import '../../model/news.dart';
+import 'tag_card.dart';
 
 class NewsCard extends StatelessWidget {
   static const double itemWidth = 185;
@@ -13,11 +13,8 @@ class NewsCard extends StatelessWidget {
   final String defaultImageUrl =
       'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg';
 
-  const NewsCard({
-    Key? key,
-    required this.data,
-    this.showCategoryTag = false,
-  }) : super(key: key);
+  const NewsCard({Key? key, required this.data, this.showCategoryTag = false})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,7 @@ class NewsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image with caching for better performance
+          // Cached image
           ClipRRect(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(10),
@@ -50,19 +47,23 @@ class NewsCard extends StatelessWidget {
               width: itemWidth,
               height: 140,
               fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                width: itemWidth,
-                height: 140,
-                color: Colors.grey[200],
-                child: const Center(child: CircularProgressIndicator()),
-              ),
-              errorWidget: (context, url, error) => Container(
-                width: itemWidth,
-                height: 140,
-                color: Colors.grey[300],
-                child:
-                    const Icon(Icons.image_not_supported, color: Colors.white),
-              ),
+              placeholder:
+                  (context, url) => Container(
+                    width: itemWidth,
+                    height: 140,
+                    color: Colors.grey[200],
+                    child: const Center(child: CircularProgressIndicator()),
+                  ),
+              errorWidget:
+                  (context, url, error) => Container(
+                    width: itemWidth,
+                    height: 140,
+                    color: Colors.grey[300],
+                    child: const Icon(
+                      Icons.image_not_supported,
+                      color: Colors.white,
+                    ),
+                  ),
             ),
           ),
           Padding(
@@ -70,10 +71,20 @@ class NewsCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Show category tag if needed
+                // Dynamic category tags
                 if (showCategoryTag && data.category.isNotEmpty)
-                  _buildCategoryTag(data.category.split(',').first.trim()),
+                  Wrap(
+                    spacing: 4,
+                    runSpacing: 4,
+                    children:
+                        data.category
+                            .split(',')
+                            .map((cat) => TagCard(tagName: cat.trim()))
+                            .toList(),
+                  ),
+
                 const SizedBox(height: 6),
+
                 // Title
                 Text(
                   data.title,
@@ -84,22 +95,26 @@ class NewsCard extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
+
                 const SizedBox(height: 6),
+
                 // Author and date
                 Text(
                   '${data.author.isNotEmpty ? data.author : "Unknown"} • ${_formatDate(data.date)}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
+
                 const SizedBox(height: 4),
-                // Show fake news indicator if applicable
+
+                // Fake news indicator
                 if (data.isFake)
                   Row(
                     children: [
-                      Icon(Icons.warning_amber_rounded,
-                          size: 14, color: Colors.red[700]),
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        size: 14,
+                        color: Colors.red[700],
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         'Potentially fake',
@@ -119,36 +134,13 @@ class NewsCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryTag(String category) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        category,
-        style: const TextStyle(
-          color: Colors.blue,
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
 
-    if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
-    } else {
-      return 'Just now';
-    }
+    if (difference.inDays > 0) return '${difference.inDays}d ago';
+    if (difference.inHours > 0) return '${difference.inHours}h ago';
+    if (difference.inMinutes > 0) return '${difference.inMinutes}m ago';
+    return 'Just now';
   }
 }
