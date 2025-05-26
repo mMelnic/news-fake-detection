@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/android/view/screens/news_page.dart';
+import 'package:frontend/android/view/screens/user_profile.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
 import 'discovery_page.dart';
 
@@ -41,7 +42,7 @@ class _PageSwitchWithAnimationState extends State<PageSwitchWithAnimation> {
       body: PageView(
         controller: _pageSwitchController,
         onPageChanged: (index) => setState(() => _selectedIndex = index),
-        children: const [NewsPage(), DiscoverPage()],
+        children: const [NewsPage(), DiscoverPage(), CombinedProfilePage()],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
