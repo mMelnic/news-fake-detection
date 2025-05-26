@@ -9,7 +9,9 @@ import '../widgets/news_filter_sheet.dart';
 import 'news_detail_page.dart';
 
 class NewsPage extends StatefulWidget {
-  const NewsPage({super.key});
+  final Function? openDrawer;
+  
+  const NewsPage({super.key, this.openDrawer});
 
   @override
   NewsPageState createState() => NewsPageState();
@@ -60,8 +62,8 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
           color: Colors.white,
         ),
         onPressedLeading: () {
-          // TODO: Drawer
-                },
+          widget.openDrawer?.call();
+        },
         title: Text(
           'News',
           style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: Colors.white),

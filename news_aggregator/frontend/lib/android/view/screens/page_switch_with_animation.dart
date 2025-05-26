@@ -3,6 +3,7 @@ import 'package:frontend/android/view/screens/news_page.dart';
 import 'package:frontend/android/view/screens/user_profile.dart';
 import '../widgets/custom_bottom_navigation_bar.dart';
 import 'discovery_page.dart';
+import 'drawer_controller.dart';
 
 class PageSwitchWithAnimation extends StatefulWidget {
   const PageSwitchWithAnimation({super.key});
@@ -15,6 +16,7 @@ class PageSwitchWithAnimation extends StatefulWidget {
 class _PageSwitchWithAnimationState extends State<PageSwitchWithAnimation> {
   int _selectedIndex = 0;
   late final PageController _pageSwitchController;
+  final GlobalKey<DrawerUserControllerState> _drawerControllerKey = GlobalKey<DrawerUserControllerState>();
 
   @override
   void initState() {
@@ -36,17 +38,28 @@ class _PageSwitchWithAnimationState extends State<PageSwitchWithAnimation> {
     super.dispose();
   }
 
+  void openDrawer() {
+    _drawerControllerKey.currentState?.onDrawerClick();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        controller: _pageSwitchController,
-        onPageChanged: (index) => setState(() => _selectedIndex = index),
-        children: const [NewsPage(), DiscoverPage(), CombinedProfilePage()],
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+    return DrawerUserController(
+      key: _drawerControllerKey,
+      screenView: Scaffold(
+        body: PageView(
+          controller: _pageSwitchController,
+          onPageChanged: (index) => setState(() => _selectedIndex = index),
+          children: [
+            NewsPage(openDrawer: openDrawer),
+            DiscoverPage(openDrawer: openDrawer),
+            const CombinedProfilePage()
+          ],
+        ),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          selectedIndex: _selectedIndex,
+          onItemTapped: _onItemTapped,
+        ),
       ),
     );
   }

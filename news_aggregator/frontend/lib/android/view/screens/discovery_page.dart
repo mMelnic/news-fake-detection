@@ -9,7 +9,9 @@ import '../widgets/news_tile.dart';
 import 'search_page.dart';
 
 class DiscoverPage extends StatefulWidget {
-  const DiscoverPage({super.key});
+  final Function? openDrawer;
+
+  const DiscoverPage({super.key, this.openDrawer});
 
   @override
   State<DiscoverPage> createState() => _DiscoverPageState();
@@ -71,11 +73,11 @@ class _DiscoverPageState extends State<DiscoverPage>
           color: Colors.white,
         ),
         onPressedLeading: () {
-          Scaffold.of(context).openDrawer();
+          widget.openDrawer?.call();
         },
         title: const Text(
           'Discover',
-          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: Colors.white),
         ),
         actions: [
           IconButton(

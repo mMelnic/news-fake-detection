@@ -14,6 +14,13 @@ class AppTheme {
   static const Color textPrimaryColor = Color(0xFF262626);
   static const Color textSecondaryColor = Color(0xFF8E8E8E);
   static const Color dividerColor = Color(0xFFDBDBDB);
+  static const Color notWhite = Color(0xFFEDF0F2);
+  static const Color nearlyWhite = Color(0xFFFEFEFE);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color nearlyBlack = Color(0xFF213333);
+  static const Color grey = Color(0xFF3A5160);
+  static const Color dark_grey = Color(0xFF313A44);
+
   static LinearGradient textOverlayGradient = LinearGradient(
     colors: [Colors.black.withOpacity(0.45), Colors.black.withOpacity(0.0)],
     begin: Alignment.bottomCenter,
