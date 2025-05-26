@@ -149,39 +149,55 @@ class ArticleService {
     }
   }
   
-  // Get saved article status
-  static Future<bool> isArticleSaved(String articleId) async {
+  // Check if article is saved
+  static Future<Map<String, dynamic>> isArticleSaved(String articleId) async {
     try {
-      // Assuming there's an endpoint for checking saved status
       final response = await _dio.get('/social/saved/$articleId/');
       
       if (response.statusCode == 200) {
-        return response.data['saved'];
+        return response.data;
       } else {
-        return false;
+        return {'saved': false};
       }
     } catch (e) {
-      // Return false as default if there's an error
-      return false;
+      // Return default if there's an error
+      return {'saved': false};
     }
   }
   
-  // Save/unsave an article
-  static Future<bool> toggleSaved(String articleId) async {
+  // Save/unsave an article to a collection
+  static Future<Map<String, dynamic>> toggleSaved(String articleId, String collectionName) async {
     try {
-      // Assuming there's an endpoint for toggling saved status
       final response = await _dio.post(
         '/social/saved/',
-        data: {'article_id': articleId},
+        data: {
+          'article_id': articleId,
+          'collection_name': collectionName,
+        },
       );
       
       if (response.statusCode == 200) {
-        return response.data['saved'];
+        return response.data;
       } else {
-        return false;
+        throw Exception('Failed to toggle saved status');
       }
     } catch (e) {
       throw Exception('Failed to toggle saved status: $e');
+    }
+  }
+  
+  // Get article topic classification
+  static Future<String> classifyArticleTopic(String articleId) async {
+    try {
+      final response = await _dio.get('/api/classify-topic/$articleId/');
+      
+      if (response.statusCode == 200) {
+        return response.data['topic'];
+      } else {
+        throw Exception('Failed to classify article topic');
+      }
+    } catch (e) {
+      throw Exception('Failed to classify article topic: $e');
     }
   }
 }
