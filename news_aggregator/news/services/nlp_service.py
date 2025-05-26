@@ -183,3 +183,52 @@ class NLPPredictionService:
     def is_ready(self):
         """Check if the model is initialized and ready for prediction"""
         return self._initialized
+
+    def predict_topic_single(self, text):
+        """
+        Perform topic classification on a single input text.
+
+        Args:
+            text (str): The input text to classify.
+
+        Returns:
+            str or None: Predicted topic label, or None if prediction failed.
+        """
+        if not self._initialized:
+            logger.warning("Model not initialized.")
+            return None
+
+        if not text or not isinstance(text, str) or len(text.strip()) < 10:
+            logger.warning("Invalid or too short input text.")
+            return None
+
+        english_chars = sum(1 for c in text if c.isalpha() and c.isascii())
+        if english_chars / max(1, len(text)) < 0.7:
+            logger.warning("Text is unlikely to be English.")
+            return None
+
+        try:
+            # Tokenize input
+            encoded = self.tokenizer(
+                text[:2000],  # Limit long input
+                padding=True,
+                truncation=True,
+                max_length=512,
+                return_tensors="pt"
+            ).to(self.device)
+
+            # Run model for topic classification
+            with torch.no_grad():
+                logits = self.model(
+                    encoded["input_ids"],
+                    encoded["attention_mask"],
+                    task_name="topic_classification"
+                )
+                pred_id = torch.argmax(logits, dim=1).item()
+
+            label_map = self.label_maps.get("topic_classification", {})
+            return label_map.get(pred_id, None)
+
+        except Exception as e:
+            logger.error(f"Failed to classify topic: {e}")
+            return None
