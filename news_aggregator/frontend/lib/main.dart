@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/android/view/screens/page_switch_with_animation.dart';
 import 'package:frontend/android/view/widgets/calendar_popup_view.dart';
 import 'android/view/screens/news_page.dart';
 import 'screens/login_screen.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         fontFamily: 'Abel',
       ),
-      home: isLoggedIn ? const NewsPage() : const Login(),
+      home: isLoggedIn ? const PageSwitchWithAnimation() : const Login(),
       debugShowCheckedModeBanner: false,
     );
   }

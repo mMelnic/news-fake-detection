@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/android/model/news.dart';
-
 import '../../model/news_helper.dart';
 import '../../route/slide_page_route.dart';
 import '../widgets/custom_app_bar.dart';
@@ -55,13 +55,16 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        leadingIcon: Icon(Icons.arrow_back_ios, color: Colors.white),
+        leadingIcon: SvgPicture.asset(
+          'assets/icons/Menu.svg',
+          color: Colors.white,
+        ),
         onPressedLeading: () {
-          Navigator.of(context).pop();
-        },
+          // TODO: Drawer
+                },
         title: Text(
           'News',
-          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: Colors.white),
         ),
         actions: [
           IconButton(
@@ -92,12 +95,10 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
               onTap: _changeTab,
               tabs: [
                 Tab(text: 'All categories'),
-                Tab(text: 'Covid19'),
-                Tab(text: 'International'),
-                Tab(text: 'Europe'),
-                Tab(text: 'American'),
-                Tab(text: 'Asian'),
+                Tab(text: 'News'),
+                Tab(text: 'Food'),
                 Tab(text: 'Sports'),
+                Tab(text: 'Fashion'),
               ],
             ),
             IndexedStack(
