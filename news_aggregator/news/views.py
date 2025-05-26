@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+
+from news_aggregator.news.services.nlp_service import NLPPredictionService
 from .models import Recommendation, Articles, UserInteraction, Like, Comment, Feed, Sources, Keyword
 from .tasks import generate_recommendations, process_and_store_articles
 from django.utils import timezone
@@ -248,7 +250,26 @@ class SourceListView(APIView):
         sources = Sources.objects.all()
         data = [{'id': s.id, 'name': s.name, 'url': s.url, 'country': s.country, 'language': s.language} for s in sources]
         return Response({'sources': data})
+    
+class ArticleTopicClassificationAPIView(APIView):
+    """Classify the topic of an article by its ID"""
 
+    def get(self, request, article_id):
+        try:
+            article = Articles.objects.get(id=article_id)
+        except Articles.DoesNotExist:
+            return Response({'error': 'Article not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        nlp_service = NLPPredictionService()
+        topic = nlp_service.predict_topic_single(article.title + ' ' + article.content)
+
+        if topic is None:
+            return Response({'error': 'Could not classify topic'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({
+            'article_id': article_id,
+            'topic': topic
+        })
 
 class SourceArticlesView(APIView):
     """Return articles belonging to a given source"""

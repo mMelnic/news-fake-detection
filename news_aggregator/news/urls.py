@@ -2,7 +2,7 @@ from django.urls import path
 from .views import  (
     ArticleListView, ArticleOrSearchView, search_and, search_or, poll_task_articles,
     FeedCategoryListView, FeedCategoryArticlesView,
-    SourceListView, SourceArticlesView, RecommendationView
+    SourceListView, SourceArticlesView, RecommendationView, ArticleTopicClassificationAPIView
 )
 from . import views
 
@@ -22,4 +22,5 @@ urlpatterns = [
     path('feed/categories/<str:category>/', FeedCategoryArticlesView.as_view(), name='feed-category-articles'),
     path('sources/', SourceListView.as_view(), name='source-list'),
     path('sources/<int:source_id>/articles/', SourceArticlesView.as_view(), name='source-articles'),
+    path('api/classify-topic/<int:article_id>/', ArticleTopicClassificationAPIView.as_view(), name='classify-topic'),
 ]
