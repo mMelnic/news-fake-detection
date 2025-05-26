@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/android/model/news.dart';
+import 'package:frontend/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../model/news_helper.dart';
 import '../../route/slide_page_route.dart';
 import '../../services/article_service.dart';
 import '../widgets/custom_app_bar.dart';
@@ -259,7 +259,10 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void showFilter() {
+  void showFilter() async {
+    // Check authentication status
+    final isAuthenticated = await AuthService.checkAuthenticated();
+    
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
@@ -269,28 +272,29 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
       context: context,
       builder: (context) {
         return NewsFilterSheet(
+          isAuthenticated: isAuthenticated,
           onSortSelected: (sort) {
-            // Skip recommendation as requested
-            if (sort != 'Recommendation') {
-              String apiSort;
-              switch (sort) {
-                case 'Newest':
-                  apiSort = 'newest';
-                  break;
-                case 'Oldest':
-                  apiSort = 'oldest';
-                  break;
-                case 'Popular':
-                  apiSort = 'popular';
-                  break;
-                case 'Random':
-                  apiSort = 'random';
-                  break;
-                default:
-                  apiSort = 'newest';
-              }
-              _onSortChanged(apiSort);
+            String apiSort;
+            switch (sort) {
+              case 'Newest':
+                apiSort = 'newest';
+                break;
+              case 'Oldest':
+                apiSort = 'oldest';
+                break;
+              case 'Popular':
+                apiSort = 'popular';
+                break;
+              case 'Recommendation':
+                apiSort = 'recommendation';
+                break;
+              case 'Random':
+                apiSort = 'random';
+                break;
+              default:
+                apiSort = 'newest';
             }
+            _onSortChanged(apiSort);
           },
         );
       },

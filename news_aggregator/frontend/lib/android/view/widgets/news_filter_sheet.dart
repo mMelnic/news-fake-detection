@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class NewsFilterSheet extends StatefulWidget {
   final Function(String)? onSortSelected;
+  final bool isAuthenticated;
 
-  const NewsFilterSheet({super.key, this.onSortSelected});
+  const NewsFilterSheet({
+    super.key,
+    this.onSortSelected,
+    required this.isAuthenticated,
+  });
 
   @override
   State<NewsFilterSheet> createState() => _NewsFilterSheetState();
@@ -12,13 +17,25 @@ class NewsFilterSheet extends StatefulWidget {
 class _NewsFilterSheetState extends State<NewsFilterSheet> {
   int _selectedIndex = 0;
 
-  final List<String> _options = [
-    'Newest',
-    'Oldest',
-    'Popular',
-    'Recommendation',
-    'Random',
-  ];
+  late List<String> _options;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Base options always available
+    _options = [
+      'Newest',
+      'Oldest',
+      'Popular',
+      'Random',
+    ];
+
+    // Add recommendation option only for authenticated users
+    if (widget.isAuthenticated) {
+      _options.insert(3, 'Recommendation');
+    }
+  }
 
   void _selectOption(int index) {
     setState(() {
@@ -64,6 +81,7 @@ class _NewsFilterSheetState extends State<NewsFilterSheet> {
                   title: _options[index],
                   selected: isSelected,
                   onTap: () => _selectOption(index),
+                  isRecommendation: _options[index] == 'Recommendation',
                 );
               },
             ),
@@ -114,6 +132,7 @@ class _NewsFilterSheetState extends State<NewsFilterSheet> {
     required String title,
     required bool selected,
     required VoidCallback onTap,
+    bool isRecommendation = false,
   }) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 20),
@@ -131,6 +150,15 @@ class _NewsFilterSheetState extends State<NewsFilterSheet> {
           if (selected) const Icon(Icons.check, color: Colors.black),
         ],
       ),
+      subtitle: isRecommendation
+          ? const Text(
+              'Based on your liked and saved articles',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+            )
+          : null,
       onTap: onTap,
     );
   }

@@ -161,4 +161,17 @@ class AuthService {
       return false;
     }
   }
+
+  // Static method to check if the user is authenticated
+  // This uses the current user endpoint directly for accuracy
+  static Future<bool> checkAuthenticated() async {
+    try {
+      final authService = AuthService();
+      await authService.getCurrentUser();
+      return true;
+    } catch (e) {
+      debugPrint('Auth check failed: $e');
+      return false;
+    }
+  }
 }

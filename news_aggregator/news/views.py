@@ -18,6 +18,8 @@ from django.db.models import Q, Count
 from rest_framework import status
 import random
 from django.core.cache import cache
+import numpy as np
+from pgvector.django import CosineDistance
 from news.utils.article_serializer import ArticleSerializer
 
 logger = logging.getLogger(__name__)
@@ -85,10 +87,33 @@ def toggle_like(request):
     article_id = request.data.get('article_id')
     article = get_object_or_404(Articles, pk=article_id)
     like, created = Like.objects.get_or_create(user=request.user, article=article)
-    if not created:
+    
+    if created:
+        # Record like interaction
+        UserInteraction.objects.update_or_create(
+            user=request.user,
+            article=article,
+            defaults={
+                'interaction_type': 'like',
+                'strength': 2.0,  # Higher weight for explicit likes
+                'timestamp': timezone.now()
+            }
+        )
+        return Response({'liked': True})
+    else:
+        # Remove like
         like.delete()
+        # Update interaction to view only
+        UserInteraction.objects.update_or_create(
+            user=request.user,
+            article=article,
+            defaults={
+                'interaction_type': 'view',
+                'strength': 0.5,  # Lower weight for views
+                'timestamp': timezone.now()
+            }
+        )
         return Response({'liked': False})
-    return Response({'liked': True})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -682,6 +707,89 @@ def poll_task_articles(request, task_id):
 #             # Log error but continue - we already returned DB results
 #             logger.error(f"Error fetching new articles: {str(e)}")
 
+def get_real_time_recommendations(user, category, page, page_size):
+    """Generate real-time recommendations based on user's liked and saved articles"""
+    # Get user's liked articles
+    liked_articles = Articles.objects.filter(like__user=user)
+    
+    # Get user's saved articles
+    saved_articles = Articles.objects.filter(savedarticle__user=user)
+    
+    # Combine liked and saved articles (distinct)
+    user_articles = (liked_articles | saved_articles).distinct()
+    
+    # Check if we have enough user articles with embeddings
+    user_articles_with_embeddings = user_articles.exclude(embedding=None)
+    
+    MIN_ARTICLES_FOR_RECOMMENDATIONS = 3
+    
+    if user_articles_with_embeddings.count() < MIN_ARTICLES_FOR_RECOMMENDATIONS:
+        # Not enough data, fall back to newest articles with optional category filter
+        if category.lower() == 'all categories':
+            fallback_articles = Articles.objects.all().order_by('-published_date')
+        else:
+            fallback_articles = Articles.objects.filter(categories__icontains=category).order_by('-published_date')
+        
+        # Paginate fallback results
+        start_idx = (page - 1) * page_size
+        end_idx = start_idx + page_size
+        fallback_articles = fallback_articles[start_idx:end_idx]
+        
+        # Convert to response format
+        return [{
+            'id': a.id,
+            'title': a.title,
+            'content': a.content,
+            'url': a.url,
+            'image_url': a.image_url if a.image_url else DEFAULT_IMAGE_URL,
+            'source': a.source.name if a.source else "Unknown",
+            'published_date': a.published_date,
+            'author': a.author,
+            'categories': a.categories,
+            'is_fake': a.is_fake,
+            'sentiment': a.sentiment,
+            'recommendation_type': 'fallback'  # Add indicator that this is a fallback
+        } for a in fallback_articles]
+    
+    # Calculate mean embedding from user's articles
+    embeddings = [a.embedding for a in user_articles_with_embeddings if a.embedding is not None]
+    embeddings_array = np.array(embeddings)
+    mean_embedding = np.mean(embeddings_array, axis=0).tolist()
+    
+    # Query for similar articles, excluding already interacted ones
+    base_query = Articles.objects.exclude(id__in=user_articles.values_list('id', flat=True))
+    
+    # Apply category filter if needed
+    if category.lower() != 'all categories':
+        base_query = base_query.filter(categories__icontains=category)
+    
+    # Find similar articles using cosine distance
+    similar_articles = base_query.exclude(embedding=None) \
+        .annotate(similarity=CosineDistance('embedding', mean_embedding)) \
+        .order_by('similarity')
+    
+    # Paginate results
+    start_idx = (page - 1) * page_size
+    end_idx = start_idx + page_size
+    paginated_articles = similar_articles[start_idx:end_idx]
+    
+    # Format for response
+    return [{
+        'id': a.id,
+        'title': a.title,
+        'content': a.content[:200] + "..." if len(a.content) > 200 else a.content,
+        'url': a.url,
+        'image_url': a.image_url if a.image_url else DEFAULT_IMAGE_URL,
+        'source': a.source.name if a.source else "Unknown",
+        'published_date': a.published_date,
+        'author': a.author,
+        'categories': a.categories,
+        'is_fake': a.is_fake,
+        'sentiment': a.sentiment,
+        'recommendation_type': 'similarity',  # Add indicator that this is a similarity-based recommendation
+        'similarity_score': float(a.similarity) if hasattr(a, 'similarity') else None  # Add similarity score
+    } for a in paginated_articles]
+
 class ArticleCategoryView(APIView):
     """
     Return articles by category with pagination support and filtering
@@ -705,6 +813,22 @@ class ArticleCategoryView(APIView):
             qs = qs.order_by('published_date')
         elif sort == 'popular':
             qs = qs.annotate(num_likes=Count('like')).order_by('-num_likes', '-published_date')
+        elif sort == 'recommendation' and request.user.is_authenticated:
+            # Get recommendations for authenticated users
+            try:
+                articles = get_real_time_recommendations(request.user, category, page, page_size)
+                
+                return Response({
+                    'category': category,
+                    'articles': articles,
+                    'page': page,
+                    'page_size': page_size,
+                    'has_more': len(articles) >= page_size  # Assume there are more if we filled the page
+                })
+            except Exception as e:
+                logger.error(f"Error generating recommendations: {e}")
+                # Fall back to newest if recommendation fails
+                qs = qs.order_by('-published_date')
         elif sort == 'random':
             qs = list(qs)
             random.shuffle(qs)
@@ -789,6 +913,25 @@ def toggle_saved(request):
     if saved_article:
         # Remove from collection
         saved_article.delete()
+        
+        # Check if article exists in any other collection
+        other_collections = SavedArticle.objects.filter(
+            user=request.user,
+            article=article
+        ).exists()
+        
+        if not other_collections:
+            # Update interaction to view only if not saved anywhere else
+            UserInteraction.objects.update_or_create(
+                user=request.user,
+                article=article,
+                defaults={
+                    'interaction_type': 'view',
+                    'strength': 0.5,
+                    'timestamp': timezone.now()
+                }
+            )
+        
         return Response({'saved': False, 'collection': collection_name})
     
     # Save to collection
@@ -796,6 +939,17 @@ def toggle_saved(request):
         user=request.user,
         article=article,
         collection=collection
+    )
+    
+    # Record save interaction
+    UserInteraction.objects.update_or_create(
+        user=request.user,
+        article=article,
+        defaults={
+            'interaction_type': 'save',
+            'strength': 3.0,  # Highest weight for saves (explicit interest)
+            'timestamp': timezone.now()
+        }
     )
     
     return Response({'saved': True, 'collection': collection_name})
