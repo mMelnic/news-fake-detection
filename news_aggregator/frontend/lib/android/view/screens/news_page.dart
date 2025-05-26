@@ -374,7 +374,7 @@ class NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
               : GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: NewsCard.itemWidth / NewsCard.itemHeight,
+                    childAspectRatio: 0.80,
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 10,
                   ),
