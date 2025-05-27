@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../services/auth_service.dart';
 import 'view/screens/news_page.dart';
+import 'view/screens/page_switch_with_animation.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -204,7 +205,7 @@ class _SignUpState extends State<SignUp> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const NewsPage(),
+                                builder: (_) => const PageSwitchWithAnimation(),
                               ),
                             );
                           } else {

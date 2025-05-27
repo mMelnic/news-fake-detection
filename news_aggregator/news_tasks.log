@@ -9694,3 +9694,139 @@ INFO 2025-05-26 23:02:26,336 tasks 21336 24540 Initializing SentenceTransformer 
 INFO 2025-05-26 23:02:30,284 tasks 21336 24540 SentenceTransformer model initialized successfully
 INFO 2025-05-26 23:02:30,286 nlp_service 21336 24540 Loading NLP prediction model and resources...
 INFO 2025-05-26 23:02:36,947 nlp_service 21336 24540 NLP model loaded successfully
+INFO 2025-05-27 05:03:11,211 tasks 26940 12060 Initializing SentenceTransformer model...
+INFO 2025-05-27 05:03:15,329 tasks 26940 12060 SentenceTransformer model initialized successfully
+INFO 2025-05-27 05:03:15,336 nlp_service 26940 12060 Loading NLP prediction model and resources...
+INFO 2025-05-27 05:03:18,252 nlp_service 26940 12060 NLP model loaded successfully
+INFO 2025-05-27 16:12:09,122 tasks 21264 23876 Initializing SentenceTransformer model...
+INFO 2025-05-27 16:12:13,171 tasks 21264 23876 SentenceTransformer model initialized successfully
+INFO 2025-05-27 16:12:13,172 nlp_service 21264 23876 Loading NLP prediction model and resources...
+INFO 2025-05-27 16:12:20,565 nlp_service 21264 23876 NLP model loaded successfully
+INFO 2025-05-27 16:21:53,205 tasks 23960 10740 Initializing SentenceTransformer model...
+INFO 2025-05-27 16:21:55,217 tasks 23960 10740 SentenceTransformer model initialized successfully
+INFO 2025-05-27 16:21:55,219 nlp_service 23960 10740 Loading NLP prediction model and resources...
+INFO 2025-05-27 16:21:56,775 nlp_service 23960 10740 NLP model loaded successfully
+INFO 2025-05-27 16:30:33,749 tasks 32648 18040 Initializing SentenceTransformer model...
+INFO 2025-05-27 16:30:36,515 tasks 32648 18040 SentenceTransformer model initialized successfully
+INFO 2025-05-27 16:30:36,516 nlp_service 32648 18040 Loading NLP prediction model and resources...
+INFO 2025-05-27 16:30:38,381 nlp_service 32648 18040 NLP model loaded successfully
+ERROR 2025-05-27 16:37:16,704 base_fetcher 32648 32296 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:16,760 gnews_api_fetcher 32648 32296 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:17,110 base_fetcher 32648 32164 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:17,114 gnews_api_fetcher 32648 32164 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:17,271 base_fetcher 32648 8784 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:17,273 gnews_api_fetcher 32648 8784 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:17,421 base_fetcher 32648 11680 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:17,426 gnews_api_fetcher 32648 11680 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:17,687 base_fetcher 32648 25012 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:17,688 gnews_api_fetcher 32648 25012 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:17,826 base_fetcher 32648 8748 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:17,827 gnews_api_fetcher 32648 8748 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:18,242 base_fetcher 32648 32296 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:18,244 gnews_api_fetcher 32648 32296 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:18,594 base_fetcher 32648 11680 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:18,595 gnews_api_fetcher 32648 11680 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:18,753 base_fetcher 32648 32164 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:18,758 gnews_api_fetcher 32648 32164 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:19,259 base_fetcher 32648 8748 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:19,261 gnews_api_fetcher 32648 8748 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:19,563 base_fetcher 32648 32296 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:19,595 gnews_api_fetcher 32648 32296 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:19,705 base_fetcher 32648 25012 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:19,706 gnews_api_fetcher 32648 25012 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:23,458 base_fetcher 32648 32296 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:23,458 gnews_api_fetcher 32648 32296 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:33,910 base_fetcher 32648 12272 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:33,912 gnews_api_fetcher 32648 12272 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:34,130 base_fetcher 32648 31604 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,133 base_fetcher 32648 31816 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:34,134 base_fetcher 32648 6432 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:34,141 gnews_api_fetcher 32648 31604 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,144 gnews_api_fetcher 32648 31816 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:34,146 gnews_api_fetcher 32648 6432 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:34,318 base_fetcher 32648 2248 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,320 base_fetcher 32648 18608 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,323 gnews_api_fetcher 32648 2248 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,323 gnews_api_fetcher 32648 18608 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,453 base_fetcher 32648 31208 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,453 gnews_api_fetcher 32648 31208 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,724 base_fetcher 32648 28468 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:34,727 gnews_api_fetcher 32648 28468 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:35,130 base_fetcher 32648 13492 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:35,133 base_fetcher 32648 12272 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:35,133 gnews_api_fetcher 32648 13492 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:35,134 gnews_api_fetcher 32648 12272 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:35,342 base_fetcher 32648 25692 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:35,344 gnews_api_fetcher 32648 25692 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:36,476 base_fetcher 32648 31816 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:36,478 gnews_api_fetcher 32648 31816 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:36,628 base_fetcher 32648 25692 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:36,629 gnews_api_fetcher 32648 25692 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:36,772 base_fetcher 32648 13492 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:36,773 gnews_api_fetcher 32648 13492 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:37,082 base_fetcher 32648 12272 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:37,095 gnews_api_fetcher 32648 12272 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:37,415 base_fetcher 32648 6432 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:37,418 gnews_api_fetcher 32648 6432 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:37,545 base_fetcher 32648 31816 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:37,545 gnews_api_fetcher 32648 31816 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:37,891 base_fetcher 32648 25692 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:37,895 gnews_api_fetcher 32648 25692 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:38,198 base_fetcher 32648 12272 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:38,198 gnews_api_fetcher 32648 12272 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:38,411 base_fetcher 32648 13492 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:38,412 gnews_api_fetcher 32648 13492 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:38,569 base_fetcher 32648 31816 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:38,569 gnews_api_fetcher 32648 31816 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:38,968 base_fetcher 32648 25692 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:38,970 gnews_api_fetcher 32648 25692 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:39,328 base_fetcher 32648 12272 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:39,329 gnews_api_fetcher 32648 12272 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:39,839 base_fetcher 32648 31816 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:39,840 gnews_api_fetcher 32648 31816 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:37:40,149 base_fetcher 32648 25692 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:40,150 gnews_api_fetcher 32648 25692 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:44,349 base_fetcher 32648 25692 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:37:44,350 gnews_api_fetcher 32648 25692 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:38:55,907 base_fetcher 32648 23508 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:55,909 gnews_api_fetcher 32648 23508 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:56,695 base_fetcher 32648 5676 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:56,697 gnews_api_fetcher 32648 5676 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:56,840 base_fetcher 32648 31288 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:56,841 gnews_api_fetcher 32648 31288 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:56,957 base_fetcher 32648 3320 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:56,958 gnews_api_fetcher 32648 3320 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:57,270 base_fetcher 32648 23508 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:57,271 gnews_api_fetcher 32648 23508 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:57,324 base_fetcher 32648 21024 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:57,326 gnews_api_fetcher 32648 21024 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:57,439 base_fetcher 32648 18580 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:57,440 gnews_api_fetcher 32648 18580 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:38:58,075 base_fetcher 32648 24076 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:38:58,076 gnews_api_fetcher 32648 24076 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:38:58,320 base_fetcher 32648 6324 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:38:58,325 gnews_api_fetcher 32648 6324 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:38:58,744 base_fetcher 32648 3320 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:38:58,745 gnews_api_fetcher 32648 3320 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:02,686 base_fetcher 32648 3320 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:02,687 gnews_api_fetcher 32648 3320 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:26,756 base_fetcher 32648 2688 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:26,757 gnews_api_fetcher 32648 2688 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:26,903 base_fetcher 32648 25060 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:26,907 gnews_api_fetcher 32648 25060 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:27,041 base_fetcher 32648 29252 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:27,046 gnews_api_fetcher 32648 29252 Failed to fetch articles: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-27 16:39:27,262 base_fetcher 32648 2980 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:27,263 gnews_api_fetcher 32648 2980 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:27,471 base_fetcher 32648 16572 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:27,472 base_fetcher 32648 16776 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:27,473 gnews_api_fetcher 32648 16572 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:27,473 gnews_api_fetcher 32648 16776 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:27,876 base_fetcher 32648 16772 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:27,877 gnews_api_fetcher 32648 16772 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:28,592 base_fetcher 32648 25060 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-27 16:39:28,593 gnews_api_fetcher 32648 25060 Failed to fetch articles: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-27 22:25:12,382 tasks 32608 26772 Initializing SentenceTransformer model...
+INFO 2025-05-27 22:25:18,462 tasks 32608 26772 SentenceTransformer model initialized successfully
+INFO 2025-05-27 22:25:18,462 nlp_service 32608 26772 Loading NLP prediction model and resources...
+INFO 2025-05-27 22:25:21,468 nlp_service 32608 26772 NLP model loaded successfully

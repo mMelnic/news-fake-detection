@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'signup_page.dart';
 import 'view/screens/news_page.dart';
+import 'view/screens/page_switch_with_animation.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -137,7 +138,7 @@ class _LoginState extends State<Login> {
                             // Navigate to home/dashboard screen
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (_) => const NewsPage()),
+                              MaterialPageRoute(builder: (_) => const PageSwitchWithAnimation()),
                             );
                           } else {
                             setState(() {

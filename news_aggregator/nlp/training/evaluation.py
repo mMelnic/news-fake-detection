@@ -32,7 +32,7 @@ if __name__ == "__main__":
         task_heads_config=task_classes,
         class_weights=class_weights
     )
-    model.load_state_dict(torch.load("nlp/outputs/multi_task_model.pt", map_location=torch.device("cpu")))
+    model.load_state_dict(torch.load("nlp/outputs/second_multi_task_model_state_dict.pt", map_location=torch.device("cpu")))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.eval()
     model.to(device)
@@ -60,6 +60,10 @@ if __name__ == "__main__":
                 task_metrics[task_name]["true_labels"].append(sample_label.item())
                 task_metrics[task_name]["pred_labels"].append(prediction.item())
 
+    from sklearn.metrics import confusion_matrix
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
     # Calculate precision, recall, and F1 score for each task
     for task, metrics in task_metrics.items():
         true_labels = metrics["true_labels"]
@@ -69,3 +73,56 @@ if __name__ == "__main__":
 
         print(f"Metrics for {task}:")
         print(f"  Precision: {precision:.4f}, Recall: {recall:.4f}, F1-Score: {f1:.4f}")
+        # Plot confusion matrix
+        cm = confusion_matrix(true_labels, pred_labels)
+        plt.figure(figsize=(6, 5))
+        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=range(cm.shape[1]), yticklabels=range(cm.shape[0]))
+        plt.title(f"Confusion Matrix for {task}")
+        plt.xlabel("Predicted Label")
+        plt.ylabel("True Label")
+        plt.tight_layout()
+        plt.show()
+
+    from sklearn.metrics import roc_curve, auc
+    import matplotlib.pyplot as plt
+
+    # Plot ROC curves for binary classification tasks
+    for task in ["sentiment_analysis", "fake_news_detection"]:
+        true_labels = task_metrics[task]["true_labels"]
+        pred_labels = task_metrics[task]["pred_labels"]
+
+        # Re-run the model to collect predicted probabilities for ROC
+        probs = []
+        with torch.no_grad():
+            for batch in test_loader:
+                input_ids = batch["input_ids"].to(device)
+                attention_mask = batch["attention_mask"].to(device)
+                labels = batch["labels"].to(device)
+                tasks = batch["tasks"]
+
+                for i, task_name in enumerate(tasks):
+                    if task_name != task:
+                        continue
+
+                    sample_input_ids = input_ids[i].unsqueeze(0)
+                    sample_attention_mask = attention_mask[i].unsqueeze(0)
+
+                    logits = model(sample_input_ids, sample_attention_mask, task_name=task_name)
+                    prob = torch.softmax(logits, dim=1)[0][1].item()  # Probability of class 1
+                    probs.append(prob)
+
+        # Compute ROC curve and AUC
+        fpr, tpr, _ = roc_curve(true_labels, probs)
+        roc_auc = auc(fpr, tpr)
+
+        # Plot
+        plt.figure(figsize=(6, 5))
+        plt.plot(fpr, tpr, color="blue", lw=2, label=f"AUC = {roc_auc:.2f}")
+        plt.plot([0, 1], [0, 1], color="gray", linestyle="--")
+        plt.title(f"ROC Curve – {task.replace('_', ' ').title()}")
+        plt.xlabel("False Positive Rate")
+        plt.ylabel("True Positive Rate")
+        plt.legend(loc="lower right")
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()

@@ -9,7 +9,8 @@ class DioClient {
 
   static final Dio dio = Dio(
     BaseOptions(
-      baseUrl: 'http://10.0.2.2:8000', // Android emulator backend
+      // baseUrl: 'http://10.0.2.2:8000', // Android emulator backend
+      baseUrl: 'http://192.168.64.4:8000', // Local network backend
       headers: {'Content-Type': 'application/json'},
       connectTimeout: const Duration(seconds: 20),
       receiveTimeout: const Duration(seconds: 20),

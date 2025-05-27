@@ -3,10 +3,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:language_picker/language_picker.dart';
 import 'package:language_picker/languages.dart';
+import '../../../services/auth_service.dart';
 import '../../model/user.dart';
 import '../../model/collection.dart';
 import '../../services/user_profile_service.dart';
 import 'collections_page.dart';
+import 'page_switch_with_animation.dart';
 
 class CombinedProfilePage extends StatefulWidget {
   const CombinedProfilePage({super.key});
@@ -479,6 +481,13 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
                               },
                             ),
                           ),
+                    // Add visual separator before logout
+                    const Divider(thickness: 1, height: 32),
+                    
+                    // Add logout button at the bottom
+                    _buildLogoutButton(context),
+                    
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -604,5 +613,57 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
         ),
       ),
     );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, 50),
+        ),
+        onPressed: () => _handleLogout(context),
+        child: const Text(
+          'Log Out',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+Future<void> _handleLogout(BuildContext context) async {
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
+    try {
+      final authService = AuthService();
+      await authService.logout();
+
+      // Close loading dialog
+      if (context.mounted) Navigator.of(context).pop();
+
+      // Navigate to LoginScreen and clear stack
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const PageSwitchWithAnimation()),
+          (Route<dynamic> route) => false,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) Navigator.of(context).pop();
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Logout failed: $e')));
+      }
+    }
   }
 }
