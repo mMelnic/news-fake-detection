@@ -26,7 +26,7 @@ class Articles(models.Model):
     source = models.ForeignKey('Sources', models.SET_NULL, blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     country = models.TextField(blank=True, null=True)
-    fake_score = models.FloatField(blank=True, null=True)  # Keep for backward compatibility
+    fake_score = models.FloatField(blank=True, null=True)  # For backward compatibility
     is_fake = models.BooleanField(blank=True, null=True)   # New field: True=fake, False=real
     sentiment = models.CharField(max_length=10, blank=True, null=True)  # New field: 'positive' or 'negative'
     embedding = VectorField(dimensions=384, blank=True, null=True)
@@ -61,9 +61,9 @@ class Sources(models.Model):
 class UserInteraction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     article = models.ForeignKey('Articles', on_delete=models.CASCADE)
-    interaction_type = models.CharField(max_length=50, default='view')  # e.g., 'view', 'like', 'save', 'comment'
+    interaction_type = models.CharField(max_length=50, default='view')  # 'view', 'like', 'save', 'comment'
     timestamp = models.DateTimeField(auto_now_add=True)
-    strength = models.FloatField(default=1.0)  # Higher for explicit likes/saves, lower for views
+    strength = models.FloatField(default=1.0)
 
     class Meta:
         indexes = [

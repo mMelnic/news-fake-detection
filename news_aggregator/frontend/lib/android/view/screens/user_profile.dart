@@ -39,14 +39,11 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
     });
     
     try {
-      // Load user profile
       final profileData = await UserProfileService.getUserProfile();
       final user = User.fromMap(profileData);
       
-      // Load user stats
       final statsData = await UserProfileService.getUserStats();
       
-      // Load collections
       final collectionsData = await UserProfileService.getSavedCollections();
       final collections = collectionsData.map((c) => Collection.fromMap(c)).toList();
       
@@ -434,7 +431,6 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
                                     onPressed: () {
                                       // Create new collection and refresh
                                       Navigator.pop(context);
-                                      // Since we need an article to save, we'll just refresh the collections
                                       _loadUserData();
                                     },
                                     child: const Text('Create'),
@@ -475,7 +471,7 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
                                       // Navigate to collection detail screen
                                       // Implement this later
                                     },
-                                    collectionIndex: index, // Pass the index here
+                                    collectionIndex: index,
                                   ),
                                 );
                               },
@@ -483,8 +479,6 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
                           ),
                     // Add visual separator before logout
                     const Divider(thickness: 1, height: 32),
-                    
-                    // Add logout button at the bottom
                     _buildLogoutButton(context),
                     
                     const SizedBox(height: 24),
@@ -509,7 +503,6 @@ class _CombinedProfilePageState extends State<CombinedProfilePage> {
   }) {
     return GestureDetector(
       onTap: () {
-        // Navigate to collection detail screen
         if (collectionIndex != null) {
           Navigator.push(
             context, 
@@ -647,10 +640,8 @@ Future<void> _handleLogout(BuildContext context) async {
       final authService = AuthService();
       await authService.logout();
 
-      // Close loading dialog
       if (context.mounted) Navigator.of(context).pop();
 
-      // Navigate to LoginScreen and clear stack
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const PageSwitchWithAnimation()),

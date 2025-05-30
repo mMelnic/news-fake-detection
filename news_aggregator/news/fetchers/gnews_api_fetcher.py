@@ -1,7 +1,6 @@
 from .base_fetcher import BaseFetcher
 from .fetcher_interface import FetcherInterface
 import os
-import logging
 from dotenv import load_dotenv
 
 load_dotenv()

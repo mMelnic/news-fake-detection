@@ -1,20 +1,15 @@
 import torch
-from nlp.models.multitask_model import MultiTaskModel  # Assuming you have a MultiTaskModel class
+from nlp.models.multitask_model import MultiTaskModel
 
-# Model parameters
 task_classes = {
     "sentiment_analysis": 2,  # POSITIVE, NEGATIVE
     "topic_classification": 41,  # Num of categories
     "fake_news_detection": 2  # REAL, FAKE
 }
 
-# Initialize model
 model = MultiTaskModel("roberta-base", task_classes)
-
-# Verify encoder loading
 print("Model initialized successfully.")
 
-# Create dummy input
 dummy_input_ids = torch.randint(0, 50265, (1, 128))  # Simulating tokenized input
 dummy_attention_mask = torch.ones_like(dummy_input_ids)
 

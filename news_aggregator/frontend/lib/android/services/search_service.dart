@@ -19,7 +19,6 @@ class SearchService {
         'mode': mode,
       };
       
-      // Add optional parameters if available
       if (language != null && language.isNotEmpty) {
         params['language'] = language;
       }
@@ -27,9 +26,7 @@ class SearchService {
       if (country != null && country.isNotEmpty) {
         params['country'] = country;
       }
-      
-      // Make the API call
-      final response = await _dio.get('/direct-search/', queryParameters: params);
+            final response = await _dio.get('/direct-search/', queryParameters: params);
       
       if (response.statusCode == 200) {
         // Convert articles to News objects
@@ -44,7 +41,6 @@ class SearchService {
     }
   }
   
-  // Convert API response to News object
   static News _convertToNews(Map<String, dynamic> data) {
     return News(
       id: data['id'].toString(),

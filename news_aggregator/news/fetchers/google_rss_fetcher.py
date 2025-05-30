@@ -43,7 +43,7 @@ class RssFeedFetcher:
         normalized_articles = []
         
         for entry in feed.entries:
-            # Extract source from HTML description if needed
+            # Extract source from HTML description
             source_name = entry.get("source", "")
             source_url = ""
             
@@ -54,17 +54,16 @@ class RssFeedFetcher:
             elif "source_url" in entry:
                 source_url = entry.get("source_url", "")
             
-            # Extract real content from description (remove HTML tags)
+            # Real content from description 
             description = entry.get("summary", "")
             if description:
                 # Remove HTML tags
                 clean_description = re.sub(r'<.*?>', '', description)
-                # Decode HTML entities
+                # Decode HTML
                 clean_description = html.unescape(clean_description)
             else:
                 clean_description = ""
             
-            # If description still contains the source info at the end, extract it
             if not source_name and "target=\"_blank\">" in description:
                 try:
                     source_part = description.split("</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">")[1]
@@ -72,15 +71,14 @@ class RssFeedFetcher:
                 except (IndexError, AttributeError):
                     pass
                 
-            # If no source URL found but we have a source name, try to guess URL
+            # If no source URL found but have a source name
             if not source_url and source_name:
-                # Simple heuristic to generate a likely source URL
                 domain = source_name.lower().replace(' ', '').replace('.', '')
                 source_url = f"https://www.{domain}.com"
             
             normalized_article = {
                 "title": entry.get("title", ""),
-                "url": entry.get("link", ""),  # Use link as the URL
+                "url": entry.get("link", ""),
                 "content": clean_description,
                 "publishedAt": entry.get("published", ""),
                 "author": "",
@@ -97,7 +95,6 @@ class RssFeedFetcher:
             
         return normalized_articles
 
-# Test usage
 if __name__ == "__main__":
     fetcher = RssFeedFetcher()
     articles = fetcher.fetch_feed(query="tehnologie", language="ro", country="RO")

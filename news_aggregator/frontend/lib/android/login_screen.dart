@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'signup_page.dart';
-import 'view/screens/news_page.dart';
 import 'view/screens/page_switch_with_animation.dart';
 
 class Login extends StatefulWidget {

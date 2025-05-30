@@ -35,7 +35,6 @@ class SearchPageState extends State<SearchPage> {
     'Entertainment',
   ];
   
-  // User preferences for language and country
   String? _userLanguage;
   String? _userCountry;
   

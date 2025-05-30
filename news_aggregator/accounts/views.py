@@ -1,16 +1,21 @@
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.middleware import csrf
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.contrib.auth import authenticate
 from django.conf import settings
-from rest_framework import status
+from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.middleware import csrf
+
+from rest_framework import status
 from rest_framework.permissions import AllowAny
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenRefreshView
+
+from .serializers import UserSerializer
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -111,8 +116,6 @@ class RegisterView(APIView):
         
         return response
     
-from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer
 class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -120,8 +123,6 @@ class CurrentUserView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
     
-from rest_framework_simplejwt.views import TokenRefreshView
-
 class CookieTokenRefreshView(TokenRefreshView):
     permission_classes = [AllowAny]
     authentication_classes = []

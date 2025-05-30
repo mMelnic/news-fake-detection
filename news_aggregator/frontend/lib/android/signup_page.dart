@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import '../services/auth_service.dart';
-import 'view/screens/news_page.dart';
 import 'view/screens/page_switch_with_animation.dart';
 
 class SignUp extends StatefulWidget {
@@ -209,7 +207,7 @@ class _SignUpState extends State<SignUp> {
                               ),
                             );
                           } else {
-                            // Registration failed (e.g., 400 - user exists, invalid data, etc.)
+                            // Registration failed
                             final error =
                                 response.data?['error'] ??
                                 'Registration failed. Please try again.';

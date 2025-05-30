@@ -1,27 +1,42 @@
+import logging
+import random
 import re
-from django.shortcuts import  get_object_or_404
-from news.fetchers.news_api_fetcher import NewsApiFetcher
+import uuid
+
+import numpy as np
+
+from django.core.cache import cache
+from django.db.models import Q, Count
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+
+from pgvector.django import CosineDistance
+
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from news.fetchers.gnews_api_fetcher import GNewsApiFetcher
 from news.fetchers.google_rss_fetcher import RssFeedFetcher
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
-from news.tasks import process_search_results
+from news.fetchers.news_api_fetcher import NewsApiFetcher
 from news.services.nlp_service import NLPPredictionService
-from .models import Recommendation, Articles, UserInteraction, Like, Comment, Feed, Sources, Keyword, SavedCollection, SavedArticle
+from news.tasks import process_search_results
+
+from .models import (
+    Articles,
+    Comment,
+    Feed,
+    Like,
+    Recommendation,
+    SavedArticle,
+    SavedCollection,
+    Sources,
+    UserInteraction,
+)
 from .tasks import generate_recommendations, process_and_store_articles
-from django.utils import timezone
-from datetime import timedelta
-import logging
-from django.db.models import Q, Count
-from rest_framework import status
-import random
-from django.core.cache import cache
-import numpy as np
-from pgvector.django import CosineDistance
-from news.utils.article_serializer import ArticleSerializer
-import uuid
+
 
 logger = logging.getLogger(__name__)
 DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg'
@@ -40,7 +55,6 @@ class ArticleDetailView(APIView):
                     defaults={'interaction_type': 'view'}
                 )
             
-            # Return article details
             return Response({
                 "id": article.id,
                 "title": article.title,
@@ -465,15 +479,11 @@ def search_or(request):
     gnews_query = newsapi_query
     rss_query = build_rss_query(terms, phrases, operator)
 
-    # Fetch articles...
     newsapi_articles = NewsApiFetcher().fetch_articles(newsapi_query, language=language)
     gnews_articles = GNewsApiFetcher().fetch_articles(gnews_query, language=language, country=country)
     rss_articles = RssFeedFetcher().fetch_feed(query=rss_query, language=(language or 'en').lower(), country=(country or 'US').upper())
 
     all_articles = newsapi_articles + gnews_articles + rss_articles
-
-    # Enrich each article with extracted keywords (store as list)
-    # Pass extracted terms and phrases to celery task for storage
     task = process_and_store_articles.delay(all_articles, language, country, extracted_terms=terms, extracted_phrases=phrases)
 
     return Response({"task_id": task.id, "status": "started", "search_type": "OR"})
@@ -484,22 +494,17 @@ def build_query_string(terms, phrases, operator):
     # Add exact phrases with quotes preserved
     if phrases:
         parts += phrases
-    # Add individual terms (escaped if needed)
     if terms:
         parts += terms
 
     if operator == "AND":
-        # Join with space, which means AND for NewsAPI/GNews
         return " ".join(parts)
     elif operator == "OR":
-        # Join with ' OR '
         return " OR ".join(parts)
     else:
         raise ValueError("Invalid operator")
     
 def build_rss_query(terms, phrases, operator):
-    # RSS feed uses simple space-separated search
-    # Just join all terms and phrases by space regardless of operator
     parts = []
     if phrases:
         parts += [p.strip('"') for p in phrases]  # remove quotes, since RSS doesn't use boolean logic
@@ -704,21 +709,17 @@ def poll_task_articles(request, task_id):
 #                 store_articles_batch.delay(batch, query)
                 
 #         except Exception as e:
-#             # Log error but continue - we already returned DB results
 #             logger.error(f"Error fetching new articles: {str(e)}")
 
 def get_real_time_recommendations(user, category, page, page_size):
     """Generate real-time recommendations based on user's liked and saved articles"""
-    # Get user's liked articles
     liked_articles = Articles.objects.filter(like__user=user)
-    
-    # Get user's saved articles
     saved_articles = Articles.objects.filter(savedarticle__user=user)
     
     # Combine liked and saved articles (distinct)
     user_articles = (liked_articles | saved_articles).distinct()
     
-    # Check if we have enough user articles with embeddings
+    # Check if enough user articles with embeddings
     user_articles_with_embeddings = user_articles.exclude(embedding=None)
     
     MIN_ARTICLES_FOR_RECOMMENDATIONS = 3
@@ -735,7 +736,6 @@ def get_real_time_recommendations(user, category, page, page_size):
         end_idx = start_idx + page_size
         fallback_articles = fallback_articles[start_idx:end_idx]
         
-        # Convert to response format
         return [{
             'id': a.id,
             'title': a.title,
@@ -759,11 +759,10 @@ def get_real_time_recommendations(user, category, page, page_size):
     # Query for similar articles, excluding already interacted ones
     base_query = Articles.objects.exclude(id__in=user_articles.values_list('id', flat=True))
     
-    # Apply category filter if needed
+    # Apply category filter
     if category.lower() != 'all categories':
         base_query = base_query.filter(categories__icontains=category)
     
-    # Find similar articles using cosine distance
     similar_articles = base_query.exclude(embedding=None) \
         .annotate(similarity=CosineDistance('embedding', mean_embedding)) \
         .order_by('similarity')
@@ -773,7 +772,6 @@ def get_real_time_recommendations(user, category, page, page_size):
     end_idx = start_idx + page_size
     paginated_articles = similar_articles[start_idx:end_idx]
     
-    # Format for response
     return [{
         'id': a.id,
         'title': a.title,
@@ -806,7 +804,6 @@ class ArticleCategoryView(APIView):
             # Filter by specific category
             qs = Articles.objects.filter(categories__icontains=category)
         
-        # Apply sorting
         if sort == 'newest':
             qs = qs.order_by('-published_date')
         elif sort == 'oldest':
@@ -823,7 +820,7 @@ class ArticleCategoryView(APIView):
                     'articles': articles,
                     'page': page,
                     'page_size': page_size,
-                    'has_more': len(articles) >= page_size  # Assume there are more if we filled the page
+                    'has_more': len(articles) >= page_size  # Assume there are more if page is filled
                 })
             except Exception as e:
                 logger.error(f"Error generating recommendations: {e}")
@@ -897,7 +894,6 @@ def toggle_saved(request):
     
     article = get_object_or_404(Articles, pk=article_id)
     
-    # Get or create the collection
     collection, created = SavedCollection.objects.get_or_create(
         user=request.user,
         name=collection_name
@@ -911,9 +907,7 @@ def toggle_saved(request):
     ).first()
     
     if saved_article:
-        # Remove from collection
         saved_article.delete()
-        
         # Check if article exists in any other collection
         other_collections = SavedArticle.objects.filter(
             user=request.user,
@@ -1072,8 +1066,6 @@ def articles_null_category(request):
         articles = Articles.objects.filter(
             models.Q(categories__isnull=True) | models.Q(categories='')
         ).order_by('-published_date')
-        
-        # Count total for pagination info
         total_count = articles.count()
         
         # Paginate
@@ -1137,8 +1129,6 @@ def direct_search(request):
         
         # Combine results
         all_articles = newsapi_articles + gnews_articles
-        
-        # Process articles directly without using Celery
         DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg'
         
         processed_articles = []
@@ -1172,7 +1162,6 @@ def direct_search(request):
             else:
                 published_date = datetime.now().isoformat()
             
-            # Create article dict
             processed_article = {
                 'id': str(uuid.uuid4()),  # Generate a temporary ID as string
                 'title': title,

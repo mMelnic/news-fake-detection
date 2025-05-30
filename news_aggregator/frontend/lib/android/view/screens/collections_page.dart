@@ -1,7 +1,4 @@
-// filepath: c:\Users\moldo\Documents\Semester_6\new_clone\news-fake-detection\news_aggregator\frontend\lib\android\view\screens\collections_page.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../model/collection.dart';
 import '../../model/news.dart';
 import '../../services/user_profile_service.dart';
@@ -48,8 +45,6 @@ class _CollectionsPageState extends State<CollectionsPage>
       _loadingStates[collection.id] = false;
       _collectionArticles[collection.id] = [];
     }
-
-    // Load initial collection
     _loadArticlesForCurrentCollection();
   }
 

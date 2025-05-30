@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import os
-import logging
 from .base_fetcher import BaseFetcher
 from .fetcher_interface import FetcherInterface
 

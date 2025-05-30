@@ -86,7 +86,7 @@ if __name__ == "__main__":
     from sklearn.metrics import roc_curve, auc
     import matplotlib.pyplot as plt
 
-    # Plot ROC curves for binary classification tasks
+    # ROC curves for binary classification tasks
     for task in ["sentiment_analysis", "fake_news_detection"]:
         true_labels = task_metrics[task]["true_labels"]
         pred_labels = task_metrics[task]["pred_labels"]
@@ -115,7 +115,6 @@ if __name__ == "__main__":
         fpr, tpr, _ = roc_curve(true_labels, probs)
         roc_auc = auc(fpr, tpr)
 
-        # Plot
         plt.figure(figsize=(6, 5))
         plt.plot(fpr, tpr, color="blue", lw=2, label=f"AUC = {roc_auc:.2f}")
         plt.plot([0, 1], [0, 1], color="gray", linestyle="--")

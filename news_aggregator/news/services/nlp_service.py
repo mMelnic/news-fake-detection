@@ -7,7 +7,6 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-# Define paths relative to project
 MODEL_DIR = os.path.join(settings.BASE_DIR, 'nlp/outputs')
 MODEL_PATH = os.path.join(MODEL_DIR, 'second_multi_task_model_state_dict.pt')
 LABEL_MAPS_PATH = os.path.join(MODEL_DIR, 'label_maps.json')
@@ -43,7 +42,6 @@ class NLPPredictionService:
         logger.info("Loading NLP prediction model and resources...")
         
         try:
-            # Load label maps
             with open(LABEL_MAPS_PATH, 'r') as f:
                 raw_label_maps = json.load(f)
                 
@@ -52,11 +50,10 @@ class NLPPredictionService:
                 for task, mapping in raw_label_maps.items()
             }
             
-            # Load class weights
             with open(CLASS_WEIGHTS_PATH, 'r') as f:
                 class_weights = json.load(f)
                 
-            # Define task classes - include all three heads but we'll only use two
+            # Define all task classes
             task_classes = {
                 "sentiment_analysis": 2,
                 "fake_news_detection": 2,
@@ -106,7 +103,7 @@ class NLPPredictionService:
         if not texts:
             return []
             
-        # We only want to use these two tasks, not topic_classification
+        # Only want to use these two tasks, not topic_classification
         if tasks is None:
             tasks = ["fake_news_detection", "sentiment_analysis"]
             
@@ -118,7 +115,6 @@ class NLPPredictionService:
             for i, text in enumerate(texts):
                 if text and isinstance(text, str) and len(text.strip()) > 10:
                     # Simple heuristic to check if text is likely English
-                    # This is a very basic check - in production you might want a better language detector
                     english_chars = sum(1 for c in text if c.isalpha() and c.isascii())
                     if english_chars / max(1, len(text)) > 0.7:  # If at least 70% English characters
                         filtered_texts.append(text[:2000])  # Limit text length to prevent overflow
@@ -132,7 +128,6 @@ class NLPPredictionService:
             if not filtered_texts:
                 return results
                 
-            # Tokenize texts
             encoded = self.tokenizer(
                 filtered_texts,
                 padding=True,
@@ -141,7 +136,6 @@ class NLPPredictionService:
                 return_tensors="pt"
             ).to(self.device)
             
-            # Get predictions
             with torch.no_grad():
                 for task in tasks:
                     # Skip topic_classification even if it exists in the model
@@ -187,10 +181,8 @@ class NLPPredictionService:
     def predict_topic_single(self, text):
         """
         Perform topic classification on a single input text.
-
         Args:
             text (str): The input text to classify.
-
         Returns:
             str or None: Predicted topic label, or None if prediction failed.
         """
@@ -208,7 +200,6 @@ class NLPPredictionService:
             return None
 
         try:
-            # Tokenize input
             encoded = self.tokenizer(
                 text[:2000],  # Limit long input
                 padding=True,

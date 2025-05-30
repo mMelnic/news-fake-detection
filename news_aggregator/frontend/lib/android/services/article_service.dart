@@ -3,7 +3,7 @@ import '../model/news.dart';
 import '../../services/dio_client.dart';
 
 class ArticleService {
-  // Use DioClient for all requests instead of direct URL
+  // Use DioClient for all requests
   static final Dio _dio = DioClient.dio;
   
   // Fetch articles by category with pagination
@@ -40,7 +40,6 @@ class ArticleService {
         throw Exception('Failed to load articles: ${response.statusCode}');
       }
     } on DioException catch (e) {
-      // Let DioClient handle the error and auth failures
       rethrow;
     } catch (e) {
       throw Exception('Failed to load articles: $e');
@@ -59,7 +58,6 @@ class ArticleService {
         throw Exception('Failed to load categories');
       }
     } on DioException catch (e) {
-      // Let DioClient handle the error and auth failures
       rethrow;
     } catch (e) {
       throw Exception('Failed to load categories: $e');
@@ -77,7 +75,6 @@ class ArticleService {
         return 0;
       }
     } catch (e) {
-      // Return 0 as default if there's an error
       return 0;
     }
   }
@@ -93,7 +90,6 @@ class ArticleService {
         return false;
       }
     } catch (e) {
-      // Return false as default if there's an error
       return false;
     }
   }
@@ -127,7 +123,6 @@ class ArticleService {
         return [];
       }
     } catch (e) {
-      // Return empty list as default if there's an error
       return [];
     }
   }
@@ -160,7 +155,6 @@ class ArticleService {
         return {'saved': false};
       }
     } catch (e) {
-      // Return default if there's an error
       return {'saved': false};
     }
   }
@@ -297,7 +291,6 @@ class ArticleService {
   }
 }
 
-// Class to hold article response data
 class ArticleResponse {
   final List<News> articles;
   final bool hasMore;

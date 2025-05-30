@@ -32,29 +32,23 @@ class HomeDrawerState extends State<HomeDrawer> {
       isLoading = true;
     });
 
-    // Load saved preferences
     final prefs = await SharedPreferences.getInstance();
     
     try {
       // Fetch all available categories from the API
       final List<String> availableCategories = await ArticleService.fetchCategories();
-      
-      // Initialize categories map
       final Map<String, bool> newCategories = {};
       
-      // Process each category
       for (var category in availableCategories) {
         // Skip fixed categories that will always be shown
-        if (fixedCategories.contains(category)) {
+        if (fixedCategories.contains(category)) { //TODO: match case sensitivity
           continue;
         }
         
-        // Get saved preference or default to false
         final bool isSelected = prefs.getBool('category_$category') ?? false;
         newCategories[category] = isSelected;
       }
       
-      // Update state
       setState(() {
         categories = newCategories;
         isLoading = false;
@@ -67,7 +61,6 @@ class HomeDrawerState extends State<HomeDrawer> {
     }
   }
 
-  // Save user preference when a category is toggled
   Future<void> _toggleCategory(String category, bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('category_$category', value);
@@ -76,7 +69,6 @@ class HomeDrawerState extends State<HomeDrawer> {
       categories[category] = value;
     });
     
-    // Notify parent about the change
     if (widget.onCategorySelectionChanged != null) {
       widget.onCategorySelectionChanged!(categories);
     }

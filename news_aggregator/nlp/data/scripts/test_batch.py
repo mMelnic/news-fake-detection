@@ -1,8 +1,6 @@
-from nlp.data.preprocess import DataPreprocessor
 import pandas as pd
 import json
 
-# Define the main function
 def main():
     train_files = {
         "sentiment_analysis": "nlp/outputs/sentiment_analysis_train.csv",
@@ -54,7 +52,7 @@ def main():
     model = MultiTaskModel("distilroberta-base", task_classes)
     model.eval()  # Set model to evaluation mode
 
-    # Run inference on a sample batch
+    # Inference on a sample batch
     input_ids = batch["input_ids"]
     attention_mask = batch["attention_mask"]
     tasks = batch["tasks"]
@@ -68,7 +66,6 @@ def main():
             logits = model(input_ids[i].unsqueeze(0), attention_mask[i].unsqueeze(0), task_name)
             outputs[task_name].append(logits)
 
-    # Print output shapes
     for task, logits_list in outputs.items():
         print(f"Task: {task}, Output Shape: {logits_list[0].shape}")
 
@@ -76,25 +73,22 @@ def main():
     # Initialize loss strategy with computed class weights
     loss_strategy = LossStrategy(class_weights)
 
-    # Generate dummy predictions (logits) for each task
+    # Dummy predictions (logits) for each task
     dummy_predictions = {
         "sentiment_analysis": torch.randn(1, 2),  # (Batch size, Num classes)
         "topic_classification": torch.randn(1, 41),  # (Batch size, Num categories)
         "fake_news_detection": torch.randn(1, 2)  # (Batch size, Num classes)
     }
 
-    # Generate dummy targets
     dummy_targets = {
         "sentiment_analysis": torch.tensor([1]),  # Class index
         "topic_classification": torch.tensor([10]),  # Class index
         "fake_news_detection": torch.tensor([0])  # Class index
     }
 
-    # Compute loss for each task
     for task, preds in dummy_predictions.items():
         loss = loss_strategy.compute_loss(task, preds, dummy_targets[task])
         print(f"Task: {task}, Loss Value: {loss.item()}")
 
-# Wrap the execution in `if __name__ == "__main__":`
 if __name__ == "__main__":
     main()

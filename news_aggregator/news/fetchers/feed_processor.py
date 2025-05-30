@@ -1,18 +1,20 @@
+import logging
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'news_aggregator.settings')
-
-import django
-django.setup()
+from datetime import datetime
 
 import feedparser
-from datetime import datetime
-from django.db import transaction
-from news.models import Feed, Articles
-from news.utils.content_extractor import ContentExtractor
 from sentence_transformers import SentenceTransformer
+
+import django
+from django.db import transaction
+from django.utils.timezone import get_default_timezone, is_naive, make_aware
+
+from news.models import Articles, Feed
 from news.services.nlp_service import NLPPredictionService
-from django.utils.timezone import make_aware, is_naive, get_default_timezone
-import logging
+from news.utils.content_extractor import ContentExtractor
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'news_aggregator.settings')
+django.setup()
 
 logger = logging.getLogger(__name__)
 DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg'
@@ -78,7 +80,6 @@ class FeedParser:
 
         try:
             with transaction.atomic():
-                # Create basic article
                 article = self.create_base_article(entry, feed, result)
                 
                 # Process NLP features in same transaction

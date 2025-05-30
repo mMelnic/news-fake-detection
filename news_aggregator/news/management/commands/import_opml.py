@@ -1,15 +1,18 @@
 import os
+import re
 import xml.etree.ElementTree as ET
+from datetime import datetime
+from html import unescape
+from urllib.parse import urlparse
+
+import feedparser
+import pycountry
+import requests
+
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from urllib.parse import urlparse
+
 from news.models import Feed, Sources
-import requests
-import feedparser
-from datetime import datetime
-import pycountry
-from html import unescape
-import re
 
 class Command(BaseCommand):
     help = 'Import RSS feeds from OPML files with proper category/country handling'

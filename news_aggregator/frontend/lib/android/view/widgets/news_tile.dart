@@ -69,7 +69,7 @@ class NewsTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
-                  // Display fake news warning if applicable
+                  // Fake news warning
                   if (data.isFake)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),

@@ -31,7 +31,7 @@ class _NewsFilterSheetState extends State<NewsFilterSheet> {
       'Random',
     ];
 
-    // Add recommendation option only for authenticated users
+    // Recommendation option only for authenticated users
     if (widget.isAuthenticated) {
       _options.insert(3, 'Recommendation');
     }

@@ -1,13 +1,12 @@
 import os
 import django
 import logging
-import json
 
 # Configure Django settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_aggregator.settings")
 django.setup()
 
-# Set up logging
+# Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -16,8 +15,6 @@ def test_nlp_model():
     from news.services.nlp_service import NLPPredictionService
     
     logger.info("Testing NLP model...")
-    
-    # Initialize service
     service = NLPPredictionService()
     
     if not service.is_ready():
@@ -39,7 +36,6 @@ def test_nlp_model():
     logger.info("Running predictions on test texts...")
     predictions = service.predict_batch(test_texts)
     
-    # Print predictions
     logger.info("Prediction results:")
     for text, prediction in zip(test_texts, predictions):
         logger.info(f"\nText: {text[:50]}...")

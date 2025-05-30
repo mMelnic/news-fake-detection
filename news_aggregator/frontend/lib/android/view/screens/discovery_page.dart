@@ -47,7 +47,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
   void _scrollListener() {
     // Check if we're near the bottom of the list
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      // Load more articles if we're not already loading and there are more to load
+      // Load more articles if not already loading and there are more to load
       if (!_isLoading && _hasMore) {
         _loadMoreArticles();
       }
@@ -74,7 +74,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
         _page = 2; // Next page to load
       });
       
-      // Debug info
       print('Loaded ${articlesData.articles.length} articles with null category');
       print('Has more: ${articlesData.hasMore}');
       print('Total count: ${articlesData.totalCount}');

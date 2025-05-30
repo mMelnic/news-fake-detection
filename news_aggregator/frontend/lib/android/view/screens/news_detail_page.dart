@@ -18,7 +18,6 @@ class NewsDetailPage extends StatefulWidget {
 class _NewsDetailPageState extends State<NewsDetailPage> {
   final String defaultImageUrl = 'https://raw.githubusercontent.com/mMelnic/news-fake-detection/refs/heads/users/news_aggregator/newspaper_beige.jpg';
   
-  // Social interaction states
   int likeCount = 0;
   int commentCount = 0;
   bool isLiked = false;
@@ -346,7 +345,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                   
                   const SizedBox(height: 20),
 
-                  // Source link - Made clickable
+                  // Source link - clickable
                   GestureDetector(
                     onTap: () => _launchURL(widget.data.sourceUrl),
                     child: Container(
@@ -628,9 +627,9 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
     try {
       // Get topic classification
       suggestedTopic = await ArticleService.classifyArticleTopic(widget.data.id);
-      Navigator.pop(context); // Close loading dialog
+      Navigator.pop(context);
     } catch (e) {
-      Navigator.pop(context); // Close loading dialog
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to classify article: $e')),
       );

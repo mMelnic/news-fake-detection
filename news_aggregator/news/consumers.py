@@ -102,28 +102,21 @@ class NewsConsumer(AsyncWebsocketConsumer):
         from datetime import timedelta
         
         queryset = Articles.objects.all()
-        
-        # Apply keyword filtering
         if query:
             keyword_filter = build_keyword_filter(query)
             if keyword_filter:
                 queryset = queryset.filter(keyword_filter)
         
-        # Apply language filter
         if language:
             queryset = queryset.filter(Q(source__language=language) | Q(source__language__isnull=True))
             
-        # Apply country filter
         if country:
             queryset = queryset.filter(Q(country=country) | Q(country__isnull=True))
             
-        # Get recently added/updated articles
         ten_minutes_ago = timezone.now() - timedelta(minutes=10)
         queryset = queryset.filter(created_at__gte=ten_minutes_ago)
-        
         queryset = queryset.order_by('-created_at').distinct()[:20]
         
-        # Convert to list of dictionaries
         return [
             {
                 "id": article.id,

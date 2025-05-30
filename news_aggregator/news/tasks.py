@@ -13,7 +13,6 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
-# This will be loaded once when the module is imported
 try:
     logger.info("Initializing SentenceTransformer model...")
     embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -28,7 +27,6 @@ nlp_service = NLPPredictionService()
 
 def normalize_article(article, source_name=None, source_url=None, default_language=None, default_country=None):
     """Normalize article fields across different sources."""
-    # Use safe gets, fallback to empty strings or defaults
     title = article.get("title", "") or ""
     url = article.get("url") or article.get("link") or ""
     content = article.get("content") or article.get("description") or ""
@@ -90,7 +88,6 @@ def normalize_article(article, source_name=None, source_url=None, default_langua
 
 
 from django.core.cache import cache
-import json
 
 @shared_task(bind=True)
 def process_and_store_articles(self, raw_articles, language=None, country=None, extracted_terms=None, extracted_phrases=None):
@@ -266,7 +263,6 @@ def process_articles_nlp(article_ids):
                 
                 if prediction["is_fake"] is not None:
                     updates["is_fake"] = prediction["is_fake"]
-                    # For compatibility with existing code, also set fake_score
                     updates["fake_score"] = 1.0 if prediction["is_fake"] else 0.0
                     
                 if prediction["sentiment"] is not None:
@@ -303,13 +299,12 @@ def process_search_results(articles):
         author = article.get('author', 'Unknown')
         published_at = article.get('publishedAt', '') or article.get('published_date', '')
         
-        # Handle source which might be a string or a dict
+        # Source might be a string or a dict
         if isinstance(article.get('source'), dict):
             source_name = article.get('source', {}).get('name', 'Unknown')
         else:
             source_name = article.get('source', 'Unknown')
         
-        # Format published date
         if published_at:
             try:
                 # Try to parse ISO format
@@ -325,7 +320,6 @@ def process_search_results(articles):
         else:
             published_date = datetime.now().isoformat()
         
-        # Create article dict
         processed_article = {
             'id': str(uuid.uuid4()),  # Generate a temporary ID as string
             'title': title,
