@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/android/view/screens/page_switch_with_animation.dart';
-import 'package:frontend/android/view/widgets/calendar_popup_view.dart';
-import 'android/view/screens/news_page.dart';
-import 'screens/login_screen.dart';
-import 'screens/register_screen.dart';
 import 'services/auth_service.dart';
-import 'services/logger.dart';
-import 'services/dio_client.dart';
-// import 'package:go_router/go_router.dart';
-import 'services/auth_state.dart';
-import 'package:provider/provider.dart';
-import 'screens/home_page.dart';
-import 'theme/app_theme.dart'; // Import our new theme
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'android/login_screen.dart';
-import 'android/view/screens/discovery_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
