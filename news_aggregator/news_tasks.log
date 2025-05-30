@@ -9830,3 +9830,302 @@ INFO 2025-05-27 22:25:12,382 tasks 32608 26772 Initializing SentenceTransformer 
 INFO 2025-05-27 22:25:18,462 tasks 32608 26772 SentenceTransformer model initialized successfully
 INFO 2025-05-27 22:25:18,462 nlp_service 32608 26772 Loading NLP prediction model and resources...
 INFO 2025-05-27 22:25:21,468 nlp_service 32608 26772 NLP model loaded successfully
+INFO 2025-05-30 15:44:28,333 tasks 10620 11984 Initializing SentenceTransformer model...
+INFO 2025-05-30 15:44:32,233 tasks 10620 11984 SentenceTransformer model initialized successfully
+INFO 2025-05-30 15:44:32,234 nlp_service 10620 11984 Loading NLP prediction model and resources...
+INFO 2025-05-30 15:44:35,481 nlp_service 10620 11984 NLP model loaded successfully
+INFO 2025-05-30 15:45:34,099 tasks 7884 15708 Initializing SentenceTransformer model...
+INFO 2025-05-30 15:45:37,177 tasks 7884 15708 SentenceTransformer model initialized successfully
+INFO 2025-05-30 15:45:37,182 nlp_service 7884 15708 Loading NLP prediction model and resources...
+INFO 2025-05-30 15:45:42,064 nlp_service 7884 15708 NLP model loaded successfully
+INFO 2025-05-30 15:48:35,539 tasks 7056 10028 Initializing SentenceTransformer model...
+INFO 2025-05-30 15:48:38,732 tasks 7056 10028 SentenceTransformer model initialized successfully
+INFO 2025-05-30 15:48:38,740 nlp_service 7056 10028 Loading NLP prediction model and resources...
+INFO 2025-05-30 15:48:41,665 nlp_service 7056 10028 NLP model loaded successfully
+INFO 2025-05-30 15:52:11,254 views 7056 22600 AND search query: 'sum'
+INFO 2025-05-30 15:52:11,254 news_api_fetcher 7056 22600 Fetching articles from NewsAPI with query: sum
+INFO 2025-05-30 15:52:11,262 views 7056 3976 AND search query: 'summ'
+INFO 2025-05-30 15:52:11,263 news_api_fetcher 7056 3976 Fetching articles from NewsAPI with query: summ
+INFO 2025-05-30 15:52:11,307 views 7056 24208 AND search query: 'summe'
+INFO 2025-05-30 15:52:11,308 news_api_fetcher 7056 24208 Fetching articles from NewsAPI with query: summe
+INFO 2025-05-30 15:52:11,520 views 7056 27192 AND search query: 'summer'
+INFO 2025-05-30 15:52:11,522 news_api_fetcher 7056 27192 Fetching articles from NewsAPI with query: summer
+INFO 2025-05-30 15:52:11,531 views 7056 21968 AND search query: 'summer'
+INFO 2025-05-30 15:52:11,531 news_api_fetcher 7056 21968 Fetching articles from NewsAPI with query: summer
+INFO 2025-05-30 15:52:12,102 news_api_fetcher 7056 3976 Received 4 articles from NewsAPI
+INFO 2025-05-30 15:52:12,103 news_api_fetcher 7056 24208 Received 3 articles from NewsAPI
+INFO 2025-05-30 15:52:12,116 gnews_api_fetcher 7056 3976 Fetching articles from GNewsAPI with query: summ
+INFO 2025-05-30 15:52:12,121 gnews_api_fetcher 7056 24208 Fetching articles from GNewsAPI with query: summe
+INFO 2025-05-30 15:52:12,179 views 7056 4348 AND search query: 'summer v'
+INFO 2025-05-30 15:52:12,182 news_api_fetcher 7056 4348 Fetching articles from NewsAPI with query: summer v
+INFO 2025-05-30 15:52:12,202 views 7056 33040 AND search query: 'summer va'
+INFO 2025-05-30 15:52:12,202 news_api_fetcher 7056 33040 Fetching articles from NewsAPI with query: summer va
+INFO 2025-05-30 15:52:12,231 news_api_fetcher 7056 27192 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:52:12,232 gnews_api_fetcher 7056 27192 Fetching articles from GNewsAPI with query: summer
+INFO 2025-05-30 15:52:12,336 views 7056 12776 AND search query: 'summer vac'
+INFO 2025-05-30 15:52:12,336 news_api_fetcher 7056 12776 Fetching articles from NewsAPI with query: summer vac
+INFO 2025-05-30 15:52:12,348 views 7056 22428 AND search query: 'summer vaca'
+INFO 2025-05-30 15:52:12,348 news_api_fetcher 7056 22428 Fetching articles from NewsAPI with query: summer vaca
+INFO 2025-05-30 15:52:12,631 news_api_fetcher 7056 22600 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:52:12,632 gnews_api_fetcher 7056 22600 Fetching articles from GNewsAPI with query: sum
+INFO 2025-05-30 15:52:12,673 views 7056 1568 AND search query: 'summer vacat'
+INFO 2025-05-30 15:52:12,673 news_api_fetcher 7056 1568 Fetching articles from NewsAPI with query: summer vacat
+INFO 2025-05-30 15:52:12,696 news_api_fetcher 7056 21968 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:52:12,697 gnews_api_fetcher 7056 21968 Fetching articles from GNewsAPI with query: summer
+INFO 2025-05-30 15:52:12,856 gnews_api_fetcher 7056 3976 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:52:12,857 gnews_api_fetcher 7056 27192 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:52:12,858 news_api_fetcher 7056 22428 Received 0 articles from NewsAPI
+INFO 2025-05-30 15:52:12,943 gnews_api_fetcher 7056 22428 Fetching articles from GNewsAPI with query: summer vaca
+INFO 2025-05-30 15:52:12,991 news_api_fetcher 7056 33040 Received 23 articles from NewsAPI
+INFO 2025-05-30 15:52:12,992 gnews_api_fetcher 7056 33040 Fetching articles from GNewsAPI with query: summer va
+INFO 2025-05-30 15:52:13,005 views 7056 17048 AND search query: 'summer vacati'
+INFO 2025-05-30 15:52:13,005 news_api_fetcher 7056 17048 Fetching articles from NewsAPI with query: summer vacati
+INFO 2025-05-30 15:52:13,015 gnews_api_fetcher 7056 24208 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:52:13,026 views 7056 33396 AND search query: 'summer vacatio'
+INFO 2025-05-30 15:52:13,027 news_api_fetcher 7056 33396 Fetching articles from NewsAPI with query: summer vacatio
+ERROR 2025-05-30 15:52:13,162 base_fetcher 7056 21968 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:52:13,164 news_api_fetcher 7056 12776 Received 5 articles from NewsAPI
+INFO 2025-05-30 15:52:13,166 news_api_fetcher 7056 1568 Received 0 articles from NewsAPI
+ERROR 2025-05-30 15:52:13,166 gnews_api_fetcher 7056 21968 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:52:13,166 gnews_api_fetcher 7056 12776 Fetching articles from GNewsAPI with query: summer vac
+INFO 2025-05-30 15:52:13,167 gnews_api_fetcher 7056 1568 Fetching articles from GNewsAPI with query: summer vacat
+ERROR 2025-05-30 15:52:13,186 base_fetcher 7056 22600 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:13,233 gnews_api_fetcher 7056 22600 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:52:13,464 news_api_fetcher 7056 33396 Received 0 articles from NewsAPI
+INFO 2025-05-30 15:52:13,465 news_api_fetcher 7056 17048 Received 0 articles from NewsAPI
+ERROR 2025-05-30 15:52:13,466 base_fetcher 7056 33040 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:13,466 base_fetcher 7056 22428 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:52:13,466 gnews_api_fetcher 7056 33396 Fetching articles from GNewsAPI with query: summer vacatio
+INFO 2025-05-30 15:52:13,467 gnews_api_fetcher 7056 17048 Fetching articles from GNewsAPI with query: summer vacati
+ERROR 2025-05-30 15:52:13,467 gnews_api_fetcher 7056 33040 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:13,468 gnews_api_fetcher 7056 22428 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:52:13,484 news_api_fetcher 7056 4348 Received 96 articles from NewsAPI
+INFO 2025-05-30 15:52:13,485 gnews_api_fetcher 7056 4348 Fetching articles from GNewsAPI with query: summer v
+INFO 2025-05-30 15:52:13,741 views 7056 22600 AND search query: 'summer vacation'
+INFO 2025-05-30 15:52:13,742 news_api_fetcher 7056 22600 Fetching articles from NewsAPI with query: summer vacation
+ERROR 2025-05-30 15:52:13,880 base_fetcher 7056 12776 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:13,881 base_fetcher 7056 1568 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:13,881 gnews_api_fetcher 7056 12776 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:13,881 gnews_api_fetcher 7056 1568 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:14,025 base_fetcher 7056 33396 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:14,026 gnews_api_fetcher 7056 33396 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:14,033 base_fetcher 7056 4348 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:14,037 gnews_api_fetcher 7056 4348 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:14,038 base_fetcher 7056 17048 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:14,046 gnews_api_fetcher 7056 17048 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:52:14,392 news_api_fetcher 7056 22600 Received 95 articles from NewsAPI
+INFO 2025-05-30 15:52:14,393 gnews_api_fetcher 7056 22600 Fetching articles from GNewsAPI with query: summer vacation
+ERROR 2025-05-30 15:52:14,932 base_fetcher 7056 22600 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:52:14,933 gnews_api_fetcher 7056 22600 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:52:19,031 views 7056 29268 AND search query: 'summer vacation'
+INFO 2025-05-30 15:52:19,032 news_api_fetcher 7056 29268 Fetching articles from NewsAPI with query: summer vacation
+INFO 2025-05-30 15:52:19,816 news_api_fetcher 7056 29268 Received 95 articles from NewsAPI
+INFO 2025-05-30 15:52:19,816 gnews_api_fetcher 7056 29268 Fetching articles from GNewsAPI with query: summer vacation
+INFO 2025-05-30 15:52:20,494 gnews_api_fetcher 7056 29268 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:52:45,483 views 7056 15772 OR search query transformed: 'summer vacation' -> 'summer OR vacation'
+INFO 2025-05-30 15:52:45,484 news_api_fetcher 7056 15772 Fetching articles from NewsAPI with query: summer OR vacation
+INFO 2025-05-30 15:52:46,438 news_api_fetcher 7056 15772 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:52:46,438 gnews_api_fetcher 7056 15772 Fetching articles from GNewsAPI with query: summer OR vacation
+INFO 2025-05-30 15:52:47,258 gnews_api_fetcher 7056 15772 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:53:41,220 views 7056 18160 AND search query: 'Entertainment'
+INFO 2025-05-30 15:53:41,221 news_api_fetcher 7056 18160 Fetching articles from NewsAPI with query: Entertainment
+INFO 2025-05-30 15:53:42,149 news_api_fetcher 7056 18160 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:53:42,151 gnews_api_fetcher 7056 18160 Fetching articles from GNewsAPI with query: Entertainment
+INFO 2025-05-30 15:53:42,864 gnews_api_fetcher 7056 18160 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:54:34,666 views 7056 1940 AND search query: '"cl'
+INFO 2025-05-30 15:54:34,667 news_api_fetcher 7056 1940 Fetching articles from NewsAPI with query: "cl
+INFO 2025-05-30 15:54:35,164 views 7056 16676 AND search query: '"cli'
+INFO 2025-05-30 15:54:35,173 news_api_fetcher 7056 16676 Fetching articles from NewsAPI with query: "cli
+INFO 2025-05-30 15:54:35,280 views 7056 25316 AND search query: '"clim'
+INFO 2025-05-30 15:54:35,281 views 7056 21292 AND search query: '"clima'
+INFO 2025-05-30 15:54:35,282 news_api_fetcher 7056 25316 Fetching articles from NewsAPI with query: "clim
+INFO 2025-05-30 15:54:35,282 news_api_fetcher 7056 21292 Fetching articles from NewsAPI with query: "clima
+ERROR 2025-05-30 15:54:35,390 base_fetcher 7056 1940 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:35,390 news_api_fetcher 7056 1940 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:35,391 gnews_api_fetcher 7056 1940 Fetching articles from GNewsAPI with query: "cl
+INFO 2025-05-30 15:54:35,394 views 7056 26516 AND search query: '"climat'
+INFO 2025-05-30 15:54:35,395 news_api_fetcher 7056 26516 Fetching articles from NewsAPI with query: "climat
+ERROR 2025-05-30 15:54:35,601 base_fetcher 7056 16676 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:35,604 base_fetcher 7056 21292 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:35,605 news_api_fetcher 7056 16676 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:35,610 news_api_fetcher 7056 21292 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:35,611 gnews_api_fetcher 7056 16676 Fetching articles from GNewsAPI with query: "cli
+INFO 2025-05-30 15:54:35,617 gnews_api_fetcher 7056 21292 Fetching articles from GNewsAPI with query: "clima
+INFO 2025-05-30 15:54:35,820 views 7056 35268 AND search query: '"climate'
+ERROR 2025-05-30 15:54:35,822 base_fetcher 7056 26516 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:35,823 news_api_fetcher 7056 35268 Fetching articles from NewsAPI with query: "climate
+ERROR 2025-05-30 15:54:35,825 news_api_fetcher 7056 26516 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:35,835 gnews_api_fetcher 7056 26516 Fetching articles from GNewsAPI with query: "climat
+ERROR 2025-05-30 15:54:35,855 base_fetcher 7056 25316 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:35,856 news_api_fetcher 7056 25316 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:35,857 gnews_api_fetcher 7056 25316 Fetching articles from GNewsAPI with query: "clim
+INFO 2025-05-30 15:54:35,927 views 7056 13956 AND search query: '"climate'
+INFO 2025-05-30 15:54:35,928 news_api_fetcher 7056 13956 Fetching articles from NewsAPI with query: "climate
+INFO 2025-05-30 15:54:35,994 views 7056 24060 AND search query: '"climate c'
+INFO 2025-05-30 15:54:35,995 news_api_fetcher 7056 24060 Fetching articles from NewsAPI with query: "climate c
+ERROR 2025-05-30 15:54:35,999 base_fetcher 7056 1940 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-30 15:54:36,001 gnews_api_fetcher 7056 1940 Failed to fetch articles from GNewsAPI: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-30 15:54:36,083 base_fetcher 7056 35268 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:36,084 news_api_fetcher 7056 35268 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:36,085 gnews_api_fetcher 7056 35268 Fetching articles from GNewsAPI with query: "climate
+ERROR 2025-05-30 15:54:36,128 base_fetcher 7056 21292 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-30 15:54:36,129 base_fetcher 7056 16676 Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-30 15:54:36,129 gnews_api_fetcher 7056 21292 Failed to fetch articles from GNewsAPI: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+ERROR 2025-05-30 15:54:36,129 gnews_api_fetcher 7056 16676 Failed to fetch articles from GNewsAPI: Error 400: {'errors': {'q': 'The query has a syntax error (see https://gnews.io/docs/v4#search-operators).'}}
+INFO 2025-05-30 15:54:36,277 views 7056 34604 AND search query: '"climate ch'
+INFO 2025-05-30 15:54:36,277 news_api_fetcher 7056 34604 Fetching articles from NewsAPI with query: "climate ch
+ERROR 2025-05-30 15:54:36,298 base_fetcher 7056 13956 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:36,299 news_api_fetcher 7056 13956 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:36,301 gnews_api_fetcher 7056 13956 Fetching articles from GNewsAPI with query: "climate
+ERROR 2025-05-30 15:54:36,307 base_fetcher 7056 26516 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:36,313 gnews_api_fetcher 7056 26516 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:54:36,375 views 7056 16676 AND search query: '"climate chan'
+INFO 2025-05-30 15:54:36,377 news_api_fetcher 7056 16676 Fetching articles from NewsAPI with query: "climate chan
+INFO 2025-05-30 15:54:36,380 views 7056 21292 AND search query: '"climate cha'
+INFO 2025-05-30 15:54:36,380 news_api_fetcher 7056 21292 Fetching articles from NewsAPI with query: "climate cha
+ERROR 2025-05-30 15:54:36,480 base_fetcher 7056 25316 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:36,480 gnews_api_fetcher 7056 25316 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:36,565 base_fetcher 7056 34604 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:36,566 news_api_fetcher 7056 34604 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:36,567 gnews_api_fetcher 7056 34604 Fetching articles from GNewsAPI with query: "climate ch
+ERROR 2025-05-30 15:54:36,574 base_fetcher 7056 24060 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:36,575 news_api_fetcher 7056 24060 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:36,575 gnews_api_fetcher 7056 24060 Fetching articles from GNewsAPI with query: "climate c
+ERROR 2025-05-30 15:54:36,732 base_fetcher 7056 21292 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:36,734 base_fetcher 7056 16676 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:36,735 base_fetcher 7056 35268 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:36,736 news_api_fetcher 7056 21292 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:36,739 news_api_fetcher 7056 16676 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:36,741 gnews_api_fetcher 7056 35268 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:54:36,746 gnews_api_fetcher 7056 21292 Fetching articles from GNewsAPI with query: "climate cha
+INFO 2025-05-30 15:54:36,750 gnews_api_fetcher 7056 16676 Fetching articles from GNewsAPI with query: "climate chan
+INFO 2025-05-30 15:54:36,829 views 7056 25316 AND search query: '"climate chang'
+INFO 2025-05-30 15:54:36,832 news_api_fetcher 7056 25316 Fetching articles from NewsAPI with query: "climate chang
+INFO 2025-05-30 15:54:36,834 views 7056 26516 AND search query: '"climate change'
+INFO 2025-05-30 15:54:36,838 news_api_fetcher 7056 26516 Fetching articles from NewsAPI with query: "climate change
+ERROR 2025-05-30 15:54:36,882 base_fetcher 7056 13956 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:36,884 gnews_api_fetcher 7056 13956 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,034 base_fetcher 7056 24060 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,035 base_fetcher 7056 34604 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,037 gnews_api_fetcher 7056 24060 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,037 gnews_api_fetcher 7056 34604 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,139 base_fetcher 7056 26516 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:37,140 base_fetcher 7056 25316 Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:37,141 news_api_fetcher 7056 26516 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+ERROR 2025-05-30 15:54:37,142 news_api_fetcher 7056 25316 Failed to fetch articles from NewsAPI: Error 400: {'status': 'error', 'code': 'unexpectedError', 'message': 'Your query may be malformed - please check that all special chars (including &) in the query are URL escaped, and that all double quotes (") are in matching pairs.'}
+INFO 2025-05-30 15:54:37,143 gnews_api_fetcher 7056 26516 Fetching articles from GNewsAPI with query: "climate change
+INFO 2025-05-30 15:54:37,143 gnews_api_fetcher 7056 25316 Fetching articles from GNewsAPI with query: "climate chang
+ERROR 2025-05-30 15:54:37,294 base_fetcher 7056 16676 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,295 base_fetcher 7056 21292 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,296 gnews_api_fetcher 7056 16676 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,296 gnews_api_fetcher 7056 21292 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,625 base_fetcher 7056 26516 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,630 base_fetcher 7056 25316 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,631 gnews_api_fetcher 7056 26516 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:54:37,633 gnews_api_fetcher 7056 25316 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:54:39,065 views 7056 35268 AND search query: '"climate change"'
+INFO 2025-05-30 15:54:39,065 news_api_fetcher 7056 35268 Fetching articles from NewsAPI with query: "climate change"
+INFO 2025-05-30 15:54:39,569 news_api_fetcher 7056 35268 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:54:39,571 gnews_api_fetcher 7056 35268 Fetching articles from GNewsAPI with query: "climate change"
+INFO 2025-05-30 15:54:40,414 gnews_api_fetcher 7056 35268 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:55:43,576 views 7056 25036 AND search query: 'gar'
+INFO 2025-05-30 15:55:43,576 news_api_fetcher 7056 25036 Fetching articles from NewsAPI with query: gar
+INFO 2025-05-30 15:55:43,985 views 7056 26828 AND search query: 'gard'
+INFO 2025-05-30 15:55:43,986 news_api_fetcher 7056 26828 Fetching articles from NewsAPI with query: gard
+INFO 2025-05-30 15:55:43,992 views 7056 26244 AND search query: 'garde'
+INFO 2025-05-30 15:55:43,993 news_api_fetcher 7056 26244 Fetching articles from NewsAPI with query: garde
+INFO 2025-05-30 15:55:44,003 news_api_fetcher 7056 25036 Received 16 articles from NewsAPI
+INFO 2025-05-30 15:55:44,005 gnews_api_fetcher 7056 25036 Fetching articles from GNewsAPI with query: gar
+INFO 2025-05-30 15:55:44,414 news_api_fetcher 7056 26828 Received 6 articles from NewsAPI
+INFO 2025-05-30 15:55:44,415 gnews_api_fetcher 7056 26828 Fetching articles from GNewsAPI with query: gard
+INFO 2025-05-30 15:55:44,466 news_api_fetcher 7056 26244 Received 86 articles from NewsAPI
+INFO 2025-05-30 15:55:44,469 gnews_api_fetcher 7056 26244 Fetching articles from GNewsAPI with query: garde
+INFO 2025-05-30 15:55:44,505 views 7056 16120 AND search query: 'garden'
+INFO 2025-05-30 15:55:44,547 views 7056 4448 AND search query: 'gardeni'
+INFO 2025-05-30 15:55:44,549 news_api_fetcher 7056 16120 Fetching articles from NewsAPI with query: garden
+INFO 2025-05-30 15:55:44,549 news_api_fetcher 7056 4448 Fetching articles from NewsAPI with query: gardeni
+INFO 2025-05-30 15:55:44,723 gnews_api_fetcher 7056 25036 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:55:44,814 views 7056 10104 AND search query: 'gardenin'
+INFO 2025-05-30 15:55:44,815 news_api_fetcher 7056 10104 Fetching articles from NewsAPI with query: gardenin
+INFO 2025-05-30 15:55:44,937 news_api_fetcher 7056 4448 Received 0 articles from NewsAPI
+INFO 2025-05-30 15:55:44,939 gnews_api_fetcher 7056 4448 Fetching articles from GNewsAPI with query: gardeni
+INFO 2025-05-30 15:55:44,980 gnews_api_fetcher 7056 26828 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:55:45,028 views 7056 25036 AND search query: 'gardening'
+INFO 2025-05-30 15:55:45,029 news_api_fetcher 7056 25036 Fetching articles from NewsAPI with query: gardening
+INFO 2025-05-30 15:55:45,133 news_api_fetcher 7056 16120 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:55:45,134 gnews_api_fetcher 7056 16120 Fetching articles from GNewsAPI with query: garden
+INFO 2025-05-30 15:55:45,236 news_api_fetcher 7056 10104 Received 0 articles from NewsAPI
+INFO 2025-05-30 15:55:45,239 gnews_api_fetcher 7056 10104 Fetching articles from GNewsAPI with query: gardenin
+INFO 2025-05-30 15:55:45,309 views 7056 26828 AND search query: 'gardening'
+INFO 2025-05-30 15:55:45,310 news_api_fetcher 7056 26828 Fetching articles from NewsAPI with query: gardening
+INFO 2025-05-30 15:55:45,327 gnews_api_fetcher 7056 26244 Received 10 articles from GNewsAPI
+ERROR 2025-05-30 15:55:45,543 base_fetcher 7056 4448 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:45,544 gnews_api_fetcher 7056 4448 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:55:45,567 news_api_fetcher 7056 25036 Received 98 articles from NewsAPI
+INFO 2025-05-30 15:55:45,568 gnews_api_fetcher 7056 25036 Fetching articles from GNewsAPI with query: gardening
+ERROR 2025-05-30 15:55:45,747 base_fetcher 7056 16120 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:45,750 gnews_api_fetcher 7056 16120 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:45,777 base_fetcher 7056 10104 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:45,780 gnews_api_fetcher 7056 10104 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:55:45,836 views 7056 14380 AND search query: 'gardening s'
+INFO 2025-05-30 15:55:45,837 news_api_fetcher 7056 14380 Fetching articles from NewsAPI with query: gardening s
+INFO 2025-05-30 15:55:45,874 news_api_fetcher 7056 26828 Received 98 articles from NewsAPI
+INFO 2025-05-30 15:55:45,904 gnews_api_fetcher 7056 26828 Fetching articles from GNewsAPI with query: gardening
+ERROR 2025-05-30 15:55:46,060 base_fetcher 7056 25036 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:46,061 gnews_api_fetcher 7056 25036 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:55:46,142 news_api_fetcher 7056 14380 Received 13 articles from NewsAPI
+INFO 2025-05-30 15:55:46,144 gnews_api_fetcher 7056 14380 Fetching articles from GNewsAPI with query: gardening s
+ERROR 2025-05-30 15:55:46,467 base_fetcher 7056 26828 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:46,468 gnews_api_fetcher 7056 26828 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:55:46,547 views 7056 4448 OR search query transformed: 'gardening s' -> 'gardening OR s'
+INFO 2025-05-30 15:55:46,548 news_api_fetcher 7056 4448 Fetching articles from NewsAPI with query: gardening OR s
+ERROR 2025-05-30 15:55:46,689 base_fetcher 7056 14380 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:46,690 gnews_api_fetcher 7056 14380 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:55:47,180 news_api_fetcher 7056 4448 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:55:47,181 gnews_api_fetcher 7056 4448 Fetching articles from GNewsAPI with query: gardening OR s
+INFO 2025-05-30 15:55:47,562 views 7056 26828 OR search query transformed: 'gardening ss' -> 'gardening OR ss'
+INFO 2025-05-30 15:55:47,563 news_api_fetcher 7056 26828 Fetching articles from NewsAPI with query: gardening OR ss
+INFO 2025-05-30 15:55:47,979 news_api_fetcher 7056 26828 Received 95 articles from NewsAPI
+INFO 2025-05-30 15:55:47,980 gnews_api_fetcher 7056 26828 Fetching articles from GNewsAPI with query: gardening OR ss
+INFO 2025-05-30 15:55:48,044 gnews_api_fetcher 7056 4448 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:55:48,156 views 7056 10104 OR search query transformed: 'gardening s' -> 'gardening OR s'
+INFO 2025-05-30 15:55:48,157 news_api_fetcher 7056 10104 Fetching articles from NewsAPI with query: gardening OR s
+INFO 2025-05-30 15:55:48,514 gnews_api_fetcher 7056 26828 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:55:48,547 news_api_fetcher 7056 10104 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:55:48,548 gnews_api_fetcher 7056 10104 Fetching articles from GNewsAPI with query: gardening OR s
+INFO 2025-05-30 15:55:48,555 views 7056 25036 OR search query transformed: 'gardening sc' -> 'gardening OR sc'
+INFO 2025-05-30 15:55:48,557 news_api_fetcher 7056 25036 Fetching articles from NewsAPI with query: gardening OR sc
+INFO 2025-05-30 15:55:48,816 views 7056 26244 OR search query transformed: 'gardening sch' -> 'gardening OR sch'
+INFO 2025-05-30 15:55:48,817 news_api_fetcher 7056 26244 Fetching articles from NewsAPI with query: gardening OR sch
+INFO 2025-05-30 15:55:49,198 views 7056 4448 OR search query transformed: 'gardening scho' -> 'gardening OR scho'
+INFO 2025-05-30 15:55:49,199 news_api_fetcher 7056 4448 Fetching articles from NewsAPI with query: gardening OR scho
+INFO 2025-05-30 15:55:49,237 news_api_fetcher 7056 26244 Received 98 articles from NewsAPI
+INFO 2025-05-30 15:55:49,238 gnews_api_fetcher 7056 26244 Fetching articles from GNewsAPI with query: gardening OR sch
+INFO 2025-05-30 15:55:49,270 gnews_api_fetcher 7056 10104 Received 10 articles from GNewsAPI
+INFO 2025-05-30 15:55:49,285 news_api_fetcher 7056 25036 Received 98 articles from NewsAPI
+INFO 2025-05-30 15:55:49,287 gnews_api_fetcher 7056 25036 Fetching articles from GNewsAPI with query: gardening OR sc
+INFO 2025-05-30 15:55:49,306 views 7056 26828 OR search query transformed: 'gardening schoo' -> 'gardening OR schoo'
+INFO 2025-05-30 15:55:49,307 news_api_fetcher 7056 26828 Fetching articles from NewsAPI with query: gardening OR schoo
+INFO 2025-05-30 15:55:49,496 views 7056 14380 OR search query transformed: 'gardening school' -> 'gardening OR school'
+INFO 2025-05-30 15:55:49,497 news_api_fetcher 7056 14380 Fetching articles from NewsAPI with query: gardening OR school
+INFO 2025-05-30 15:55:49,617 news_api_fetcher 7056 4448 Received 98 articles from NewsAPI
+INFO 2025-05-30 15:55:49,621 gnews_api_fetcher 7056 4448 Fetching articles from GNewsAPI with query: gardening OR scho
+INFO 2025-05-30 15:55:49,703 news_api_fetcher 7056 26828 Received 98 articles from NewsAPI
+INFO 2025-05-30 15:55:49,704 gnews_api_fetcher 7056 26828 Fetching articles from GNewsAPI with query: gardening OR schoo
+ERROR 2025-05-30 15:55:49,737 base_fetcher 7056 26244 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:49,738 gnews_api_fetcher 7056 26244 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:49,770 base_fetcher 7056 25036 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:49,772 gnews_api_fetcher 7056 25036 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:55:49,918 news_api_fetcher 7056 14380 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:55:49,919 gnews_api_fetcher 7056 14380 Fetching articles from GNewsAPI with query: gardening OR school
+ERROR 2025-05-30 15:55:50,082 base_fetcher 7056 4448 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:50,083 gnews_api_fetcher 7056 4448 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:50,205 base_fetcher 7056 26828 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:50,206 gnews_api_fetcher 7056 26828 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:50,390 base_fetcher 7056 14380 Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+ERROR 2025-05-30 15:55:50,392 gnews_api_fetcher 7056 14380 Failed to fetch articles from GNewsAPI: Error 429: {'errors': ['This request was blocked because you made too many requests on the API in a short period of time.']}
+INFO 2025-05-30 15:55:52,722 views 7056 4448 OR search query transformed: 'gardening school' -> 'gardening OR school'
+INFO 2025-05-30 15:55:52,723 news_api_fetcher 7056 4448 Fetching articles from NewsAPI with query: gardening OR school
+INFO 2025-05-30 15:55:53,128 news_api_fetcher 7056 4448 Received 100 articles from NewsAPI
+INFO 2025-05-30 15:55:53,129 gnews_api_fetcher 7056 4448 Fetching articles from GNewsAPI with query: gardening OR school
+INFO 2025-05-30 15:55:53,736 gnews_api_fetcher 7056 4448 Received 10 articles from GNewsAPI

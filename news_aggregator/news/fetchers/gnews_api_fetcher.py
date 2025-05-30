@@ -17,16 +17,29 @@ class GNewsApiFetcher(BaseFetcher, FetcherInterface):
         self.api_key = GNEWS_API_KEY
 
     def fetch_articles(self, query, language=None, country=None):
+        """
+        Fetch articles from GNewsAPI with proper query formatting.
+        
+        GNews API has its own query syntax:
+        - Quotes for exact phrases: "climate change"
+        - AND operator: climate AND change
+        - OR operator: climate OR change
+        - NOT operator: climate NOT change
+        - Parentheses for grouping: (climate OR weather) AND change
+        """
+        # Basic validation without URL encoding
         query = self._validate_and_format_query(query)
         language = self._validate_language(language)
         country = self._validate_country(country)
-
+        
+        # GNewsAPI also accepts the query syntax directly
         params = {
             "apikey": self.api_key,
-            "q": query,
+            "q": query,  # Send the query as is - GNewsAPI handles the syntax
             "max": 10,
             "sortby": "relevance"
         }
+        
         if language:
             params["lang"] = language
         if country:
@@ -34,10 +47,12 @@ class GNewsApiFetcher(BaseFetcher, FetcherInterface):
 
         articles = []
         try:
+            self.logger.info(f"Fetching articles from GNewsAPI with query: {query}")
             response_data = self._send_request(GNEWS_API_URL, params)
             articles = response_data.get("articles", [])
+            self.logger.info(f"Received {len(articles)} articles from GNewsAPI")
         except Exception as e:
-            self.logger.error(f"Failed to fetch articles: {e}")
+            self.logger.error(f"Failed to fetch articles from GNewsAPI: {e}")
 
         return articles
 

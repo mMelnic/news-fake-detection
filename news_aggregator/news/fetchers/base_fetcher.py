@@ -10,12 +10,12 @@ class BaseFetcher:
         self.logger = logger
         
     def _validate_and_format_query(self, query):
-        """Validate and format the search query."""
+        """Validate the search query but don't format it - leave that to specific API fetchers."""
         if not query or not isinstance(query, str):
             raise ValueError("Query must be a non-empty string.")
         if len(query) > 500:
             raise ValueError("Query must not exceed 500 characters.")
-        return quote(query.strip()) # TODO: Check if explicit url encoiding is needed or if requests params handles it correctly
+        return query.strip()  # Just return the trimmed query without URL encoding
 
     def _send_request(self, url, params, headers=None):
         """Send an HTTP GET request and return the response."""

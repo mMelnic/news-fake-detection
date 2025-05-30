@@ -14,26 +14,42 @@ class NewsApiFetcher(BaseFetcher, FetcherInterface):
         self.api_key = NEWS_API_KEY
 
     def fetch_articles(self, query, language=None, country=None):
+        """
+        Fetch articles from NewsAPI with proper query formatting.
+        
+        NewsAPI supports advanced search syntax:
+        - Quoted phrases for exact matches: "climate change"
+        - Required terms with +: +bitcoin
+        - Excluded terms with -: -bitcoin
+        - AND/OR/NOT operators: crypto AND (ethereum OR litecoin) NOT bitcoin
+        """
+        # Basic validation without URL encoding yet
         query = self._validate_and_format_query(query)
         language = self._validate_language(language)
         one_week_ago = (datetime.now() - timedelta(days=7)).isoformat()
 
+        # For NewsAPI, we don't need to transform the query syntax
+        # It already supports quotes for exact phrases and AND/OR operators
+        
         params = {
             "apiKey": self.api_key,
-            "q": query,
+            "q": query,  # Send the query as is - NewsAPI handles the syntax
             "sortBy": "popularity",
             "pageSize": 100,
             "from": one_week_ago,
         }
+        
         if language:
             params["language"] = language
 
         articles = []
         try:
+            self.logger.info(f"Fetching articles from NewsAPI with query: {query}")
             response_data = self._send_request(NEWS_API_URL, params)
             articles = response_data.get("articles", [])
+            self.logger.info(f"Received {len(articles)} articles from NewsAPI")
         except Exception as e:
-            self.logger.error(f"Failed to fetch articles: {e}")
+            self.logger.error(f"Failed to fetch articles from NewsAPI: {e}")
 
         return articles
 

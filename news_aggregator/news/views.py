@@ -429,6 +429,9 @@ def search_and(request):
         return Response({"error": "Query parameter 'q' is required"}, status=400)
     
     try:
+        # For AND search, we can pass the query directly to both APIs
+        # since they both support space-separated terms for AND logic
+        
         # Process the search using the NewsAPI fetcher
         newsapi_fetcher = NewsApiFetcher()
         newsapi_articles = newsapi_fetcher.fetch_articles(query, language=language)
@@ -455,6 +458,7 @@ def search_and(request):
 
 @api_view(['GET'])
 def search_or(request):
+    """Search articles using OR logic (any search terms may match)"""
     raw_query = request.GET.get('q', '')
     language = request.GET.get('language')
     country = request.GET.get('country')
@@ -463,24 +467,32 @@ def search_or(request):
         return Response({"error": "Missing query param 'q'"}, status=400)
 
     # Extract terms and phrases
-    terms = []
-    phrases = []
-    matches = re.findall(r'"([^"]+)"|(\S+)', raw_query)
-    for phrase, term in matches:
-        if phrase:
-            phrases.append(f'"{phrase}"')
-        else:
-            terms.append(term)
-
-    operator = "OR"
-
-    # Build query strings per API
-    newsapi_query = build_query_string(terms, phrases, operator)
-    gnews_query = newsapi_query
-    rss_query = build_rss_query(terms, phrases, operator)
-
-    newsapi_articles = NewsApiFetcher().fetch_articles(newsapi_query, language=language)
-    gnews_articles = GNewsApiFetcher().fetch_articles(gnews_query, language=language, country=country)
+    import re
+    phrases = re.findall(r'"([^"]+)"', raw_query)
+    # Remove quoted phrases from the query string temporarily
+    remaining_query = re.sub(r'"[^"]+"', '', raw_query)
+    # Split remaining text into individual terms
+    terms = [term.strip() for term in remaining_query.split() if term.strip()]
+    
+    # Build query strings for each API - they both support similar OR syntax
+    query_parts = []
+    # Add quoted phrases back
+    for phrase in phrases:
+        query_parts.append(f'"{phrase}"')
+    # Add individual terms
+    query_parts.extend(terms)
+    
+    # Join with OR operator
+    api_query = " OR ".join(query_parts)
+    
+    logger.info(f"OR search query transformed: '{raw_query}' -> '{api_query}'")
+    
+    # Use the same query format for both APIs
+    newsapi_articles = NewsApiFetcher().fetch_articles(api_query, language=language)
+    gnews_articles = GNewsApiFetcher().fetch_articles(api_query, language=language, country=country)
+    
+    # For RSS feed, build a separate query with spaces (no OR operators)
+    rss_query = " ".join([p.strip('"') for p in phrases] + terms)
     rss_articles = RssFeedFetcher().fetch_feed(query=rss_query, language=(language or 'en').lower(), country=(country or 'US').upper())
 
     all_articles = newsapi_articles + gnews_articles + rss_articles
@@ -1119,13 +1131,41 @@ def direct_search(request):
         return Response({"error": "Query parameter 'q' is required"}, status=400)
     
     try:
+        # Prepare the query based on search mode
+        processed_query = query
+        
+        # If OR search, format the query with OR operators between terms
+        # but preserve quoted phrases
+        if search_mode.lower() == 'or':
+            # Extract quoted phrases and individual terms
+            import re
+            phrases = re.findall(r'"([^"]+)"', query)
+            # Remove quoted phrases from the query string temporarily
+            remaining_query = re.sub(r'"[^"]+"', '', query)
+            # Split remaining text into individual terms
+            terms = [term.strip() for term in remaining_query.split() if term.strip()]
+            
+            # Combine terms with OR operator for NewsAPI
+            newsapi_query = " OR ".join(terms + [f'"{phrase}"' for phrase in phrases])
+            
+            # Combine terms with OR operator for GNewsAPI (same format)
+            gnews_query = newsapi_query
+            
+            logger.info(f"OR search query transformed: '{query}' -> '{newsapi_query}'")
+        else:
+            # For AND search, we can pass the query as is to both APIs
+            newsapi_query = query
+            gnews_query = query
+            
+            logger.info(f"AND search query: '{query}'")
+        
         # Process the search using the NewsAPI fetcher
         newsapi_fetcher = NewsApiFetcher()
-        newsapi_articles = newsapi_fetcher.fetch_articles(query, language=language)
+        newsapi_articles = newsapi_fetcher.fetch_articles(newsapi_query, language=language)
         
         # Process the search using GNews fetcher
         gnews_fetcher = GNewsApiFetcher()
-        gnews_articles = gnews_fetcher.fetch_articles(query, language=language)
+        gnews_articles = gnews_fetcher.fetch_articles(gnews_query, language=language, country=country)
         
         # Combine results
         all_articles = newsapi_articles + gnews_articles
@@ -1163,7 +1203,7 @@ def direct_search(request):
                 published_date = datetime.now().isoformat()
             
             processed_article = {
-                'id': str(uuid.uuid4()),  # Generate a temporary ID as string
+                'id': str(uuid.uuid4()),
                 'title': title,
                 'content': content,
                 'url': url,
@@ -1172,7 +1212,7 @@ def direct_search(request):
                 'published_date': published_date,
                 'source': source_name,
                 'categories': '',
-                'is_fake': False,  # Default, would need actual classification
+                'is_fake': False,
                 'sentiment': 'neutral'
             }
             
