@@ -1131,24 +1131,17 @@ def direct_search(request):
         return Response({"error": "Query parameter 'q' is required"}, status=400)
     
     try:
-        # Prepare the query based on search mode
         processed_query = query
-        
-        # If OR search, format the query with OR operators between terms
-        # but preserve quoted phrases
         if search_mode.lower() == 'or':
             # Extract quoted phrases and individual terms
             import re
             phrases = re.findall(r'"([^"]+)"', query)
             # Remove quoted phrases from the query string temporarily
             remaining_query = re.sub(r'"[^"]+"', '', query)
-            # Split remaining text into individual terms
             terms = [term.strip() for term in remaining_query.split() if term.strip()]
             
             # Combine terms with OR operator for NewsAPI
             newsapi_query = " OR ".join(terms + [f'"{phrase}"' for phrase in phrases])
-            
-            # Combine terms with OR operator for GNewsAPI (same format)
             gnews_query = newsapi_query
             
             logger.info(f"OR search query transformed: '{query}' -> '{newsapi_query}'")

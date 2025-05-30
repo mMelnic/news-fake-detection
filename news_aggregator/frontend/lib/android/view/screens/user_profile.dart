@@ -4,6 +4,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:language_picker/language_picker.dart';
 import 'package:language_picker/languages.dart';
 import '../../../services/auth_service.dart';
+import '../../login_screen.dart';
 import '../../model/user.dart';
 import '../../model/collection.dart';
 import '../../services/user_profile_service.dart';
@@ -644,7 +645,7 @@ Future<void> _handleLogout(BuildContext context) async {
 
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const PageSwitchWithAnimation()),
+          MaterialPageRoute(builder: (context) => const Login()),
           (Route<dynamic> route) => false,
         );
       }
